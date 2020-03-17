@@ -1,0 +1,16 @@
+<form [formGroup]="form" class="form">
+  <h3>USER SIGNUP</h3>
+  <mat-form-field appearance="outline">
+    <mat-label>Enter your email!</mat-label>
+    <input formControlName="email" matInput />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Enter your name!</mat-label>
+    <input formControlName="name" matInput />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Enter your password!</mat-label>
+    <input formControlName="password" type="password" matInput />
+  </mat-form-field>
+  <button mat-raised-button color="primary">SIGNUP</button>
+</form>
