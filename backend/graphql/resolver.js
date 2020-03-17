@@ -52,7 +52,7 @@ module.exports = {
       throw error;
     }
 
-    const isEqual = await bcrypt.compare(user.password, password);
+    const isEqual = await bcrypt.compare(password, user.password);
 
     if (!isEqual) {
       const error = new Error("not authenticated!");
@@ -66,6 +66,6 @@ module.exports = {
       { expiresIn: "1h" }
     );
 
-    return { token: token, userId: user._id.toString() };
+    return { token: token, userId: user._id.toString(), expiresIn: 3600 };
   }
 };

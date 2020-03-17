@@ -17,6 +17,7 @@ module.exports = buildSchema(`
   type AuthData{
     token: String!
     userId: String!
+    expiresIn: Int!
   }
 
   type RootQuery{
