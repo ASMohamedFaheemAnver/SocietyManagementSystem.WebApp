@@ -3,6 +3,11 @@ const ip = require("ip");
 const graphqlHttp = require("express-graphql");
 const mongoose = require("mongoose");
 
+const fs = require("fs");
+const path = require("path");
+
+const extractFile = require("./middleware/file");
+
 const app = express();
 const graphqlSchema = require("./graphql/schema");
 const graphqlResolver = require("./graphql/resolver");
@@ -18,6 +23,21 @@ app.use((req, res, next) => {
     return res.sendStatus(200);
   }
   next();
+});
+
+app.use("/images", express.static(path.join("images")));
+
+app.post("/upload-profile", extractFile, (req, res, next) => {
+  if (!req.file) {
+    return res.status(404).json({ message: "no file provided!" });
+  }
+  const url = req.protocol + "://" + req.get("host");
+
+  const imageUrl = url + "/" + req.file.path;
+
+  return res
+    .status(201)
+    .json({ message: "image uploaded!", imageUrl: imageUrl });
 });
 
 app.use(
@@ -45,6 +65,11 @@ mongoose
     useUnifiedTopology: true
   })
   .then(_ => {
+    const dir = path.join(__dirname, "images");
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
     app.listen(3000, () => {
       console.log("Server is running on " + ip.address() + ":3000");
     });

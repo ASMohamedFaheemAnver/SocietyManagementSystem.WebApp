@@ -6,12 +6,14 @@ module.exports = buildSchema(`
     email: String!
     name: String!
     password: String!
+    imageUrl: String!
   }
 
   type User{
     _id: ID!
     name: String!
     email: String!
+    imageUrl: String!
   }
 
   type AuthData{
@@ -22,6 +24,7 @@ module.exports = buildSchema(`
 
   type RootQuery{
     login(email: String!, password: String!): AuthData!
+    getOneUser(userId: String!): User!
   }
 
   type RootMutation{

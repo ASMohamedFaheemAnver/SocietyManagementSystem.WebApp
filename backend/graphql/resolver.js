@@ -19,6 +19,10 @@ module.exports = {
       errors.push({ message: "password is too short!" });
     }
 
+    // if (!validator.isURL(userInput.imageUrl)) {
+    //   errors.push({ message: "image url is not valid!" });
+    // }
+
     if (errors.length > 0) {
       const error = new Error("invalid input!");
       error.data = errors;
@@ -37,7 +41,8 @@ module.exports = {
     const user = new User({
       email: userInput.email,
       name: userInput.name,
-      password: hash
+      password: hash,
+      imageUrl: userInput.imageUrl
     });
     const createdUser = await user.save();
     return createdUser._doc;
@@ -67,5 +72,10 @@ module.exports = {
     );
 
     return { token: token, userId: user._id.toString(), expiresIn: 3600 };
+  },
+
+  getOneUser: async ({ userId }) => {
+    const user = await User.findById(userId);
+    return user._doc;
   }
 };
