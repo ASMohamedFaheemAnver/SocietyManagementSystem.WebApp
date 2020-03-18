@@ -20,7 +20,7 @@ const routes: Routes = [
     component: SignupComponent
   },
   {
-    path: "user/home",
+    path: "user/home/:userId",
     component: HomeComponent,
     canActivate: [AuthGuard]
   }

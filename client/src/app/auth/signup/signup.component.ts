@@ -13,6 +13,9 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   isLoading = false;
 
+  imageUrl: any =
+    "https://icons-for-free.com/iconfiles/png/512/add+profile+seo+user+icon-1320191017476245273.png";
+
   private authStatusSub: Subscription;
 
   constructor(private authService: AuthService) {}
@@ -25,6 +28,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       });
 
     this.form = new FormGroup({
+      image: new FormControl(null, { validators: [Validators.required] }),
       name: new FormControl(null, { validators: [Validators.required] }),
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email]
@@ -43,7 +47,21 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.authService.createUser(
       this.form.value.email,
       this.form.value.name,
-      this.form.value.password
+      this.form.value.password,
+      this.form.value.image
     );
+  }
+
+  onImageUpload(event: Event) {
+    const file: File = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({ image: file });
+    this.form.get("image").updateValueAndValidity();
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      this.imageUrl = reader.result;
+    };
   }
 }

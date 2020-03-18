@@ -1,5 +1,19 @@
 <form *ngIf="!isLoading" [formGroup]="form" class="form" (submit)="onSignUp()">
   <h3>USER SIGNUP</h3>
+  <div class="profile-pic">
+    <img src="{{ imageUrl }}" alt="Profile picture!" />
+    <input
+      style="display: none;"
+      #inputImage
+      type="file"
+      (change)="onImageUpload($event)"
+    />
+    <br />
+    <button mat-stroked-button (click)="inputImage.click()">
+      UPLOAD PICTURE!
+    </button>
+    <br />
+  </div>
   <mat-form-field appearance="outline">
     <mat-label>Enter your email!</mat-label>
     <input formControlName="email" matInput />

@@ -17,3 +17,14 @@
 .extra {
   padding: 1rem;
 }
+
+.profile-pic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-pic img {
+  width: 250px;
+  border-radius: 50%;
+}

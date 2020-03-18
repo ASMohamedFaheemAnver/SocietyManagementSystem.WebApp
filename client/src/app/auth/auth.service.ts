@@ -7,6 +7,7 @@ import { Subject } from "rxjs";
 export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
   private graphQLUrl = "http://localhost:3000/graphql";
+  private restImageUploadUrl = "http://localhost:3000/upload-profile";
 
   private authStatusListenner = new Subject<boolean>();
   private userId: string;
@@ -18,21 +19,33 @@ export class AuthService {
     return this.authStatusListenner;
   }
 
-  createUser(email: string, name: string, password: string) {
-    const graphqlQuery = {
-      query: `
+  createUser(email: string, name: string, password: string, image: File) {
+    const formData = new FormData();
+    formData.append("image", image);
+    this.http.post(this.restImageUploadUrl, formData).subscribe(
+      res => {
+        console.log(res);
+        const imageUrl = res["imageUrl"];
+        const graphqlQuery = {
+          query: `
         mutation{
-          createUser(userInput: {email: "${email}", name: "${name}" password: "${password}"}){
+          createUser(userInput: {email: "${email}", name: "${name}" password: "${password}", imageUrl: "${imageUrl}"}){
             _id
             email
             name
         }
       }`
-    };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-      res => {
-        console.log(res);
-        this.router.navigateByUrl("/");
+        };
+        this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+          res => {
+            console.log(res);
+            this.router.navigateByUrl("/");
+          },
+          err => {
+            console.log(err);
+            this.authStatusListenner.next(false);
+          }
+        );
       },
       err => {
         console.log(err);
@@ -66,7 +79,7 @@ export class AuthService {
           this.isUserLoggedIn = true;
           this.saveAuthData(token, expirationDate, userId);
           this.setAuthTimer(expiresIn);
-          this.router.navigateByUrl("/user/home");
+          this.router.navigateByUrl("/user/home/" + userId);
         }
       },
       err => {
@@ -132,5 +145,9 @@ export class AuthService {
 
   isUserAuth() {
     return this.isUserLoggedIn;
+  }
+
+  getUserId() {
+    return this.userId;
   }
 }
