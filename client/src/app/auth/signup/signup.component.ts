@@ -10,6 +10,8 @@ import { AuthService } from "../auth.service";
 export class SignupComponent implements OnInit {
   form: FormGroup;
 
+  isLoading = false;
+
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
@@ -22,5 +24,13 @@ export class SignupComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(8)]
       })
     });
+  }
+
+  onSignUp() {
+    this.authService.createUser(
+      this.form.value.email,
+      this.form.value.name,
+      this.form.value.password
+    );
   }
 }

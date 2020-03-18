@@ -7,10 +7,11 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AngularMaterialModule } from "./angular-material.module";
 import { HttpClientModule } from "@angular/common/http";
 import { AuthModule } from "./auth/auth.module";
-import { TopNavComponent } from './shared/top-nav/top-nav.component';
+import { TopNavComponent } from "./shared/top-nav/top-nav.component";
+import { HomeComponent } from "./user/home/home.component";
 
 @NgModule({
-  declarations: [AppComponent, TopNavComponent],
+  declarations: [AppComponent, TopNavComponent, HomeComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

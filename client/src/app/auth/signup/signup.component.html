@@ -1,4 +1,4 @@
-<form [formGroup]="form" class="form">
+<form *ngIf="!isLoading" [formGroup]="form" class="form" (submit)="onSignUp()">
   <h3>USER SIGNUP</h3>
   <mat-form-field appearance="outline">
     <mat-label>Enter your email!</mat-label>
@@ -14,3 +14,4 @@
   </mat-form-field>
   <button mat-raised-button color="primary">SIGNUP</button>
 </form>
+<mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
