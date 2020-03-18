@@ -23,3 +23,8 @@ ul {
   background-color: rgba(0, 0, 0, 0.2);
   color: white;
 }
+
+button {
+  padding: 0.5rem;
+  font-size: 18px;
+}

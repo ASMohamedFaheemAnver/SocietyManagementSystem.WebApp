@@ -1,20 +1,30 @@
 <mat-toolbar>
   <span
-    ><a
-      href="/auth/login"
-      routerLink="/auth/login"
-      routerLinkActive="mat-accent"
+    ><a href="/user/home" routerLink="/user/home" routerLinkActive="mat-accent"
       >VIFA Management System</a
     ></span
   >
   <ul>
     <li>
       <a
+        *ngIf="!isAuth"
+        href="/auth/login"
+        routerLink="/auth/login"
+        routerLinkActive="mat-accent"
+        >LOGIN</a
+      >
+    </li>
+    <li>
+      <a
+        *ngIf="!isAuth"
         href="/auth/signup"
         routerLink="/auth/signup"
         routerLinkActive="mat-accent"
         >SIGNUP</a
       >
+    </li>
+    <li>
+      <button (click)="onLogOut()" mat-button *ngIf="isAuth">LOGOUT</button>
     </li>
   </ul>
 </mat-toolbar>

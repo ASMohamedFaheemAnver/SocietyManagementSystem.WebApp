@@ -82,7 +82,7 @@ export class AuthService {
     }, expiresIn * 1000);
   }
 
-  private logOutUser() {
+  logOutUser() {
     this.token = null;
     this.isUserLoggedIn = false;
     this.authStatusListenner.next(false);
@@ -102,6 +102,32 @@ export class AuthService {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("expirationDate");
+  }
+
+  autoAuthUser() {
+    const authInformation = this.getAuthData();
+    if (authInformation) {
+      const now = new Date();
+      const expiresIn =
+        new Date(authInformation.expirationDate).getTime() - now.getTime();
+      if (expiresIn > 0) {
+        this.token = authInformation.token;
+        this.userId = authInformation.userId;
+        this.isUserLoggedIn = true;
+        this.setAuthTimer(expiresIn / 1000);
+        this.authStatusListenner.next(true);
+      }
+    }
+  }
+
+  private getAuthData() {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const expirationDate = localStorage.getItem("expirationDate");
+    if (!token || !expirationDate) {
+      return;
+    }
+    return { token: token, userId: userId, expirationDate: expirationDate };
   }
 
   isUserAuth() {
