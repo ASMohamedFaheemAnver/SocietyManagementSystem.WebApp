@@ -7,6 +7,8 @@ module.exports = buildSchema(`
     name: String!
     password: String!
     imageUrl: String!
+    address: String!
+    category: String!
   }
 
   type User{
@@ -14,6 +16,8 @@ module.exports = buildSchema(`
     name: String!
     email: String!
     imageUrl: String!
+    address: String!
+    arrears: Int!
   }
 
   type AuthData{
@@ -23,7 +27,7 @@ module.exports = buildSchema(`
   }
 
   type RootQuery{
-    login(email: String!, password: String!): AuthData!
+    login(email: String!, password: String!, category: String!): AuthData!
     getOneUser(userId: String!): User!
   }
 
