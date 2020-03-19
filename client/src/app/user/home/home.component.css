@@ -1,11 +1,17 @@
-section {
-  margin-top: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+mat-card {
+  margin-top: 50px;
+  width: 40%;
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-section img {
+mat-card img {
   width: 200px;
   border-radius: 50%;
+}
+
+.box {
+  padding: 1rem;
 }

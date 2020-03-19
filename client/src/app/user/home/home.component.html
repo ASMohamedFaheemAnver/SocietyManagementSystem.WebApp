@@ -1,5 +1,18 @@
-<section>
+<mat-card>
+  <h1>PROFILE</h1>
   <img src="{{ imageUrl }}" alt="Profile picture!" />
   <h3>{{ name }}</h3>
-  <p>{{ email }}</p>
-</section>
+
+  <div class="box">
+    <strong>Email</strong>
+    <p>{{ email }}</p>
+  </div>
+  <div class="box">
+    <strong>Address</strong>
+    <p>{{ address }}</p>
+  </div>
+  <div class="box">
+    <strong>Arrears</strong>
+    <p>{{ arrears }} RS</p>
+  </div>
+</mat-card>

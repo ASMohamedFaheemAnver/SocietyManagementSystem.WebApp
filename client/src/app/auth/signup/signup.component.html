@@ -1,5 +1,6 @@
 <form *ngIf="!isLoading" [formGroup]="form" class="form" (submit)="onSignUp()">
   <h3>USER SIGNUP</h3>
+
   <div class="profile-pic">
     <img src="{{ imageUrl }}" alt="Profile picture!" />
     <input
@@ -14,18 +15,36 @@
     </button>
     <br />
   </div>
+
   <mat-form-field appearance="outline">
     <mat-label>Enter your email!</mat-label>
     <input formControlName="email" matInput />
   </mat-form-field>
+
   <mat-form-field appearance="outline">
     <mat-label>Enter your name!</mat-label>
     <input formControlName="name" matInput />
   </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Enter your address!</mat-label>
+    <textarea formControlName="address" rows="4" matInput></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>User category!</mat-label>
+    <mat-select formControlName="category">
+      <mat-option value="normalUser">NORMAL USER</mat-option>
+      <mat-option value="administrator">ADMINISTRATOR</mat-option>
+      <mat-option value="superUser">SUPER USER</mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <mat-form-field appearance="outline">
     <mat-label>Enter your password!</mat-label>
     <input formControlName="password" type="password" matInput />
   </mat-form-field>
+
   <button mat-raised-button color="primary">SIGNUP</button>
 </form>
 <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>

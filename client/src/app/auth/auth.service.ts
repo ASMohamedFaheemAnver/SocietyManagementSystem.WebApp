@@ -19,7 +19,14 @@ export class AuthService {
     return this.authStatusListenner;
   }
 
-  createUser(email: string, name: string, password: string, image: File) {
+  createUser(
+    email: string,
+    name: string,
+    password: string,
+    image: File,
+    address: string,
+    category: string
+  ) {
     const formData = new FormData();
     formData.append("image", image);
     this.http.post(this.restImageUploadUrl, formData).subscribe(
@@ -28,13 +35,14 @@ export class AuthService {
         const imageUrl = res["imageUrl"];
         const graphqlQuery = {
           query: `
-        mutation{
-          createUser(userInput: {email: "${email}", name: "${name}" password: "${password}", imageUrl: "${imageUrl}"}){
-            _id
-            email
-            name
-        }
-      }`
+            mutation{
+              createUser(userInput: {email: "${email}", name: "${name}" password: "${password}", 
+              imageUrl: "${imageUrl}", address: "${address}", category: "${category}"}){
+                _id
+                email
+                name
+            }
+          }`
         };
         this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
           res => {
@@ -54,10 +62,10 @@ export class AuthService {
     );
   }
 
-  loginUser(email: string, password: string) {
+  loginUser(email: string, category: string, password: string) {
     const graphqlQuery = {
       query: `{
-        login(email: "${email}", password: "${password}"){
+        login(email: "${email}", password: "${password}", category: "${category}"){
           userId
           token
           expiresIn

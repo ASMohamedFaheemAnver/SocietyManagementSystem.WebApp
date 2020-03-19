@@ -11,10 +11,11 @@ export class UserService {
       query: `
         {
           getOneUser(userId: "${userId}"){
-            _id
   	        email
             name
             imageUrl
+            address
+            arrears
           }
         }
       `

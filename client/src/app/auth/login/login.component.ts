@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email]
       }),
+      category: new FormControl(null, { validators: [Validators.required] }),
       password: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(8)]
       })
@@ -43,6 +44,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
-    this.authService.loginUser(this.form.value.email, this.form.value.password);
+
+    this.authService.loginUser(
+      this.form.value.email,
+      this.form.value.category,
+      this.form.value.password
+    );
   }
 }

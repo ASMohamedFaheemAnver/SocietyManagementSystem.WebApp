@@ -19,6 +19,8 @@ export class HomeComponent implements OnInit {
   name: string;
   userId: string;
   imageUrl = "";
+  address: string;
+  arrears: number;
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -30,6 +32,8 @@ export class HomeComponent implements OnInit {
           this.name = user["data"].getOneUser.name;
           this.userId = user["data"].getOneUser._id;
           this.imageUrl = user["data"].getOneUser.imageUrl;
+          this.address = user["data"].getOneUser.address;
+          this.arrears = user["data"].getOneUser.arrears;
         });
       }
     });
