@@ -2,12 +2,16 @@ const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
 
-const User = require("../model/user");
+const normalUser = require("../model/normal-user");
+
+const superUser = require("../model/super-user");
+const administrativeUser = require("../model/administrative-user");
 
 const validator = require("validator");
 
 module.exports = {
   createUser: async ({ userInput }) => {
+    console.log(userInput);
     const errors = [];
     if (!validator.isEmail(userInput.email)) {
       errors.push({ message: "email is invalid!" });
@@ -30,7 +34,22 @@ module.exports = {
       throw error;
     }
 
-    const existingUser = await User.findOne({ email: userInput.email });
+    let existingUser;
+
+    if (userInput.category === "normalUser") {
+      existingUser = await normalUser.findOne({ email: userInput.email });
+    } else if (userInput.category === "administrator") {
+      existingUser = await administrativeUser.findOne({
+        email: userInput.email
+      });
+    } else if (userInput.category === "superUser") {
+      existingUser = await superUser.findOne({ email: userInput.email });
+    } else {
+      const error = new Error("can't create the category!");
+      error.code = 409;
+      throw error;
+    }
+
     if (existingUser) {
       const error = new Error("user already exist!");
       error.code = 403;
@@ -38,18 +57,47 @@ module.exports = {
     }
 
     const hash = await bcrypt.hash(userInput.password, 12);
-    const user = new User({
-      email: userInput.email,
-      name: userInput.name,
-      password: hash,
-      imageUrl: userInput.imageUrl
-    });
+    let user;
+    if (userInput.category === "normalUser") {
+      user = new normalUser({
+        email: userInput.email,
+        name: userInput.name,
+        password: hash,
+        imageUrl: userInput.imageUrl,
+        address: userInput.address,
+        arrears: 0
+      });
+    } else if (userInput.category === "administrator") {
+      user = new administrativeUser({
+        email: userInput.email,
+        name: userInput.name,
+        password: hash,
+        imageUrl: userInput.imageUrl,
+        address: userInput.address
+      });
+    } else if (userInput.category === "superUser") {
+      user = new superUser({
+        email: userInput.email,
+        name: userInput.name,
+        password: hash,
+        imageUrl: userInput.imageUrl,
+        address: userInput.address
+      });
+    }
     const createdUser = await user.save();
     return createdUser._doc;
   },
 
-  login: async ({ email, password }) => {
-    const user = await User.findOne({ email: email });
+  login: async ({ email, password, category }) => {
+    let user;
+    console.log({ email: email, password: password, category: category });
+    if (category === "normalUser") {
+      user = await normalUser.findOne({ email: email });
+    } else if (category === "administrator") {
+      user = await administrativeUser.findOne({ email: email });
+    } else if (category === "superUser") {
+      user = await superUser.findOne({ email: email });
+    }
 
     if (!user) {
       const error = new Error("user doesn't exist!");
@@ -75,7 +123,7 @@ module.exports = {
   },
 
   getOneUser: async ({ userId }) => {
-    const user = await User.findById(userId);
+    const user = await normalUser.findById(userId);
     return user._doc;
   }
 };
