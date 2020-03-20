@@ -1,7 +1,19 @@
 <mat-toolbar>
   <span
-    ><a href="/user/home" routerLink="/user/home" routerLinkActive="mat-accent"
+    ><a
+      href="{{ homeUrl }}"
+      routerLink="{{ homeUrl }}"
+      routerLinkActive="mat-accent"
       >VIFA Management System</a
+    ></span
+  >
+  <span
+    ><a
+      *ngIf="isAuth"
+      href="/user/members"
+      routerLink="/user/members"
+      routerLinkActive="mat-accent"
+      >MEMBERS</a
     ></span
   >
   <ul>

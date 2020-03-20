@@ -125,5 +125,9 @@ module.exports = {
   getOneUser: async ({ userId }) => {
     const user = await normalUser.findById(userId);
     return user._doc;
+  },
+  getAllUsers: async () => {
+    const users = await normalUser.find();
+    return users;
   }
 };

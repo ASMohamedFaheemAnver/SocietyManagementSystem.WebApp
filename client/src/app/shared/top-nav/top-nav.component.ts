@@ -15,6 +15,9 @@ export class TopNavComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService) {}
   isAuth = false;
+  userId: string;
+  homeUrl = "/user/home/";
+
   ngOnInit(): void {
     this.isAuth = this.authService.isUserAuth();
     this.authStatusSub = this.authService
@@ -22,6 +25,8 @@ export class TopNavComponent implements OnInit, OnDestroy {
       .subscribe(emittedBoolean => {
         this.isAuth = emittedBoolean;
       });
+    this.userId = this.authService.getUserId();
+    this.homeUrl += this.userId;
   }
 
   onLogOut() {
