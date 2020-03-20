@@ -1,0 +1,13 @@
+section {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+section mat-card {
+  text-align: center;
+  width: 300px;
+}
+section mat-card img {
+  width: 200px;
+}
