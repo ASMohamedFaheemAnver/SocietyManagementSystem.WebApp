@@ -6,6 +6,10 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 
+const auth = require("./middleware/auth");
+
+const Developer = require("./model/developer");
+
 const extractFile = require("./middleware/file");
 
 const app = express();
@@ -18,12 +22,14 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "OPTIONS, GET, POST, PUT, PATCH, DELETE"
   );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
   next();
 });
+
+app.use(auth);
 
 app.use("/images", express.static(path.join("images")));
 
@@ -59,6 +65,8 @@ app.use(
   })
 );
 
+let PORT = process.env.PORT || 3000;
+
 mongoose
   .connect(process.env.mongodb_url, {
     useNewUrlParser: true,
@@ -70,7 +78,18 @@ mongoose
       fs.mkdirSync(dir);
     }
 
-    app.listen(3000, () => {
+    Developer.find().then(isSuper => {
+      if (isSuper == 0) {
+        const developer = new Developer({
+          email: "jstrfaheem065@gmail.com",
+          password:
+            "$2b$12$4ffLoL5xlDNxz.WhmI6cbeld4415PhxwFaNzRY1SLYlkay/Tipy7u"
+        });
+        developer.save();
+      }
+    });
+
+    app.listen(PORT, () => {
       console.log("Server is running on " + ip.address() + ":3000");
     });
   })

@@ -2,8 +2,12 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const administrativeUserSchema = new Schema({
+const societySchema = new Schema({
   email: {
+    type: String,
+    required: true
+  },
+  regNo: {
     type: String,
     required: true
   },
@@ -19,10 +23,19 @@ const administrativeUserSchema = new Schema({
     type: String,
     required: true
   },
+  phoneNumber: {
+    type: String,
+    required: true
+  },
   address: {
     type: String,
     required: true
-  }
+  },
+  approved: {
+    type: Boolean,
+    default: false
+  },
+  members: [{ type: Schema.Types.ObjectId, ref: "Member" }]
 });
 
-module.exports = mongoose.model("AdministrativeUser", administrativeUserSchema);
+module.exports = mongoose.model("Society", societySchema);

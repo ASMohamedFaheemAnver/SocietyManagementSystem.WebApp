@@ -19,6 +19,18 @@ export class AuthService {
     return this.authStatusListenner;
   }
 
+  getBasicSocietyDetailes() {
+    const graphqlQuery = {
+      query: `{
+        getBasicSocietyDetailes{
+   	      _id
+          name
+        }
+      }`
+    };
+    return this.http.post(this.graphQLUrl, graphqlQuery);
+  }
+
   createUser(
     email: string,
     name: string,
@@ -62,23 +74,56 @@ export class AuthService {
     );
   }
 
-  loginUser(email: string, category: string, password: string) {
-    const graphqlQuery = {
-      query: `{
-        login(email: "${email}", password: "${password}", category: "${category}"){
-          userId
+  loginUser(email: string, password: string, category: string) {
+    let graphqlQuery;
+
+    if (category === "member") {
+      graphqlQuery = {
+        query: `{
+        loginMember(email: "${email}", password: "${password}"){
+          _id
           token
           expiresIn
         }
       }`
-    };
+      };
+    } else if (category === "society") {
+      graphqlQuery = {
+        query: `{
+        loginMember(email: "${email}", password: "${password}"){
+          _id
+          token
+          expiresIn
+        }
+      }`
+      };
+    } else if (category === "developer") {
+      graphqlQuery = {
+        query: `{
+        loginMember(email: "${email}", password: "${password}"){
+          _id
+          token
+          expiresIn
+        }
+      }`
+      };
+    }
     this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
       res => {
         console.log(res);
-        const token = res["data"].login.token;
+        let token;
+
+        if (category === "member") {
+          token = res["data"].loginMember.token;
+        } else if (category === "society") {
+          token = res["data"].loginMember.token;
+        } else if (category === "developer") {
+          token = res["data"].loginMember.token;
+        }
+
         if (token) {
-          const expiresIn = res["data"].login.expiresIn;
-          const userId = res["data"].login.userId;
+          const expiresIn = res["data"].loginMember.expiresIn;
+          const userId = res["data"].loginMember._id;
           this.token = token;
           this.authStatusListenner.next(true);
 
@@ -153,6 +198,10 @@ export class AuthService {
 
   isUserAuth() {
     return this.isUserLoggedIn;
+  }
+
+  getToken() {
+    return this.token;
   }
 
   getUserId() {

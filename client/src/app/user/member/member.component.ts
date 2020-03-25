@@ -16,11 +16,7 @@ export class MemberComponent implements OnInit, OnDestroy {
   }
   private usersSub: Subscription;
 
-  constructor(
-    private userService: UserService,
-    private authService: AuthService,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private userService: UserService) {}
 
   email: string;
   name: string;

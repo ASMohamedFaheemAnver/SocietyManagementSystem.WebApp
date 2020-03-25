@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const normalUserSchema = new Schema({
+const memberSchema = new Schema({
   email: {
     type: String,
     required: true
@@ -27,9 +27,18 @@ const normalUserSchema = new Schema({
     type: String,
     required: true
   },
+  approved: {
+    type: Boolean,
+    default: false
+  },
+  phoneNumber: {
+    type: String,
+    required: true
+  },
+  society: { type: Schema.Types.ObjectId, ref: "Society" },
   fines: [{ type: Schema.Types.ObjectId, ref: "Fine" }],
   fees: [{ type: Schema.Types.ObjectId, ref: "Fee" }],
   logs: [{ type: Schema.Types.ObjectId, ref: "Log" }]
 });
 
-module.exports = mongoose.model("NormalUser", normalUserSchema);
+module.exports = mongoose.model("Member", memberSchema);

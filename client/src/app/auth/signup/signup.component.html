@@ -16,6 +16,18 @@
     <br />
   </div>
 
+  <mat-form-field appearance="fill">
+    <mat-label>Select society!</mat-label>
+    <mat-select formControlName="societyId">
+      <mat-option *ngFor="let society of societies" value="{{ society._id }}">{{
+        society.name
+      }}</mat-option>
+      <mat-option *ngIf="societies.length == 0">
+        <mat-error>NO SOCIETY HAS BEEN REGISTERED!</mat-error>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <mat-form-field appearance="outline">
     <mat-label>Enter your email!</mat-label>
     <input formControlName="email" matInput />
@@ -34,10 +46,15 @@
   <mat-form-field appearance="fill">
     <mat-label>User category!</mat-label>
     <mat-select formControlName="category">
-      <mat-option value="normalUser">NORMAL USER</mat-option>
-      <mat-option value="administrator">ADMINISTRATOR</mat-option>
-      <mat-option value="superUser">SUPER USER</mat-option>
+      <mat-option value="member">MEMBER</mat-option>
+      <mat-option value="society">SOCIETY</mat-option>
+      <mat-option value="developer">DEVELOPER</mat-option>
     </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Enter your phone number!</mat-label>
+    <input formControlName="phoneNumber" matInput />
   </mat-form-field>
 
   <mat-form-field appearance="outline">

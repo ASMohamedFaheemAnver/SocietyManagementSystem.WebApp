@@ -2,28 +2,58 @@ const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
 
-const normalUser = require("../model/normal-user");
+const Member = require("../model/member");
 
-const superUser = require("../model/super-user");
-const administrativeUser = require("../model/administrative-user");
+const Society = require("../model/society");
+
+const Developer = require("../model/developer");
 
 const validator = require("validator");
 
 module.exports = {
-  createUser: async ({ userInput }) => {
-    console.log(userInput);
+  getBasicSocietyDetailes: async () => {
+    const societies = await Society.find();
+    return societies;
+  },
+  createSociety: async ({ societyInput }) => {
+    let existingSociety = await Society.findOne({ email: societyInput.email });
+
+    if (existingSociety) {
+      const error = new Error("society already exist!");
+      error.code = 403;
+      throw error;
+    }
+
+    const hash = await bcrypt.hash(societyInput.password, 12);
+
+    const society = new Society({
+      email: societyInput.email,
+      name: societyInput.name,
+      imageUrl: societyInput.imageUrl,
+      address: societyInput.address,
+      password: hash,
+      phoneNumber: societyInput.phoneNumber,
+      regNo: societyInput.regNo
+    });
+
+    const createdSociety = await society.save();
+    return createdSociety._doc;
+  },
+
+  createMember: async ({ memberInput }) => {
+    console.log(memberInput);
     const errors = [];
-    if (!validator.isEmail(userInput.email)) {
+    if (!validator.isEmail(memberInput.email)) {
       errors.push({ message: "email is invalid!" });
     }
     if (
-      validator.isEmpty(userInput.password) ||
-      !validator.isLength(userInput.password, { min: 5 })
+      validator.isEmpty(memberInput.password) ||
+      !validator.isLength(memberInput.password, { min: 5 })
     ) {
       errors.push({ message: "password is too short!" });
     }
 
-    // if (!validator.isURL(userInput.imageUrl)) {
+    // if (!validator.isURL(memberInput.imageUrl)) {
     //   errors.push({ message: "image url is not valid!" });
     // }
 
@@ -34,78 +64,93 @@ module.exports = {
       throw error;
     }
 
-    let existingUser;
+    let existingSociety = await Society.findById(memberInput.societyId);
 
-    if (userInput.category === "normalUser") {
-      existingUser = await normalUser.findOne({ email: userInput.email });
-    } else if (userInput.category === "administrator") {
-      existingUser = await administrativeUser.findOne({
-        email: userInput.email
-      });
-    } else if (userInput.category === "superUser") {
-      existingUser = await superUser.findOne({ email: userInput.email });
-    } else {
-      const error = new Error("can't create the category!");
-      error.code = 409;
-      throw error;
-    }
-
-    if (existingUser) {
-      const error = new Error("user already exist!");
+    if (!existingSociety) {
+      const error = new Error("society not exist!");
       error.code = 403;
       throw error;
     }
 
-    const hash = await bcrypt.hash(userInput.password, 12);
-    let user;
-    if (userInput.category === "normalUser") {
-      user = new normalUser({
-        email: userInput.email,
-        name: userInput.name,
-        password: hash,
-        imageUrl: userInput.imageUrl,
-        address: userInput.address,
-        arrears: 0
-      });
-    } else if (userInput.category === "administrator") {
-      user = new administrativeUser({
-        email: userInput.email,
-        name: userInput.name,
-        password: hash,
-        imageUrl: userInput.imageUrl,
-        address: userInput.address
-      });
-    } else if (userInput.category === "superUser") {
-      user = new superUser({
-        email: userInput.email,
-        name: userInput.name,
-        password: hash,
-        imageUrl: userInput.imageUrl,
-        address: userInput.address
-      });
+    let existingMember = await Member.findOne({
+      email: memberInput.email
+    });
+
+    if (existingMember) {
+      const error = new Error("member already exist!");
+      error.code = 403;
+      throw error;
     }
-    const createdUser = await user.save();
-    return createdUser._doc;
+
+    const hash = await bcrypt.hash(memberInput.password, 12);
+    let member = new Member({
+      email: memberInput.email,
+      name: memberInput.name,
+      password: hash,
+      imageUrl: memberInput.imageUrl,
+      address: memberInput.address,
+      arrears: 0,
+      society: existingSociety,
+      phoneNumber: memberInput.phoneNumber
+    });
+    const createdMember = await member.save();
+    existingSociety.members.push(createdMember);
+    await existingSociety.save();
+    return createdMember._doc;
   },
 
-  login: async ({ email, password, category }) => {
-    let user;
-    console.log({ email: email, password: password, category: category });
-    if (category === "normalUser") {
-      user = await normalUser.findOne({ email: email });
-    } else if (category === "administrator") {
-      user = await administrativeUser.findOne({ email: email });
-    } else if (category === "superUser") {
-      user = await superUser.findOne({ email: email });
-    }
-
-    if (!user) {
-      const error = new Error("user doesn't exist!");
+  approveSociety: async ({ societyId }, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
       error.code = 401;
       throw error;
     }
 
-    const isEqual = await bcrypt.compare(password, user.password);
+    if (!societyId) {
+      const error = new Error("invalid society id!");
+      error.code = 403;
+      throw error;
+    }
+    await Society.updateOne({ _id: societyId }, { $set: { approved: true } });
+    return { message: "approved successfly!" };
+  },
+
+  approveMember: async ({ memberId }, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (!memberId) {
+      const error = new Error("invalid society id!");
+      error.code = 403;
+      throw error;
+    }
+    await Member.updateOne(
+      { _id: memberId, society: req.decryptedId },
+      { $set: { approved: true } }
+    );
+    return { message: "approved successfly!" };
+  },
+
+  loginMember: async ({ email, password }) => {
+    console.log({ email: email, password: password });
+    let member = await Member.findOne({ email: email });
+
+    if (!member) {
+      const error = new Error("member doesn't exist!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (!member.approved) {
+      const error = new Error("member doesn't approved yet!");
+      error.code = 401;
+      throw error;
+    }
+
+    const isEqual = await bcrypt.compare(password, member.password);
 
     if (!isEqual) {
       const error = new Error("not authenticated!");
@@ -114,20 +159,93 @@ module.exports = {
     }
 
     const token = jwt.sign(
-      { userId: user._id.toString(), email: user.email },
+      { encryptedId: member._id.toString() },
       process.env.secret_word,
       { expiresIn: "1h" }
     );
 
-    return { token: token, userId: user._id.toString(), expiresIn: 3600 };
+    return { token: token, memberId: member._id.toString(), expiresIn: 3600 };
   },
 
-  getOneUser: async ({ userId }) => {
-    const user = await normalUser.findById(userId);
-    return user._doc;
+  loginSociety: async ({ email, password }) => {
+    console.log({ email: email, password: password });
+    let society = await Society.findOne({ email: email });
+    if (!society) {
+      const error = new Error("society doesn't exist!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (!society.approved) {
+      const error = new Error("society doesn't approved yet!");
+      error.code = 401;
+      throw error;
+    }
+
+    const isEqual = await bcrypt.compare(password, society.password);
+
+    if (!isEqual) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    const token = jwt.sign(
+      { encryptedId: society._id.toString() },
+      process.env.secret_word,
+      { expiresIn: "1h" }
+    );
+
+    return { token: token, societyId: society._id.toString(), expiresIn: 3600 };
   },
-  getAllUsers: async () => {
-    const users = await normalUser.find();
-    return users;
+
+  loginDeveloper: async ({ email, password }) => {
+    console.log({ email: email, password: password });
+    let developer = await Developer.findOne({ email: email });
+    if (!developer) {
+      const error = new Error("developer doesn't exist!");
+      error.code = 401;
+      throw error;
+    }
+
+    const isEqual = await bcrypt.compare(password, developer.password);
+
+    if (!isEqual) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    const token = jwt.sign(
+      { encryptedId: developer._id.toString() },
+      process.env.secret_word,
+      { expiresIn: "1h" }
+    );
+
+    return {
+      token: token,
+      _id: developer._id.toString(),
+      expiresIn: 3600
+    };
+  },
+
+  getOneMember: async ({ memberId }, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    const member = await Member.findById(memberId);
+    return member._doc;
+  },
+  getAllMembers: async req => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+    const members = await Member.find();
+    return members;
   }
 };

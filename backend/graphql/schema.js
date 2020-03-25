@@ -2,16 +2,31 @@ const { buildSchema } = require("graphql");
 
 module.exports = buildSchema(`
 
-  input UserInputData{
+  type Message{
+    message: String!
+  }
+
+  input MemberInputData{
     email: String!
     name: String!
     password: String!
     imageUrl: String!
     address: String!
-    category: String!
+    societyId: String!
+    phoneNumber: String!
   }
 
-  type User{
+  input SocietyInputData{
+    email: String!
+    name: String!
+    password: String!
+    imageUrl: String!
+    address: String!
+    phoneNumber: String!
+    regNo: String!
+  }
+
+  type Member{
     _id: ID!
     name: String!
     email: String!
@@ -20,20 +35,41 @@ module.exports = buildSchema(`
     arrears: Int!
   }
 
+  type Society{
+    _id: ID!
+    name: String!
+    email: String!
+    imageUrl: String!
+    address: String!
+    phoneNumber: String!
+    regNo: String!
+  }
+
+  type BasicSocietyData{
+    _id: ID!
+    name: String!
+  }
+
   type AuthData{
     token: String!
-    userId: String!
+    _id: String!
     expiresIn: Int!
   }
 
   type RootQuery{
-    login(email: String!, password: String!, category: String!): AuthData!
-    getOneUser(userId: String!): User!
-    getAllUsers: [User!]!
+    loginMember(email: String!, password: String!): AuthData!
+    loginSociety(email: String!, password: String!): AuthData!
+    loginDeveloper(email: String!, password: String!): AuthData!
+    getOneMember(memberId: String!): Member!
+    getAllMembers(societyId: String!): [Member!]!
+    getBasicSocietyDetailes: [BasicSocietyData!]!
   }
 
   type RootMutation{
-    createUser(userInput: UserInputData!): User!
+    createSociety(societyInput: SocietyInputData!): Society!
+    createMember(memberInput: MemberInputData!): Member!
+    approveSociety(societyId: String!): Message!
+    approveMember(memberId: String!): Message!
   }
 
   schema{

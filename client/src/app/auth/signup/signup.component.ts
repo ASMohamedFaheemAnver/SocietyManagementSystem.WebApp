@@ -18,6 +18,8 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   private authStatusSub: Subscription;
 
+  societies = [];
+
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
@@ -26,15 +28,21 @@ export class SignupComponent implements OnInit, OnDestroy {
       .subscribe(emittedBoolean => {
         this.isLoading = emittedBoolean;
       });
+    this.authService.getBasicSocietyDetailes().subscribe(res => {
+      this.societies = res["data"].getBasicSocietyDetailes;
+      console.log(this.societies);
+    });
 
     this.form = new FormGroup({
       image: new FormControl(null, { validators: [Validators.required] }),
+      societyId: new FormControl(null, { validators: [Validators.required] }),
       name: new FormControl(null, { validators: [Validators.required] }),
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email]
       }),
       category: new FormControl(null, { validators: [Validators.required] }),
       address: new FormControl(null, { validators: [Validators.required] }),
+      phoneNumber: new FormControl(null, { validators: [Validators.required] }),
       password: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(8)]
       })
