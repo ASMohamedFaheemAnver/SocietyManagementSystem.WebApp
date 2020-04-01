@@ -5,6 +5,7 @@ import { SignupComponent } from "./auth/signup/signup.component";
 import { HomeComponent } from "./user/home/home.component";
 import { AuthGuard } from "./auth/auth.guard";
 import { MemberComponent } from "./user/member/member.component";
+import { DevHomeComponent } from "./developer/dev-home/dev-home.component";
 
 const routes: Routes = [
   {
@@ -28,6 +29,11 @@ const routes: Routes = [
   {
     path: "user/members",
     component: MemberComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "developer/home",
+    component: DevHomeComponent,
     canActivate: [AuthGuard]
   }
 ];

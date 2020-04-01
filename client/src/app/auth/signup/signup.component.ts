@@ -40,7 +40,6 @@ export class SignupComponent implements OnInit, OnDestroy {
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email]
       }),
-      category: new FormControl(null, { validators: [Validators.required] }),
       address: new FormControl(null, { validators: [Validators.required] }),
       phoneNumber: new FormControl(null, { validators: [Validators.required] }),
       password: new FormControl(null, {
@@ -58,13 +57,14 @@ export class SignupComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.authService.createUser(
+    this.authService.createMember(
       this.form.value.email,
       this.form.value.name,
       this.form.value.password,
       this.form.value.image,
       this.form.value.address,
-      this.form.value.category
+      this.form.value.societyId,
+      this.form.value.phoneNumber
     );
   }
 

@@ -31,13 +31,14 @@ export class AuthService {
     return this.http.post(this.graphQLUrl, graphqlQuery);
   }
 
-  createUser(
+  createMember(
     email: string,
     name: string,
     password: string,
     image: File,
     address: string,
-    category: string
+    societyId: string,
+    phoneNumber: string
   ) {
     const formData = new FormData();
     formData.append("image", image);
@@ -48,8 +49,8 @@ export class AuthService {
         const graphqlQuery = {
           query: `
             mutation{
-              createUser(userInput: {email: "${email}", name: "${name}" password: "${password}", 
-              imageUrl: "${imageUrl}", address: "${address}", category: "${category}"}){
+              createMember(memberInput: {email: "${email}", name: "${name}" password: "${password}", 
+              imageUrl: "${imageUrl}", address: "${address}", societyId: "${societyId}", phoneNumber: "${phoneNumber}"}){
                 _id
                 email
                 name
@@ -90,7 +91,7 @@ export class AuthService {
     } else if (category === "society") {
       graphqlQuery = {
         query: `{
-        loginMember(email: "${email}", password: "${password}"){
+        loginSociety(email: "${email}", password: "${password}"){
           _id
           token
           expiresIn
@@ -100,7 +101,7 @@ export class AuthService {
     } else if (category === "developer") {
       graphqlQuery = {
         query: `{
-        loginMember(email: "${email}", password: "${password}"){
+        loginDeveloper(email: "${email}", password: "${password}"){
           _id
           token
           expiresIn
@@ -116,14 +117,25 @@ export class AuthService {
         if (category === "member") {
           token = res["data"].loginMember.token;
         } else if (category === "society") {
-          token = res["data"].loginMember.token;
+          token = res["data"].loginSociety.token;
         } else if (category === "developer") {
-          token = res["data"].loginMember.token;
+          token = res["data"].loginDeveloper.token;
         }
 
         if (token) {
-          const expiresIn = res["data"].loginMember.expiresIn;
-          const userId = res["data"].loginMember._id;
+          let expiresIn;
+          let userId;
+
+          if (category === "member") {
+            expiresIn = res["data"].loginMember.expiresIn;
+            userId = res["data"].loginMember._id;
+          } else if (category === "society") {
+            expiresIn = res["data"].loginSociety.expiresIn;
+            userId = res["data"].loginSociety._id;
+          } else if (category === "developer") {
+            expiresIn = res["data"].loginDeveloper.expiresIn;
+            userId = res["data"].loginDeveloper._id;
+          }
           this.token = token;
           this.authStatusListenner.next(true);
 
@@ -132,7 +144,13 @@ export class AuthService {
           this.isUserLoggedIn = true;
           this.saveAuthData(token, expirationDate, userId);
           this.setAuthTimer(expiresIn);
-          this.router.navigateByUrl("/user/home/" + userId);
+          if (category === "member") {
+            this.router.navigateByUrl("/user/home/" + userId);
+          } else if (category === "society") {
+            this.router.navigateByUrl("/society/home/" + userId);
+          } else if (category === "developer") {
+            this.router.navigateByUrl("/developer/home");
+          }
         }
       },
       err => {

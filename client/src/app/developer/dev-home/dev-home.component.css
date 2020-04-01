@@ -1,0 +1,19 @@
+.parent {
+  display: flex;
+  flex-direction: column;
+}
+mat-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+}
+
+mat-card img {
+  width: 75px;
+  height: 75px;
+}
+
+mat-card .flex-item {
+  margin: 0 1rem;
+}

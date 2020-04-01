@@ -239,7 +239,7 @@ module.exports = {
     const member = await Member.findById(memberId);
     return member._doc;
   },
-  getAllMembers: async req => {
+  getAllMembers: async ({}, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -247,5 +247,14 @@ module.exports = {
     }
     const members = await Member.find();
     return members;
+  },
+  getAllSocieties: async ({}, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+    const societies = await Society.find();
+    return societies;
   }
 };

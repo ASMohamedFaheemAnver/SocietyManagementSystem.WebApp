@@ -1,0 +1,16 @@
+<div class="parent">
+  <mat-card *ngFor="let society of societies">
+    <div class="flex-item">
+      <img src="{{ society.imageUrl }}" alt="society image" />
+    </div>
+    <p class="flex-item">{{ society.name }}</p>
+    <p class="flex-item">{{ society.address }}</p>
+    <p class="flex-item">{{ society.regNo }}</p>
+    <p class="flex-item">{{ society.email }}</p>
+    <p class="flex-item">{{ society.phoneNumber }}</p>
+    <mat-card-actions class="flex-item">
+      <button mat-button class="btn-green">APPROVE</button>
+      <button mat-button color="warn">DELETE</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

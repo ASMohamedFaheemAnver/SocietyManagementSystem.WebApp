@@ -63,6 +63,7 @@ module.exports = buildSchema(`
     getOneMember(memberId: String!): Member!
     getAllMembers(societyId: String!): [Member!]!
     getBasicSocietyDetailes: [BasicSocietyData!]!
+    getAllSocieties: [Society!]!
   }
 
   type RootMutation{
