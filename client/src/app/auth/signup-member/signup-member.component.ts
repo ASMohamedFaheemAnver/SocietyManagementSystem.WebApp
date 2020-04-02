@@ -4,11 +4,11 @@ import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
 
 @Component({
-  selector: "app-signup",
-  templateUrl: "./signup.component.html",
-  styleUrls: ["./signup.component.css"]
+  selector: "app-signup-member",
+  templateUrl: "./signup-member.component.html",
+  styleUrls: ["./signup-member.component.css"]
 })
-export class SignupComponent implements OnInit, OnDestroy {
+export class SignupMemberComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   isLoading = false;

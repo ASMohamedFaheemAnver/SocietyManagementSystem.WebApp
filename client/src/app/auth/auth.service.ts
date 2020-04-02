@@ -75,6 +75,48 @@ export class AuthService {
     );
   }
 
+  createSociety(
+    email: string,
+    name: string,
+    password: string,
+    image: File,
+    address: string,
+    regNo: string,
+    phoneNumber: string
+  ) {
+    const formData = new FormData();
+    formData.append("image", image);
+    this.http.post(this.restImageUploadUrl, formData).subscribe(
+      res => {
+        console.log(res);
+        const imageUrl = res["imageUrl"];
+        const graphqlQuery = {
+          query: `
+            mutation{
+              createSociety(societyInput: {email: "${email}", name: "${name}", password: "${password}", imageUrl: "${imageUrl}", address: "${address}", phoneNumber: "${phoneNumber}", regNo: "2016/008"}){
+                _id
+              }
+            }   
+          `
+        };
+        this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+          res => {
+            console.log(res);
+            this.router.navigateByUrl("/");
+          },
+          err => {
+            console.log(err);
+            this.authStatusListenner.next(false);
+          }
+        );
+      },
+      err => {
+        console.log(err);
+        this.authStatusListenner.next(false);
+      }
+    );
+  }
+
   loginUser(email: string, password: string, category: string) {
     let graphqlQuery;
 

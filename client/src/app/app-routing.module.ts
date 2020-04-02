@@ -1,11 +1,12 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./auth/login/login.component";
-import { SignupComponent } from "./auth/signup/signup.component";
+import { SignupMemberComponent } from "./auth/signup-member/signup-member.component";
 import { HomeComponent } from "./user/home/home.component";
 import { AuthGuard } from "./auth/auth.guard";
 import { MemberComponent } from "./user/member/member.component";
 import { DevHomeComponent } from "./developer/dev-home/dev-home.component";
+import { SignupSocietyComponent } from "./auth/signup-society/signup-society.component";
 
 const routes: Routes = [
   {
@@ -18,8 +19,12 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: "auth/signup",
-    component: SignupComponent
+    path: "auth/signup-member",
+    component: SignupMemberComponent
+  },
+  {
+    path: "auth/signup-society",
+    component: SignupSocietyComponent
   },
   {
     path: "user/home/:userId",

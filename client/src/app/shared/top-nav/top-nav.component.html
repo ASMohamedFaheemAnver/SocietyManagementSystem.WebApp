@@ -29,10 +29,19 @@
     <li>
       <a
         *ngIf="!isAuth"
-        href="/auth/signup"
-        routerLink="/auth/signup"
+        href="/auth/signup-member"
+        routerLink="/auth/signup-member"
         routerLinkActive="mat-accent"
-        >SIGNUP</a
+        >SIGNUP MEMBER</a
+      >
+    </li>
+    <li>
+      <a
+        *ngIf="!isAuth"
+        href="/auth/signup-society"
+        routerLink="/auth/signup-society"
+        routerLinkActive="mat-accent"
+        >SIGNUP SOCIETY</a
       >
     </li>
     <li>
