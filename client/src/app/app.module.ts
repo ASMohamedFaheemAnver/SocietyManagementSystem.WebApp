@@ -12,6 +12,8 @@ import { HomeComponent } from "./user/home/home.component";
 import { MemberComponent } from "./user/member/member.component";
 import { DevHomeComponent } from "./developer/dev-home/dev-home.component";
 import { AuthInterceptor } from "./auth/auth-interceptor";
+import { ErrorInterceptor } from "./error-interceptor";
+import { ErrorComponent } from "./error/error.component";
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
     TopNavComponent,
     HomeComponent,
     MemberComponent,
-    DevHomeComponent
+    DevHomeComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -34,8 +37,14 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ErrorComponent]
 })
 export class AppModule {}
