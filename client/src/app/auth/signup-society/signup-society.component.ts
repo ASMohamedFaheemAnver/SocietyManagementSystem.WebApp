@@ -49,7 +49,7 @@ export class SignupSocietyComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-
+    this.isLoading = true;
     this.authService.createSociety(
       this.form.value.email,
       this.form.value.name,

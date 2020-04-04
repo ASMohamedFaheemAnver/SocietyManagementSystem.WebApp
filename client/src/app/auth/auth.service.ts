@@ -14,6 +14,7 @@ export class AuthService {
   private token: string;
   private isUserLoggedIn: boolean;
   private tokenTimer: NodeJS.Timer;
+  private userCategory: string;
 
   getAuthStatusListener() {
     return this.authStatusListenner;
@@ -26,7 +27,7 @@ export class AuthService {
    	      _id
           name
         }
-      }`
+      }`,
     };
     return this.http.post(this.graphQLUrl, graphqlQuery);
   }
@@ -43,7 +44,7 @@ export class AuthService {
     const formData = new FormData();
     formData.append("image", image);
     this.http.post(this.restImageUploadUrl, formData).subscribe(
-      res => {
+      (res) => {
         console.log(res);
         const imageUrl = res["imageUrl"];
         const graphqlQuery = {
@@ -55,20 +56,20 @@ export class AuthService {
                 email
                 name
             }
-          }`
+          }`,
         };
         this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-          res => {
+          (res) => {
             console.log(res);
             this.router.navigateByUrl("/");
           },
-          err => {
+          (err) => {
             console.log(err);
             this.authStatusListenner.next(false);
           }
         );
       },
-      err => {
+      (err) => {
         console.log(err);
         this.authStatusListenner.next(false);
       }
@@ -87,7 +88,7 @@ export class AuthService {
     const formData = new FormData();
     formData.append("image", image);
     this.http.post(this.restImageUploadUrl, formData).subscribe(
-      res => {
+      (res) => {
         console.log(res);
         const imageUrl = res["imageUrl"];
         const graphqlQuery = {
@@ -97,30 +98,30 @@ export class AuthService {
                 _id
               }
             }   
-          `
+          `,
         };
         this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-          res => {
+          (res) => {
             console.log(res);
             this.router.navigateByUrl("/");
           },
-          err => {
+          (err) => {
             console.log(err);
             this.authStatusListenner.next(false);
           }
         );
       },
-      err => {
+      (err) => {
         console.log(err);
         this.authStatusListenner.next(false);
       }
     );
   }
 
-  loginUser(email: string, password: string, category: string) {
+  loginUser(email: string, password: string, userCategory: string) {
     let graphqlQuery;
 
-    if (category === "member") {
+    if (userCategory === "member") {
       graphqlQuery = {
         query: `{
         loginMember(email: "${email}", password: "${password}"){
@@ -128,9 +129,9 @@ export class AuthService {
           token
           expiresIn
         }
-      }`
+      }`,
       };
-    } else if (category === "society") {
+    } else if (userCategory === "society") {
       graphqlQuery = {
         query: `{
         loginSociety(email: "${email}", password: "${password}"){
@@ -138,9 +139,9 @@ export class AuthService {
           token
           expiresIn
         }
-      }`
+      }`,
       };
-    } else if (category === "developer") {
+    } else if (userCategory === "developer") {
       graphqlQuery = {
         query: `{
         loginDeveloper(email: "${email}", password: "${password}"){
@@ -148,33 +149,35 @@ export class AuthService {
           token
           expiresIn
         }
-      }`
+      }`,
       };
     }
     this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-      res => {
+      (res) => {
         console.log(res);
         let token;
 
-        if (category === "member") {
+        if (userCategory === "member") {
           token = res["data"].loginMember.token;
-        } else if (category === "society") {
+        } else if (userCategory === "society") {
           token = res["data"].loginSociety.token;
-        } else if (category === "developer") {
+        } else if (userCategory === "developer") {
           token = res["data"].loginDeveloper.token;
         }
+
+        this.userCategory = userCategory;
 
         if (token) {
           let expiresIn;
           let userId;
 
-          if (category === "member") {
+          if (userCategory === "member") {
             expiresIn = res["data"].loginMember.expiresIn;
             userId = res["data"].loginMember._id;
-          } else if (category === "society") {
+          } else if (userCategory === "society") {
             expiresIn = res["data"].loginSociety.expiresIn;
             userId = res["data"].loginSociety._id;
-          } else if (category === "developer") {
+          } else if (userCategory === "developer") {
             expiresIn = res["data"].loginDeveloper.expiresIn;
             userId = res["data"].loginDeveloper._id;
           }
@@ -184,18 +187,18 @@ export class AuthService {
           const now = new Date();
           const expirationDate = new Date(now.getTime() + expiresIn * 1000);
           this.isUserLoggedIn = true;
-          this.saveAuthData(token, expirationDate, userId);
+          this.saveAuthData(token, expirationDate, userId, userCategory);
           this.setAuthTimer(expiresIn);
-          if (category === "member") {
+          if (userCategory === "member") {
             this.router.navigateByUrl("/user/home/" + userId);
-          } else if (category === "society") {
+          } else if (userCategory === "society") {
             this.router.navigateByUrl("/society/home/" + userId);
-          } else if (category === "developer") {
+          } else if (userCategory === "developer") {
             this.router.navigateByUrl("/developer/home");
           }
         }
       },
-      err => {
+      (err) => {
         console.log(err);
         this.authStatusListenner.next(false);
       }
@@ -215,18 +218,26 @@ export class AuthService {
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
     this.userId = null;
+    this.userCategory = null;
     this.router.navigateByUrl("/");
   }
 
-  private saveAuthData(token: string, expirationDate: Date, userId: string) {
+  private saveAuthData(
+    token: string,
+    expirationDate: Date,
+    userId: string,
+    userCategory: string
+  ) {
     localStorage.setItem("token", token);
     localStorage.setItem("userId", userId);
+    localStorage.setItem("userCategory", userCategory);
     localStorage.setItem("expirationDate", expirationDate.toISOString());
   }
 
   private clearAuthData() {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
+    localStorage.removeItem("userCategory");
     localStorage.removeItem("expirationDate");
   }
 
@@ -240,6 +251,7 @@ export class AuthService {
         this.token = authInformation.token;
         this.userId = authInformation.userId;
         this.isUserLoggedIn = true;
+        this.userCategory = authInformation.userCategory;
         this.setAuthTimer(expiresIn / 1000);
         this.authStatusListenner.next(true);
       }
@@ -249,11 +261,17 @@ export class AuthService {
   private getAuthData() {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    const userCategory = localStorage.getItem("userCategory");
     const expirationDate = localStorage.getItem("expirationDate");
     if (!token || !expirationDate) {
       return;
     }
-    return { token: token, userId: userId, expirationDate: expirationDate };
+    return {
+      token: token,
+      userId: userId,
+      userCategory: userCategory,
+      expirationDate: expirationDate,
+    };
   }
 
   isUserAuth() {
@@ -262,6 +280,10 @@ export class AuthService {
 
   getToken() {
     return this.token;
+  }
+
+  getUserCategory() {
+    return this.userCategory;
   }
 
   getUserId() {

@@ -9,9 +9,9 @@
   >
   <span
     ><a
-      *ngIf="isAuth"
-      href="/user/members"
-      routerLink="/user/members"
+      *ngIf="isAuth && !isDeveloper"
+      href="/member/members"
+      routerLink="/member/members"
       routerLinkActive="mat-accent"
       >MEMBERS</a
     ></span

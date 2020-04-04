@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ParamMap, ActivatedRoute } from "@angular/router";
-import { UserService } from "../user.service";
+import { MemberService } from "../member.service";
 import { AuthService } from "src/app/auth/auth.service";
 import { Subscription } from "rxjs";
-import { User } from "../user.model";
+import { Member } from "../member.model";
 
 @Component({
   selector: "app-member",
-  templateUrl: "./member.component.html",
-  styleUrls: ["./member.component.css"]
+  templateUrl: "./members.component.html",
+  styleUrls: ["./members.component.css"],
 })
 export class MemberComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
@@ -16,7 +16,7 @@ export class MemberComponent implements OnInit, OnDestroy {
   }
   private usersSub: Subscription;
 
-  constructor(private userService: UserService) {}
+  constructor(private memberService: MemberService) {}
 
   email: string;
   name: string;
@@ -24,13 +24,13 @@ export class MemberComponent implements OnInit, OnDestroy {
   imageUrl = "";
   address: string;
   arrears: number;
-  users: User[] = [];
+  users: Member[] = [];
 
   ngOnInit(): void {
-    this.userService.getAllUsers();
-    this.usersSub = this.userService
+    this.memberService.getAllUsers();
+    this.usersSub = this.memberService
       .getUserUpdateListener()
-      .subscribe(users => {
+      .subscribe((users) => {
         this.users = users;
       });
   }

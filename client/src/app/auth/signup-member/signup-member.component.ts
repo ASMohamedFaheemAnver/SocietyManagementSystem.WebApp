@@ -56,7 +56,7 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
-
+    this.isLoading = true;
     this.authService.createMember(
       this.form.value.email,
       this.form.value.name,

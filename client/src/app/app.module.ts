@@ -8,21 +8,21 @@ import { AngularMaterialModule } from "./angular-material.module";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { AuthModule } from "./auth/auth.module";
 import { TopNavComponent } from "./shared/top-nav/top-nav.component";
-import { HomeComponent } from "./user/home/home.component";
-import { MemberComponent } from "./user/member/member.component";
+import { MemberComponent } from "./member/members/members.component";
 import { DevHomeComponent } from "./developer/dev-home/dev-home.component";
 import { AuthInterceptor } from "./auth/auth-interceptor";
 import { ErrorInterceptor } from "./error-interceptor";
 import { ErrorComponent } from "./error/error.component";
+import { MemberHomeComponent } from "./member/member-home/member-home.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     TopNavComponent,
-    HomeComponent,
+    MemberHomeComponent,
     MemberComponent,
     DevHomeComponent,
-    ErrorComponent
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,21 +30,21 @@ import { ErrorComponent } from "./error/error.component";
     BrowserAnimationsModule,
     AngularMaterialModule,
     HttpClientModule,
-    AuthModule
+    AuthModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ErrorComponent]
+  entryComponents: [ErrorComponent],
 })
 export class AppModule {}

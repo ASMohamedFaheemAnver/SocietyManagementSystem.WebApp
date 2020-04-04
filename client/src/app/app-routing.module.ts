@@ -2,50 +2,50 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./auth/login/login.component";
 import { SignupMemberComponent } from "./auth/signup-member/signup-member.component";
-import { HomeComponent } from "./user/home/home.component";
 import { AuthGuard } from "./auth/auth.guard";
-import { MemberComponent } from "./user/member/member.component";
+import { MemberComponent } from "./member/members/members.component";
 import { DevHomeComponent } from "./developer/dev-home/dev-home.component";
 import { SignupSocietyComponent } from "./auth/signup-society/signup-society.component";
+import { MemberHomeComponent } from "./member/member-home/member-home.component";
 
 const routes: Routes = [
   {
     path: "",
     redirectTo: "auth/login",
-    pathMatch: "full"
+    pathMatch: "full",
   },
   {
     path: "auth/login",
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: "auth/signup-member",
-    component: SignupMemberComponent
+    component: SignupMemberComponent,
   },
   {
     path: "auth/signup-society",
-    component: SignupSocietyComponent
+    component: SignupSocietyComponent,
   },
   {
-    path: "user/home/:userId",
-    component: HomeComponent,
-    canActivate: [AuthGuard]
+    path: "member/home/:memberId",
+    component: MemberHomeComponent,
+    canActivate: [AuthGuard],
   },
   {
-    path: "user/members",
+    path: "member/members",
     component: MemberComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: "developer/home",
     component: DevHomeComponent,
-    canActivate: [AuthGuard]
-  }
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [AuthGuard]
+  providers: [AuthGuard],
 })
 export class AppRoutingModule {}
