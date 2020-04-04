@@ -6,7 +6,7 @@ import { Subscription } from "rxjs";
 @Component({
   selector: "app-signup-member",
   templateUrl: "./signup-member.component.html",
-  styleUrls: ["./signup-member.component.css"]
+  styleUrls: ["./signup-member.component.css"],
 })
 export class SignupMemberComponent implements OnInit, OnDestroy {
   form: FormGroup;
@@ -23,14 +23,16 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.authStatusSub = this.authService
       .getAuthStatusListener()
-      .subscribe(emittedBoolean => {
+      .subscribe((emittedBoolean) => {
         this.isLoading = emittedBoolean;
       });
-    this.authService.getBasicSocietyDetailes().subscribe(res => {
+    this.authService.getBasicSocietyDetailes().subscribe((res) => {
       this.societies = res["data"].getBasicSocietyDetailes;
       console.log(this.societies);
+      this.isLoading = false;
     });
 
     this.form = new FormGroup({
@@ -38,13 +40,13 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
       societyId: new FormControl(null, { validators: [Validators.required] }),
       name: new FormControl(null, { validators: [Validators.required] }),
       email: new FormControl(null, {
-        validators: [Validators.required, Validators.email]
+        validators: [Validators.required, Validators.email],
       }),
       address: new FormControl(null, { validators: [Validators.required] }),
       phoneNumber: new FormControl(null, { validators: [Validators.required] }),
       password: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(8)]
-      })
+        validators: [Validators.required, Validators.minLength(8)],
+      }),
     });
   }
 

@@ -10,7 +10,7 @@
       (change)="onImageUpload($event)"
     />
     <br />
-    <button mat-stroked-button (click)="inputImage.click()">
+    <button type="button" mat-stroked-button (click)="inputImage.click()">
       UPLOAD PICTURE!
     </button>
     <br />
@@ -53,6 +53,6 @@
     <input formControlName="password" type="password" matInput />
   </mat-form-field>
 
-  <button mat-raised-button color="primary">SIGNUP</button>
+  <button type="submit" mat-raised-button color="primary">SIGNUP</button>
 </form>
 <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>

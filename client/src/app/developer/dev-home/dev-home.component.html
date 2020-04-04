@@ -9,8 +9,24 @@
     <p class="flex-item">{{ society.email }}</p>
     <p class="flex-item">{{ society.phoneNumber }}</p>
     <mat-card-actions class="flex-item">
-      <button mat-button class="btn-green">APPROVE</button>
+      <button
+        *ngIf="!society.approved"
+        mat-button
+        class="btn-green"
+        (click)="onApproveSociety(society._id)"
+      >
+        APPROVE
+      </button>
+      <button
+        *ngIf="society.approved"
+        mat-button
+        color="warn"
+        (click)="onDisApproveSociety(society._id)"
+      >
+        DISAPPROVE
+      </button>
       <button mat-button color="warn">DELETE</button>
     </mat-card-actions>
   </mat-card>
 </div>
+<mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>

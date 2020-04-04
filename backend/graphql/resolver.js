@@ -33,7 +33,7 @@ module.exports = {
       address: societyInput.address,
       password: hash,
       phoneNumber: societyInput.phoneNumber,
-      regNo: societyInput.regNo
+      regNo: societyInput.regNo,
     });
 
     const createdSociety = await society.save();
@@ -73,7 +73,7 @@ module.exports = {
     }
 
     let existingMember = await Member.findOne({
-      email: memberInput.email
+      email: memberInput.email,
     });
 
     if (existingMember) {
@@ -91,7 +91,7 @@ module.exports = {
       address: memberInput.address,
       arrears: 0,
       society: existingSociety,
-      phoneNumber: memberInput.phoneNumber
+      phoneNumber: memberInput.phoneNumber,
     });
     const createdMember = await member.save();
     existingSociety.members.push(createdMember);
@@ -132,6 +132,22 @@ module.exports = {
       { $set: { approved: true } }
     );
     return { message: "approved successfly!" };
+  },
+
+  disApproveSociety: async ({ societyId }, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (!societyId) {
+      const error = new Error("invalid society id!");
+      error.code = 403;
+      throw error;
+    }
+    await Society.updateOne({ _id: societyId }, { $set: { approved: false } });
+    return { message: "disapproved successfly!" };
   },
 
   loginMember: async ({ email, password }) => {
@@ -225,7 +241,7 @@ module.exports = {
     return {
       token: token,
       _id: developer._id.toString(),
-      expiresIn: 3600
+      expiresIn: 3600,
     };
   },
 
@@ -256,5 +272,5 @@ module.exports = {
     }
     const societies = await Society.find();
     return societies;
-  }
+  },
 };

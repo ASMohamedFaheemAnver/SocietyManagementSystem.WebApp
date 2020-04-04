@@ -43,6 +43,7 @@ module.exports = buildSchema(`
     address: String!
     phoneNumber: String!
     regNo: String!
+    approved: Boolean!
   }
 
   type BasicSocietyData{
@@ -71,6 +72,7 @@ module.exports = buildSchema(`
     createMember(memberInput: MemberInputData!): Member!
     approveSociety(societyId: String!): Message!
     approveMember(memberId: String!): Message!
+    disApproveSociety(societyId: String!): Message!
   }
 
   schema{
