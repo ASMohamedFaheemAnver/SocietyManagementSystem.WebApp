@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { DevService } from "../dev.service";
 import { Subscription } from "rxjs";
 import { Society } from "../society.model";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-dev-home",
@@ -10,6 +11,7 @@ import { Society } from "../society.model";
 })
 export class DevHomeComponent implements OnInit, OnDestroy {
   isLoading = false;
+  back_end_url = environment.back_end_url;
 
   constructor(private devService: DevService) {}
   ngOnDestroy(): void {
@@ -38,8 +40,13 @@ export class DevHomeComponent implements OnInit, OnDestroy {
     this.devService.approveSociety(societyId);
   }
 
-  onDisApproveSociety(societyId) {
+  onDisApproveSociety(societyId: string) {
     this.isLoading = true;
     this.devService.disApproveSociety(societyId);
+  }
+
+  onDeleteSociety(societyId: string) {
+    this.isLoading = true;
+    this.devService.deleteSociety(societyId);
   }
 }

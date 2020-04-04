@@ -1,7 +1,7 @@
 <div class="parent">
   <mat-card *ngFor="let society of societies">
     <div class="flex-item">
-      <img src="{{ society.imageUrl }}" alt="society image" />
+      <img src="{{ back_end_url + society.imageUrl }}" alt="society image" />
     </div>
     <p class="flex-item">{{ society.name }}</p>
     <p class="flex-item">{{ society.address }}</p>
@@ -25,7 +25,9 @@
       >
         DISAPPROVE
       </button>
-      <button mat-button color="warn">DELETE</button>
+      <button (click)="onDeleteSociety(society._id)" mat-button color="warn">
+        DELETE
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>

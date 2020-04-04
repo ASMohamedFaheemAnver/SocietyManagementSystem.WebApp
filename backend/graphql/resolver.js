@@ -10,6 +10,8 @@ const Developer = require("../model/developer");
 
 const validator = require("validator");
 
+const fileDeletor = require("../util/delete-file");
+
 module.exports = {
   getBasicSocietyDetailes: async () => {
     const societies = await Society.find();
@@ -106,6 +108,12 @@ module.exports = {
       throw error;
     }
 
+    if (req.category !== "developer") {
+      const error = new Error("only developer can approve societies!");
+      error.code = 401;
+      throw error;
+    }
+
     if (!societyId) {
       const error = new Error("invalid society id!");
       error.code = 403;
@@ -118,6 +126,12 @@ module.exports = {
   approveMember: async ({ memberId }, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (req.category !== "society") {
+      const error = new Error("only society can approve it's member!");
       error.code = 401;
       throw error;
     }
@@ -137,6 +151,12 @@ module.exports = {
   disApproveSociety: async ({ societyId }, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (req.category !== "developer") {
+      const error = new Error("only developer can approve societies!");
       error.code = 401;
       throw error;
     }
@@ -175,7 +195,7 @@ module.exports = {
     }
 
     const token = jwt.sign(
-      { encryptedId: member._id.toString() },
+      { encryptedId: member._id.toString(), category: "member" },
       process.env.secret_word,
       { expiresIn: "1h" }
     );
@@ -207,12 +227,12 @@ module.exports = {
     }
 
     const token = jwt.sign(
-      { encryptedId: society._id.toString() },
+      { encryptedId: society._id.toString(), category: "society" },
       process.env.secret_word,
       { expiresIn: "1h" }
     );
 
-    return { token: token, societyId: society._id.toString(), expiresIn: 3600 };
+    return { token: token, _id: society._id.toString(), expiresIn: 3600 };
   },
 
   loginDeveloper: async ({ email, password }) => {
@@ -233,7 +253,7 @@ module.exports = {
     }
 
     const token = jwt.sign(
-      { encryptedId: developer._id.toString() },
+      { encryptedId: developer._id.toString(), category: "developer" },
       process.env.secret_word,
       { expiresIn: "1h" }
     );
@@ -252,12 +272,23 @@ module.exports = {
       throw error;
     }
 
+    if (req.category !== "member") {
+      const error = new Error("only developer can approve societies!");
+      error.code = 401;
+      throw error;
+    }
+
     const member = await Member.findById(memberId);
     return member._doc;
   },
   getAllMembers: async ({}, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+    if (req.category !== "member") {
+      const error = new Error("only developer can approve societies!");
       error.code = 401;
       throw error;
     }
@@ -270,7 +301,29 @@ module.exports = {
       error.code = 401;
       throw error;
     }
+    if (req.category !== "developer") {
+      const error = new Error("only developer can approve societies!");
+      error.code = 401;
+      throw error;
+    }
     const societies = await Society.find();
     return societies;
+  },
+
+  deleteSociety: async ({ societyId }, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+    if (req.category !== "developer") {
+      const error = new Error("only developer can delete societies!");
+      error.code = 401;
+      throw error;
+    }
+    const society = await Society.findById(societyId);
+    fileDeletor(society.imageUrl);
+    await society.delete();
+    return { message: "society deleted!" };
   },
 };

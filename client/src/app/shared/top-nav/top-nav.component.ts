@@ -45,7 +45,6 @@ export class TopNavComponent implements OnInit, OnDestroy {
     } else {
       this.homeUrl = "/user/home/" + this.userId;
     }
-    console.log(this.isDeveloper);
   }
 
   onLogOut() {

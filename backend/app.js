@@ -37,9 +37,10 @@ app.post("/upload-profile", extractFile, (req, res, next) => {
   if (!req.file) {
     return res.status(404).json({ message: "no file provided!" });
   }
-  const url = req.protocol + "://" + req.get("host");
+  // const url = req.protocol + "://" + req.get("host");
 
-  const imageUrl = url + "/" + req.file.path;
+  // const imageUrl = url + "/" + req.file.path;
+  const imageUrl = req.file.path;
 
   return res
     .status(201)
@@ -61,7 +62,7 @@ app.use(
       const message = err.message;
       const code = err.originalError.code || 500;
       return { message: message, status: code, data: data };
-    }
+    },
   })
 );
 
@@ -70,20 +71,20 @@ let PORT = process.env.PORT || 3000;
 mongoose
   .connect(process.env.mongodb_url, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
-  .then(_ => {
+  .then((_) => {
     const dir = path.join(__dirname, "images");
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
 
-    Developer.find().then(isSuper => {
+    Developer.find().then((isSuper) => {
       if (isSuper == 0) {
         const developer = new Developer({
           email: "jstrfaheem065@gmail.com",
           password:
-            "$2b$12$4ffLoL5xlDNxz.WhmI6cbeld4415PhxwFaNzRY1SLYlkay/Tipy7u"
+            "$2b$12$4ffLoL5xlDNxz.WhmI6cbeld4415PhxwFaNzRY1SLYlkay/Tipy7u",
         });
         developer.save();
       }
@@ -93,6 +94,6 @@ mongoose
       console.log("Server is running on " + ip.address() + ":3000");
     });
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });

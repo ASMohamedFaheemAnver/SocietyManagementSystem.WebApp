@@ -22,6 +22,7 @@ module.exports = (req, res, next) => {
     return next();
   }
   req.decryptedId = decodedToken.encryptedId;
+  req.category = decodedToken.category;
   req.isAuth = true;
   next();
 };
