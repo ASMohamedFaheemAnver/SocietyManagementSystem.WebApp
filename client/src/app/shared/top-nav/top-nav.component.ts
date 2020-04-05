@@ -19,6 +19,7 @@ export class TopNavComponent implements OnInit, OnDestroy {
   isDeveloper = true;
   homeUrl: string;
   userCategory: string;
+  membersUrl: string;
 
   ngOnInit(): void {
     this.isAuth = this.authService.isUserAuth();
@@ -42,8 +43,12 @@ export class TopNavComponent implements OnInit, OnDestroy {
     this.userId = this.authService.getUserId();
     if (this.isDeveloper) {
       this.homeUrl = "/developer/home";
-    } else {
-      this.homeUrl = "/user/home/" + this.userId;
+    } else if (this.userCategory === "society") {
+      this.homeUrl = "/society/home/";
+      this.membersUrl = "/society/members";
+    } else if (this.userCategory === "member") {
+      this.homeUrl = "/member/home/";
+      this.membersUrl = "/member/members";
     }
   }
 

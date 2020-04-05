@@ -10,8 +10,8 @@
   <span
     ><a
       *ngIf="isAuth && !isDeveloper"
-      href="/member/members"
-      routerLink="/member/members"
+      href="{{ membersUrl }}"
+      routerLink="{{ membersUrl }}"
       routerLinkActive="mat-accent"
       >MEMBERS</a
     ></span

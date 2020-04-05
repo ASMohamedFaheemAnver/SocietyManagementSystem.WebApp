@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  back_end_url: "http://localhost:3000/",
+  backeEndBaseUrl: "http://localhost:3000/",
+  backEndGraphQlUrl: "http://localhost:3000/graphql",
+  backEndPicUploadUrl: "http://localhost:3000/upload-profile",
 };
 
 /*

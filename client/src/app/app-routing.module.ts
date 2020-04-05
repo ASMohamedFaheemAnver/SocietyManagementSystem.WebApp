@@ -3,10 +3,11 @@ import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./auth/login/login.component";
 import { SignupMemberComponent } from "./auth/signup-member/signup-member.component";
 import { AuthGuard } from "./auth/auth.guard";
-import { MemberComponent } from "./member/members/members.component";
 import { DevHomeComponent } from "./developer/dev-home/dev-home.component";
 import { SignupSocietyComponent } from "./auth/signup-society/signup-society.component";
 import { MemberHomeComponent } from "./member/member-home/member-home.component";
+import { SocietyHomeComponent } from "./society/society-home/society-home.component";
+import { SocietyMembersComponent } from "./society/society-members/society-members.component";
 
 const routes: Routes = [
   {
@@ -32,13 +33,18 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: "member/members",
-    component: MemberComponent,
+    path: "developer/home",
+    component: DevHomeComponent,
     canActivate: [AuthGuard],
   },
   {
-    path: "developer/home",
-    component: DevHomeComponent,
+    path: "society/home",
+    component: SocietyHomeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "society/members",
+    component: SocietyMembersComponent,
     canActivate: [AuthGuard],
   },
 ];

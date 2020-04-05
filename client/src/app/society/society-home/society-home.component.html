@@ -1,0 +1,24 @@
+<mat-card>
+  <h1>PROFILE</h1>
+  <img
+    *ngIf="imageUrl"
+    src="{{ backeEndBaseUrl + imageUrl }}"
+    alt="Profile
+  picture!"
+  />
+  <h3>{{ name }}</h3>
+
+  <div class="box">
+    <strong>Email</strong>
+    <p>{{ email }}</p>
+  </div>
+  <div class="box">
+    <strong>Address</strong>
+    <p>{{ address }}</p>
+  </div>
+  <div class="box">
+    <strong>Registration number</strong>
+    <p>{{ regNo }}</p>
+  </div>
+</mat-card>
+<mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>

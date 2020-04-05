@@ -2,11 +2,12 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Member } from "./member.model";
 import { Subject } from "rxjs";
+import { environment } from "src/environments/environment";
 
 @Injectable({ providedIn: "root" })
 export class MemberService {
   constructor(private http: HttpClient) {}
-  private graphQLUrl = "http://localhost:3000/graphql";
+  private graphQLUrl = environment.backEndGraphQlUrl;
   private usersUpdated = new Subject<Member[]>();
   private users: Member[] = [];
 

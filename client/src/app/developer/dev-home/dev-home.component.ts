@@ -11,19 +11,20 @@ import { environment } from "src/environments/environment";
 })
 export class DevHomeComponent implements OnInit, OnDestroy {
   isLoading = false;
-  back_end_url = environment.back_end_url;
+  backeEndBaseUrl = environment.backeEndBaseUrl;
 
   constructor(private devService: DevService) {}
   ngOnDestroy(): void {
     this.societiesSub.unsubscribe();
+    this.devStatusSub.unsubscribe();
   }
   societies: Society[] = [];
   private societiesSub: Subscription;
-  private devStatusListenner: Subscription;
+  private devStatusSub: Subscription;
 
   ngOnInit(): void {
     this.devService.getAllSociety();
-    this.devStatusListenner = this.devService
+    this.devStatusSub = this.devService
       .getDevStatusListenner()
       .subscribe((emittedBoolean) => {
         this.isLoading = emittedBoolean;

@@ -11,7 +11,6 @@ import { MemberService } from "../member.service";
 export class MemberHomeComponent implements OnInit {
   constructor(
     private memberService: MemberService,
-    private authService: AuthService,
     private route: ActivatedRoute
   ) {}
 

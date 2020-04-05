@@ -2,12 +2,13 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
+import { environment } from "src/environments/environment";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
-  private graphQLUrl = "http://localhost:3000/graphql";
-  private restImageUploadUrl = "http://localhost:3000/upload-profile";
+  private graphQLUrl = environment.backEndGraphQlUrl;
+  private restImageUploadUrl = environment.backEndPicUploadUrl;
 
   private authStatusListenner = new Subject<boolean>();
   private userId: string;
@@ -51,7 +52,7 @@ export class AuthService {
           query: `
             mutation{
               createMember(memberInput: {email: "${email}", name: "${name}" password: "${password}", 
-              imageUrl: "${imageUrl}", address: "${address}", societyId: "${societyId}", phoneNumber: "${phoneNumber}"}){
+              imageUrl: "${imageUrl}", address: """${address}""", societyId: "${societyId}", phoneNumber: "${phoneNumber}"}){
                 _id
                 email
                 name
@@ -94,7 +95,7 @@ export class AuthService {
         const graphqlQuery = {
           query: `
             mutation{
-              createSociety(societyInput: {email: "${email}", name: "${name}", password: "${password}", imageUrl: "${imageUrl}", address: "${address}", phoneNumber: "${phoneNumber}", regNo: "2016/008"}){
+              createSociety(societyInput: {email: "${email}", name: "${name}", password: "${password}", imageUrl: "${imageUrl}", address: """${address}""", phoneNumber: "${phoneNumber}", regNo: "${regNo}"}){
                 _id
               }
             }   
@@ -183,16 +184,16 @@ export class AuthService {
           }
           this.token = token;
           this.authStatusListenner.next(true);
-
+          this.userId = userId;
           const now = new Date();
           const expirationDate = new Date(now.getTime() + expiresIn * 1000);
           this.isUserLoggedIn = true;
           this.saveAuthData(token, expirationDate, userId, userCategory);
           this.setAuthTimer(expiresIn);
           if (userCategory === "member") {
-            this.router.navigateByUrl("/user/home/" + userId);
+            this.router.navigateByUrl("/member/home" + userId);
           } else if (userCategory === "society") {
-            this.router.navigateByUrl("/society/home/" + userId);
+            this.router.navigateByUrl("/society/home");
           } else if (userCategory === "developer") {
             this.router.navigateByUrl("/developer/home");
           }

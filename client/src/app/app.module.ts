@@ -8,21 +8,23 @@ import { AngularMaterialModule } from "./angular-material.module";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { AuthModule } from "./auth/auth.module";
 import { TopNavComponent } from "./shared/top-nav/top-nav.component";
-import { MemberComponent } from "./member/members/members.component";
 import { DevHomeComponent } from "./developer/dev-home/dev-home.component";
 import { AuthInterceptor } from "./auth/auth-interceptor";
 import { ErrorInterceptor } from "./error-interceptor";
 import { ErrorComponent } from "./error/error.component";
 import { MemberHomeComponent } from "./member/member-home/member-home.component";
+import { SocietyHomeComponent } from "./society/society-home/society-home.component";
+import { SocietyMembersComponent } from './society/society-members/society-members.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TopNavComponent,
     MemberHomeComponent,
-    MemberComponent,
     DevHomeComponent,
     ErrorComponent,
+    SocietyHomeComponent,
+    SocietyMembersComponent,
   ],
   imports: [
     BrowserModule,

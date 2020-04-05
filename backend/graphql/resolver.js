@@ -281,19 +281,19 @@ module.exports = {
     const member = await Member.findById(memberId);
     return member._doc;
   },
-  getAllMembers: async ({}, req) => {
+  getAllSocietyMembers: async ({ societyId }, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
       throw error;
     }
-    if (req.category !== "member") {
+    if (req.category !== "society") {
       const error = new Error("only developer can approve societies!");
       error.code = 401;
       throw error;
     }
-    const members = await Member.find();
-    return members;
+    const society = await Society.findById(societyId).populate("members");
+    return society.members;
   },
   getAllSocieties: async ({}, req) => {
     if (!req.isAuth) {
@@ -325,5 +325,20 @@ module.exports = {
     fileDeletor(society.imageUrl);
     await society.delete();
     return { message: "society deleted!" };
+  },
+
+  getOneSociety: async ({ societyId }, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+    if (req.category !== "society") {
+      const error = new Error("only developer can delete societies!");
+      error.code = 401;
+      throw error;
+    }
+    const society = await Society.findById(societyId);
+    return society;
   },
 };
