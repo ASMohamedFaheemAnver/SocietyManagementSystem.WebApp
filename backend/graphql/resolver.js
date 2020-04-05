@@ -366,6 +366,7 @@ module.exports = {
     return society;
   },
   deleteMember: async ({ memberId }, req) => {
+    console.log({ memberId: memberId });
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -376,7 +377,9 @@ module.exports = {
       error.code = 401;
       throw error;
     }
-    const member = await Member.findById(memberId);
+    const member = await Member.findById(memberId).populate("society");
+    member.society.members.pop(memberId);
+    await member.society.save();
     fileDeletor(member.imageUrl);
     await member.delete();
     return { message: "member deleted!" };
