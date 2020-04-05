@@ -37,6 +37,7 @@ export class SocietyHomeComponent implements OnInit {
         this.imageUrl = society["data"].getOneSociety.imageUrl;
         this.address = society["data"].getOneSociety.address;
         this.regNo = society["data"].getOneSociety.regNo;
+        this.isLoading = false;
       },
       (err) => {
         this.isLoading = false;

@@ -40,6 +40,7 @@ export class SocietyService {
           imageUrl
           address
           arrears
+          approved
         }
       }`,
     };
@@ -62,5 +63,64 @@ export class SocietyService {
 
   getSocietyStatusListenner() {
     return this.societyStatusListenner;
+  }
+
+  approveMember(memberId: string) {
+    const graphqlQuery = {
+      query: `
+      mutation{
+        approveMember(memberId: "${memberId}"){
+          message
+        }
+      }`,
+    };
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      (res) => {
+        console.log(res);
+        let updatedMembers = this.members;
+        updatedMembers = updatedMembers.map((member) => {
+          if (member._id === memberId) {
+            member.approved = true;
+          }
+          return member;
+        });
+        this.members = updatedMembers;
+        this.membersUpdated.next([...updatedMembers]);
+        this.societyStatusListenner.next(false);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
+  }
+  disApproveMember(memberId: string) {
+    const graphqlQuery = {
+      query: `
+      mutation{
+        disApproveMember(memberId: "${memberId}"){
+          message
+        }
+      }`,
+    };
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      (res) => {
+        console.log(res);
+        let updatedMembers = this.members;
+        updatedMembers = updatedMembers.map((member) => {
+          if (member._id === memberId) {
+            member.approved = false;
+          }
+          return member;
+        });
+        this.members = updatedMembers;
+        this.membersUpdated.next([...updatedMembers]);
+        this.societyStatusListenner.next(false);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
   }
 }

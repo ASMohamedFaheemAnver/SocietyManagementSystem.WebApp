@@ -33,6 +33,7 @@ module.exports = buildSchema(`
     imageUrl: String!
     address: String!
     arrears: Int!
+    approved: Boolean!
   }
 
   type Society{
@@ -75,6 +76,7 @@ module.exports = buildSchema(`
     approveMember(memberId: String!): Message!
     disApproveSociety(societyId: String!): Message!
     deleteSociety(societyId: String!): Message!
+    disApproveMember(memberId: String!): Message!
   }
 
   schema{

@@ -147,6 +147,30 @@ module.exports = {
     );
     return { message: "approved successfly!" };
   },
+  disApproveMember: async ({ memberId }, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (req.category !== "society") {
+      const error = new Error("only society can disapprove it's member!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (!memberId) {
+      const error = new Error("invalid society id!");
+      error.code = 403;
+      throw error;
+    }
+    await Member.updateOne(
+      { _id: memberId, society: req.decryptedId },
+      { $set: { approved: false } }
+    );
+    return { message: "disapproved successfly!" };
+  },
 
   disApproveSociety: async ({ societyId }, req) => {
     if (!req.isAuth) {

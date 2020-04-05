@@ -5,4 +5,5 @@ export interface Member {
   imageUrl: string;
   address: string;
   arrears: number;
+  approved: boolean;
 }

@@ -20,5 +20,26 @@
     <strong>Arrears</strong>
     <p>{{ member.arrears }}</p>
   </div>
+  <mat-card-actions class="flex-item">
+    <button
+      *ngIf="!member.approved"
+      mat-button
+      class="btn-green"
+      (click)="onApproveMember(member._id)"
+    >
+      APPROVE
+    </button>
+    <button
+      *ngIf="member.approved"
+      mat-button
+      color="warn"
+      (click)="onDisApproveMember(member._id)"
+    >
+      DISAPPROVE
+    </button>
+    <button mat-button color="warn" (click)="onDeleteMember(member._id)">
+      DELETE
+    </button>
+  </mat-card-actions>
 </mat-card>
 <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>

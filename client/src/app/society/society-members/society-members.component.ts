@@ -42,4 +42,16 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
       });
     this.societyServie.getAllSocietyMembers(this.authService.getUserId());
   }
+
+  onApproveMember(memberId: string) {
+    this.isLoading = true;
+    this.societyServie.approveMember(memberId);
+  }
+
+  onDeleteMember(memberId: string) {}
+
+  onDisApproveMember(memberId: string) {
+    this.isLoading = true;
+    this.societyServie.disApproveMember(memberId);
+  }
 }

@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
+import { MatDialog } from "@angular/material/dialog";
+import { ErrorComponent } from "src/app/error/error.component";
 
 @Component({
   selector: "app-signup-member",
@@ -20,7 +22,7 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
 
   societies = [];
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -29,11 +31,20 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
       .subscribe((emittedBoolean) => {
         this.isLoading = emittedBoolean;
       });
-    this.authService.getBasicSocietyDetailes().subscribe((res) => {
-      this.societies = res["data"].getBasicSocietyDetailes;
-      console.log(this.societies);
-      this.isLoading = false;
-    });
+    this.authService.getBasicSocietyDetailes().subscribe(
+      (res) => {
+        this.societies = res["data"].getBasicSocietyDetailes;
+        console.log(this.societies);
+        this.isLoading = false;
+      },
+      (err) => {
+        console.log(err);
+        this.dialog.open(ErrorComponent, {
+          data: { message: "SERVER DOWN, TRY AGAIN LATER!" },
+        });
+        this.isLoading = false;
+      }
+    );
 
     this.form = new FormGroup({
       image: new FormControl(null, { validators: [Validators.required] }),
