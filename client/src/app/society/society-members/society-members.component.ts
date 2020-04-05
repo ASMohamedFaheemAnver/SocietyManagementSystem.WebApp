@@ -48,7 +48,10 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
     this.societyServie.approveMember(memberId);
   }
 
-  onDeleteMember(memberId: string) {}
+  onDeleteMember(memberId: string) {
+    this.isLoading = true;
+    this.societyServie.deleteMember(memberId);
+  }
 
   onDisApproveMember(memberId: string) {
     this.isLoading = true;

@@ -365,4 +365,20 @@ module.exports = {
     const society = await Society.findById(societyId);
     return society;
   },
+  deleteMember: async ({ memberId }, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+    if (req.category !== "society") {
+      const error = new Error("only developer can delete societies!");
+      error.code = 401;
+      throw error;
+    }
+    const member = await Member.findById(memberId);
+    fileDeletor(member.imageUrl);
+    await member.delete();
+    return { message: "member deleted!" };
+  },
 };

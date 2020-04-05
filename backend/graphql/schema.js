@@ -77,6 +77,7 @@ module.exports = buildSchema(`
     disApproveSociety(societyId: String!): Message!
     deleteSociety(societyId: String!): Message!
     disApproveMember(memberId: String!): Message!
+    deleteMember(memberId: String!): Message!
   }
 
   schema{

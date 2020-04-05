@@ -123,4 +123,31 @@ export class SocietyService {
       }
     );
   }
+
+  deleteMember(memberId: string) {
+    const graphqlQuery = {
+      query: `
+      mutation{
+        deleteMember(memberId: "${memberId}"){
+          message
+        }
+      }`,
+    };
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      (res) => {
+        console.log(res);
+        let updatedMembers = this.members;
+        updatedMembers = updatedMembers.filter((member) => {
+          return member._id !== memberId;
+        });
+        this.members = updatedMembers;
+        this.membersUpdated.next([...updatedMembers]);
+        this.societyStatusListenner.next(false);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
+  }
 }
