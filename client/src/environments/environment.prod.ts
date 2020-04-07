@@ -1,4 +1,9 @@
 export const environment = {
-  production: true,
-  back_end_url: "http://localhost:3000/",
+  production: false,
+  backeEndBaseUrl: "http://localhost:3000/",
+  backEndGraphQlUrl: "http://localhost:3000/graphql",
+  backEndPicUploadUrl: "http://localhost:3000/upload-profile",
+  backeEndBaseUrl2: "https://rifa-sms.herokuapp.com/",
+  backEndGraphQlUrl2: "https://rifa-sms.herokuapp.com/graphql",
+  backEndPicUploadUrl2: "https://rifa-sms.herokuapp.com/upload-profile",
 };

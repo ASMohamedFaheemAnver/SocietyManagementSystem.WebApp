@@ -17,7 +17,7 @@ export class TopNavComponent implements OnInit, OnDestroy {
   isAuth = false;
   userId: string;
   isDeveloper = true;
-  homeUrl: string;
+  homeUrl: string = "./developer/home";
   userCategory: string;
   membersUrl: string;
 
@@ -32,13 +32,13 @@ export class TopNavComponent implements OnInit, OnDestroy {
       this.isDeveloper = false;
     }
     if (this.isDeveloper) {
-      this.homeUrl = "/developer/home";
+      this.homeUrl = "./developer/home";
     } else if (this.userCategory === "society") {
-      this.homeUrl = "/society/home/";
-      this.membersUrl = "/society/members";
+      this.homeUrl = "./society/home/";
+      this.membersUrl = "./society/members";
     } else if (this.userCategory === "member") {
-      this.homeUrl = "/member/home/";
-      this.membersUrl = "/member/members";
+      this.homeUrl = "./member/home/";
+      this.membersUrl = "./member/members";
     }
 
     this.authStatusSub = this.authService
@@ -52,13 +52,13 @@ export class TopNavComponent implements OnInit, OnDestroy {
           this.isDeveloper = false;
         }
         if (this.isDeveloper) {
-          this.homeUrl = "/developer/home";
+          this.homeUrl = "./developer/home";
         } else if (this.userCategory === "society") {
-          this.homeUrl = "/society/home/";
-          this.membersUrl = "/society/members";
+          this.homeUrl = "./society/home/";
+          this.membersUrl = "./society/members";
         } else if (this.userCategory === "member") {
-          this.homeUrl = "/member/home/";
-          this.membersUrl = "/member/members";
+          this.homeUrl = "./member/home/";
+          this.membersUrl = "./member/members";
         }
       });
   }
