@@ -13,7 +13,7 @@
         *ngIf="!society.approved"
         mat-button
         class="btn-green"
-        (click)="onApproveSociety(society._id)"
+        (click)="onApproveSociety($event, society._id)"
       >
         APPROVE
       </button>
@@ -21,14 +21,22 @@
         *ngIf="society.approved"
         mat-button
         color="warn"
-        (click)="onDisApproveSociety(society._id)"
+        (click)="onDisApproveSociety($event, society._id)"
       >
         DISAPPROVE
       </button>
-      <button (click)="onDeleteSociety(society._id)" mat-button color="warn">
+      <button
+        (click)="onDeleteSociety($event, society._id)"
+        mat-button
+        color="warn"
+      >
         DELETE
       </button>
     </mat-card-actions>
   </mat-card>
 </div>
-<mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
+<mat-spinner
+  [ngStyle]="loadingCSS"
+  *ngIf="isLoading"
+  class="spinner"
+></mat-spinner>

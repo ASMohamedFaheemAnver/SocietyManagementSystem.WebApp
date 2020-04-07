@@ -14,9 +14,11 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   backeEndBaseUrl = environment.backeEndBaseUrl;
 
   members: Member[] = [];
-  isLoading: Boolean;
+  isLoading: boolean;
   private membersSub: Subscription;
   private societyStatusSub: Subscription;
+
+  loadingCSS;
 
   constructor(
     private authService: AuthService,
@@ -43,17 +45,30 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
     this.societyServie.getAllSocietyMembers(this.authService.getUserId());
   }
 
-  onApproveMember(memberId: string) {
+  onApproveMember($event: MouseEvent, memberId: string) {
+    this.loadingCSS = {
+      top: $event.y + "px",
+      left: $event.x + "px",
+    };
+
     this.isLoading = true;
     this.societyServie.approveMember(memberId);
   }
 
-  onDeleteMember(memberId: string) {
+  onDeleteMember($event: MouseEvent, memberId: string) {
+    this.loadingCSS = {
+      top: $event.y + "px",
+      left: $event.x + "px",
+    };
     this.isLoading = true;
     this.societyServie.deleteMember(memberId);
   }
 
-  onDisApproveMember(memberId: string) {
+  onDisApproveMember($event: MouseEvent, memberId: string) {
+    this.loadingCSS = {
+      top: $event.y + "px",
+      left: $event.x + "px",
+    };
     this.isLoading = true;
     this.societyServie.disApproveMember(memberId);
   }

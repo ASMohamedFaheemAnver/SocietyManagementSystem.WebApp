@@ -1,45 +1,55 @@
-<mat-card *ngFor="let member of members">
-  <h1>PROFILE</h1>
-  <img
-    *ngIf="member.imageUrl"
-    src="{{ backeEndBaseUrl + member.imageUrl }}"
-    alt="Profile
+<div class="container">
+  <mat-card *ngFor="let member of members; index as i">
+    <h1>PROFILE</h1>
+    <img
+      *ngIf="member.imageUrl"
+      src="{{ backeEndBaseUrl + member.imageUrl }}"
+      alt="Profile
   picture!"
-  />
-  <h3>{{ member.name }}</h3>
+    />
+    <h3>{{ member.name }}</h3>
 
-  <div class="box">
-    <strong>Email</strong>
-    <p>{{ member.email }}</p>
-  </div>
-  <div class="box">
-    <strong>Address</strong>
-    <p>{{ member.address }}</p>
-  </div>
-  <div class="box">
-    <strong>Arrears</strong>
-    <p>{{ member.arrears }}</p>
-  </div>
-  <mat-card-actions class="flex-item">
-    <button
-      *ngIf="!member.approved"
-      mat-button
-      class="btn-green"
-      (click)="onApproveMember(member._id)"
-    >
-      APPROVE
-    </button>
-    <button
-      *ngIf="member.approved"
-      mat-button
-      color="warn"
-      (click)="onDisApproveMember(member._id)"
-    >
-      DISAPPROVE
-    </button>
-    <button mat-button color="warn" (click)="onDeleteMember(member._id)">
-      DELETE
-    </button>
-  </mat-card-actions>
-</mat-card>
-<mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
+    <div class="box">
+      <strong>Email</strong>
+      <p>{{ member.email }}</p>
+    </div>
+    <div class="box">
+      <strong>Address</strong>
+      <p>{{ member.address }}</p>
+    </div>
+    <div class="box">
+      <strong>Arrears</strong>
+      <p>{{ member.arrears }}</p>
+    </div>
+    <mat-card-actions class="flex-item">
+      <button
+        *ngIf="!member.approved"
+        mat-button
+        class="btn-green"
+        (click)="onApproveMember($event, member._id)"
+      >
+        APPROVE
+      </button>
+      <button
+        *ngIf="member.approved"
+        mat-button
+        color="warn"
+        (click)="onDisApproveMember($event, member._id)"
+      >
+        DISAPPROVE
+      </button>
+      <button
+        mat-button
+        color="warn"
+        (click)="onDeleteMember($event, member._id)"
+      >
+        DELETE
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<mat-spinner
+  [ngStyle]="loadingCSS"
+  *ngIf="isLoading"
+  class="spinner"
+></mat-spinner>

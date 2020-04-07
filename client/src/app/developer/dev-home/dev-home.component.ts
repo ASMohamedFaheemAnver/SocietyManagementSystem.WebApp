@@ -22,6 +22,8 @@ export class DevHomeComponent implements OnInit, OnDestroy {
   private societiesSub: Subscription;
   private devStatusSub: Subscription;
 
+  loadingCSS;
+
   ngOnInit(): void {
     this.devService.getAllSociety();
     this.devStatusSub = this.devService
@@ -36,17 +38,29 @@ export class DevHomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  onApproveSociety(societyId: string) {
+  onApproveSociety($event, societyId: string) {
+    this.loadingCSS = {
+      top: $event.y + "px",
+      left: $event.x + "px",
+    };
     this.isLoading = true;
     this.devService.approveSociety(societyId);
   }
 
-  onDisApproveSociety(societyId: string) {
+  onDisApproveSociety($event, societyId: string) {
+    this.loadingCSS = {
+      top: $event.y + "px",
+      left: $event.x + "px",
+    };
     this.isLoading = true;
     this.devService.disApproveSociety(societyId);
   }
 
-  onDeleteSociety(societyId: string) {
+  onDeleteSociety($event, societyId: string) {
+    this.loadingCSS = {
+      top: $event.y + "px",
+      left: $event.x + "px",
+    };
     this.isLoading = true;
     this.devService.deleteSociety(societyId);
   }
