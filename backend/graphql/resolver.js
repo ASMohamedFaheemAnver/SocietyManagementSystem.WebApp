@@ -223,8 +223,7 @@ module.exports = {
       process.env.secret_word,
       { expiresIn: "1h" }
     );
-
-    return { token: token, memberId: member._id.toString(), expiresIn: 3600 };
+    return { token: token, _id: member._id.toString(), expiresIn: 3600 };
   },
 
   loginSociety: async ({ email, password }) => {
@@ -289,7 +288,7 @@ module.exports = {
     };
   },
 
-  getMember: async ({ memberId }, req) => {
+  getMember: async ({}, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -302,10 +301,10 @@ module.exports = {
       throw error;
     }
 
-    const member = await Member.findById(memberId);
+    const member = await Member.findById(req.decryptedId);
     return member._doc;
   },
-  getAllSocietyMembers: async ({ societyId }, req) => {
+  getAllSocietyMembers: async ({}, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -316,7 +315,7 @@ module.exports = {
       error.code = 401;
       throw error;
     }
-    const society = await Society.findById(societyId).populate("members");
+    const society = await Society.findById(req.decryptedId).populate("members");
     return society.members;
   },
   getAllSocieties: async ({}, req) => {
@@ -334,7 +333,7 @@ module.exports = {
     return societies;
   },
 
-  deleteSociety: async ({ societyId }, req) => {
+  deleteSociety: async ({}, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -345,13 +344,13 @@ module.exports = {
       error.code = 401;
       throw error;
     }
-    const society = await Society.findById(societyId);
+    const society = await Society.findById(req.decryptedId);
     fileDeletor(society.imageUrl);
     await society.delete();
     return { message: "society deleted!" };
   },
 
-  getSociety: async ({ societyId }, req) => {
+  getSociety: async ({}, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -362,11 +361,10 @@ module.exports = {
       error.code = 401;
       throw error;
     }
-    const society = await Society.findById(societyId);
+    const society = await Society.findById(req.decryptedId);
     return society;
   },
-  deleteMember: async ({ memberId }, req) => {
-    console.log({ memberId: memberId });
+  deleteMember: async ({}, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -377,7 +375,7 @@ module.exports = {
       error.code = 401;
       throw error;
     }
-    const member = await Member.findById(memberId).populate("society");
+    const member = await Member.findById(req.decryptedId).populate("society");
     member.society.members.pop(memberId);
     await member.society.save();
     fileDeletor(member.imageUrl);
@@ -394,5 +392,18 @@ module.exports = {
 
     fileDeletor(req.imageUrl);
     return { message: "image deleted!" };
+  },
+
+  getAllMembers: async ({}, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+    if (req.category !== "member") {
+      const error = new Error("you are not a member!");
+      error.code = 401;
+      throw error;
+    }
   },
 };

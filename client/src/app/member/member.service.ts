@@ -11,11 +11,11 @@ export class MemberService {
   private usersUpdated = new Subject<Member[]>();
   private users: Member[] = [];
 
-  getOneUser(userId: string) {
+  getMember(memberId: string) {
     const graphqlQuery = {
       query: `
         {
-          getOneUser(userId: "${userId}"){
+          getMember{
   	        email
             name
             imageUrl
@@ -29,11 +29,11 @@ export class MemberService {
     return this.http.post(this.graphQLUrl, graphqlQuery);
   }
 
-  getAllUsers() {
+  getAllMembers() {
     const graphqlQuery = {
       query: `
         {
-          getAllUsers{
+          getAllSocietyMembers{
   	        email
             name
             imageUrl

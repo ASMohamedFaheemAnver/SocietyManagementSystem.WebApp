@@ -16,6 +16,7 @@ import { MemberHomeComponent } from "./member/member-home/member-home.component"
 import { SocietyHomeComponent } from "./society/society-home/society-home.component";
 import { SocietyMembersComponent } from "./society/society-members/society-members.component";
 import { ImgDeleteInterceptor } from "./auth/img-interceptor";
+import { MemberMembersComponent } from './member/member-members/member-members.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ImgDeleteInterceptor } from "./auth/img-interceptor";
     ErrorComponent,
     SocietyHomeComponent,
     SocietyMembersComponent,
+    MemberMembersComponent,
   ],
   imports: [
     BrowserModule,

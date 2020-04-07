@@ -1,0 +1,28 @@
+mat-card {
+  margin-top: 50px;
+  width: 25%;
+  display: block;
+  margin: 1rem;
+  text-align: center;
+}
+
+mat-card img {
+  width: 200px;
+  border-radius: 50%;
+}
+
+.box {
+  padding: 1rem;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+mat-spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

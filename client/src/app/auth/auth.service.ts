@@ -227,7 +227,7 @@ export class AuthService {
           this.saveAuthData(token, expirationDate, userId, userCategory);
           this.setAuthTimer(expiresIn);
           if (userCategory === "member") {
-            this.router.navigateByUrl("/member/home" + userId);
+            this.router.navigateByUrl("/member/home");
           } else if (userCategory === "society") {
             this.router.navigateByUrl("/society/home");
           } else if (userCategory === "developer") {

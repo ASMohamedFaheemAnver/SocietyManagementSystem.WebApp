@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { AuthService } from "src/app/auth/auth.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { MemberService } from "../member.service";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-member-home",
@@ -11,7 +12,7 @@ import { MemberService } from "../member.service";
 export class MemberHomeComponent implements OnInit {
   constructor(
     private memberService: MemberService,
-    private route: ActivatedRoute
+    private authService: AuthService
   ) {}
 
   email: string;
@@ -20,21 +21,18 @@ export class MemberHomeComponent implements OnInit {
   imageUrl = "";
   address: string;
   arrears: number;
+  backeEndBaseUrl = environment.backeEndBaseUrl;
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      if (paramMap.has("memberId")) {
-        this.memberId = paramMap.get("memberId");
-        this.memberService.getOneUser(this.memberId).subscribe((user) => {
-          console.log(user);
-          this.email = user["data"].getOneUser.email;
-          this.name = user["data"].getOneUser.name;
-          this.memberId = user["data"].getOneUser._id;
-          this.imageUrl = user["data"].getOneUser.imageUrl;
-          this.address = user["data"].getOneUser.address;
-          this.arrears = user["data"].getOneUser.arrears;
-        });
-      }
+    this.memberId = this.authService.getUserId();
+    this.memberService.getMember(this.memberId).subscribe((member) => {
+      console.log(member);
+      this.email = member["data"].getMember.email;
+      this.name = member["data"].getMember.name;
+      this.memberId = member["data"].getMember._id;
+      this.imageUrl = member["data"].getMember.imageUrl;
+      this.address = member["data"].getMember.address;
+      this.arrears = member["data"].getMember.arrears;
     });
   }
 }

@@ -28,8 +28,7 @@ export class SocietyHomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.societyId = this.authService.getUserId();
-    this.societyService.getSociety(this.societyId).subscribe(
+    this.societyService.getSociety().subscribe(
       (society) => {
         console.log(society);
         this.email = society["data"].getSociety.email;

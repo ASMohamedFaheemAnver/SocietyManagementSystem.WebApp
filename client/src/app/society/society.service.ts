@@ -13,10 +13,10 @@ export class SocietyService {
 
   constructor(private http: HttpClient) {}
 
-  getSociety(societyId: string) {
+  getSociety() {
     const graphqlQuery = {
       query: `{
-        getSociety(societyId: "${societyId}"){
+        getSociety{
    	      _id
           name
           email
@@ -29,11 +29,10 @@ export class SocietyService {
     return this.http.post(this.graphQLUrl, graphqlQuery);
   }
 
-  getAllSocietyMembers(societyId: string) {
-    console.log(societyId);
+  getAllSocietyMembers() {
     const graphqlQuery = {
       query: `{
-        getAllSocietyMembers(societyId: "${societyId}"){
+        getAllSocietyMembers{
    	      _id
           name
           email

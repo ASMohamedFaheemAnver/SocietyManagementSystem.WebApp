@@ -1,6 +1,10 @@
 <mat-card>
   <h1>PROFILE</h1>
-  <img src="{{ imageUrl }}" alt="Profile picture!" />
+  <img
+    *ngIf="imageUrl"
+    src="{{ backeEndBaseUrl + imageUrl }}"
+    alt="Profile picture!"
+  />
   <h3>{{ name }}</h3>
 
   <div class="box">

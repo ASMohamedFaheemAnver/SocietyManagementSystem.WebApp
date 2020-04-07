@@ -52,6 +52,7 @@ export class DevService {
           }
           return society;
         });
+        this.societies = updatedSocieties;
         this.societiesUpdated.next([...updatedSocieties]);
         this.devStatusListenner.next(false);
       },

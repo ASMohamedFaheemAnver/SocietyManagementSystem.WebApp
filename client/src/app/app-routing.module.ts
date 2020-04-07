@@ -8,6 +8,7 @@ import { SignupSocietyComponent } from "./auth/signup-society/signup-society.com
 import { MemberHomeComponent } from "./member/member-home/member-home.component";
 import { SocietyHomeComponent } from "./society/society-home/society-home.component";
 import { SocietyMembersComponent } from "./society/society-members/society-members.component";
+import { MemberMembersComponent } from "./member/member-members/member-members.component";
 
 const routes: Routes = [
   {
@@ -28,7 +29,7 @@ const routes: Routes = [
     component: SignupSocietyComponent,
   },
   {
-    path: "member/home/:memberId",
+    path: "member/home",
     component: MemberHomeComponent,
     canActivate: [AuthGuard],
   },
@@ -45,6 +46,11 @@ const routes: Routes = [
   {
     path: "society/members",
     component: SocietyMembersComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "member/members",
+    component: MemberMembersComponent,
     canActivate: [AuthGuard],
   },
 ];
