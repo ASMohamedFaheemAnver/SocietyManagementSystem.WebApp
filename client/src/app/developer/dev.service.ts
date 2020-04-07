@@ -2,10 +2,11 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
 import { Society } from "./society.model";
+import { environment } from "src/environments/environment";
 
 @Injectable({ providedIn: "root" })
 export class DevService {
-  private graphQLUrl = "http://localhost:3000/graphql";
+  private graphQLUrl = environment.backEndGraphQlUrl2;
   private devStatusListenner = new Subject<boolean>();
   private societiesUpdated = new Subject<Society[]>();
   private societies: Society[];

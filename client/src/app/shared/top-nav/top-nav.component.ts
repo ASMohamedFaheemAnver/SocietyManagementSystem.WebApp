@@ -22,13 +22,25 @@ export class TopNavComponent implements OnInit, OnDestroy {
   membersUrl: string;
 
   ngOnInit(): void {
+    console.log("Triggerring top-nav!");
     this.isAuth = this.authService.isUserAuth();
     this.userCategory = this.authService.getUserCategory();
+
     if (this.userCategory === "developer") {
       this.isDeveloper = true;
     } else {
       this.isDeveloper = false;
     }
+    if (this.isDeveloper) {
+      this.homeUrl = "/developer/home";
+    } else if (this.userCategory === "society") {
+      this.homeUrl = "/society/home/";
+      this.membersUrl = "/society/members";
+    } else if (this.userCategory === "member") {
+      this.homeUrl = "/member/home/";
+      this.membersUrl = "/member/members";
+    }
+
     this.authStatusSub = this.authService
       .getAuthStatusListener()
       .subscribe((emittedBoolean) => {
@@ -39,17 +51,16 @@ export class TopNavComponent implements OnInit, OnDestroy {
         } else {
           this.isDeveloper = false;
         }
+        if (this.isDeveloper) {
+          this.homeUrl = "/developer/home";
+        } else if (this.userCategory === "society") {
+          this.homeUrl = "/society/home/";
+          this.membersUrl = "/society/members";
+        } else if (this.userCategory === "member") {
+          this.homeUrl = "/member/home/";
+          this.membersUrl = "/member/members";
+        }
       });
-    this.userId = this.authService.getUserId();
-    if (this.isDeveloper) {
-      this.homeUrl = "/developer/home";
-    } else if (this.userCategory === "society") {
-      this.homeUrl = "/society/home/";
-      this.membersUrl = "/society/members";
-    } else if (this.userCategory === "member") {
-      this.homeUrl = "/member/home/";
-      this.membersUrl = "/member/members";
-    }
   }
 
   onLogOut() {

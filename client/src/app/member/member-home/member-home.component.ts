@@ -21,11 +21,11 @@ export class MemberHomeComponent implements OnInit {
   imageUrl = "";
   address: string;
   arrears: number;
-  backeEndBaseUrl = environment.backeEndBaseUrl;
+  backeEndBaseUrl = environment.backeEndBaseUrl2;
 
   ngOnInit(): void {
-    this.memberId = this.authService.getUserId();
-    this.memberService.getMember(this.memberId).subscribe((member) => {
+    // this.memberId = this.authService.getUserId();
+    this.memberService.getMember().subscribe((member) => {
       console.log(member);
       this.email = member["data"].getMember.email;
       this.name = member["data"].getMember.name;

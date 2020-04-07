@@ -11,7 +11,7 @@ import { environment } from "src/environments/environment";
   styleUrls: ["./society-members.component.css"],
 })
 export class SocietyMembersComponent implements OnInit, OnDestroy {
-  backeEndBaseUrl = environment.backeEndBaseUrl;
+  backeEndBaseUrl = environment.backeEndBaseUrl2;
 
   members: Member[] = [];
   isLoading: boolean;

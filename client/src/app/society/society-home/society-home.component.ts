@@ -24,7 +24,7 @@ export class SocietyHomeComponent implements OnInit {
 
   isLoading: Boolean;
 
-  backeEndBaseUrl = environment.backeEndBaseUrl;
+  backeEndBaseUrl = environment.backeEndBaseUrl2;
 
   ngOnInit(): void {
     this.isLoading = true;

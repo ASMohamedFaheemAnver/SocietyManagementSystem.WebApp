@@ -7,8 +7,8 @@ import { environment } from "src/environments/environment";
 @Injectable({ providedIn: "root" })
 export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
-  private graphQLUrl = environment.backEndGraphQlUrl;
-  private restImageUploadUrl = environment.backEndPicUploadUrl;
+  private graphQLUrl = environment.backEndGraphQlUrl2;
+  private restImageUploadUrl = environment.backEndPicUploadUrl2;
 
   private authStatusListenner = new Subject<boolean>();
   private userId: string;
@@ -157,7 +157,7 @@ export class AuthService {
 
   loginUser(email: string, password: string, userCategory: string) {
     let graphqlQuery;
-
+    this.userCategory = userCategory;
     if (userCategory === "member") {
       graphqlQuery = {
         query: `{
@@ -201,8 +201,6 @@ export class AuthService {
         } else if (userCategory === "developer") {
           token = res["data"].loginDeveloper.token;
         }
-
-        this.userCategory = userCategory;
 
         if (token) {
           let expiresIn;

@@ -11,7 +11,7 @@ import { environment } from "src/environments/environment";
 })
 export class DevHomeComponent implements OnInit, OnDestroy {
   isLoading = false;
-  backeEndBaseUrl = environment.backeEndBaseUrl;
+  backeEndBaseUrl = environment.backeEndBaseUrl2;
 
   constructor(private devService: DevService) {}
   ngOnDestroy(): void {
@@ -25,6 +25,7 @@ export class DevHomeComponent implements OnInit, OnDestroy {
   loadingCSS;
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.devService.getAllSociety();
     this.devStatusSub = this.devService
       .getDevStatusListenner()
@@ -35,33 +36,35 @@ export class DevHomeComponent implements OnInit, OnDestroy {
       .getSocietiesUpdateListener()
       .subscribe((societies: Society[]) => {
         this.societies = societies;
+        this.isLoading = false;
       });
   }
 
   onApproveSociety($event, societyId: string) {
+    this.isLoading = true;
     this.loadingCSS = {
       top: $event.y + "px",
       left: $event.x + "px",
     };
-    this.isLoading = true;
+
     this.devService.approveSociety(societyId);
   }
 
   onDisApproveSociety($event, societyId: string) {
+    this.isLoading = true;
     this.loadingCSS = {
       top: $event.y + "px",
       left: $event.x + "px",
     };
-    this.isLoading = true;
     this.devService.disApproveSociety(societyId);
   }
 
   onDeleteSociety($event, societyId: string) {
+    this.isLoading = true;
     this.loadingCSS = {
       top: $event.y + "px",
       left: $event.x + "px",
     };
-    this.isLoading = true;
     this.devService.deleteSociety(societyId);
   }
 }

@@ -21,7 +21,7 @@
       <strong>Arrears</strong>
       <p>{{ member.arrears }}</p>
     </div>
-    <mat-card-actions class="flex-item">
+    <mat-card-actions *ngIf="!isLoading" class="flex-item">
       <button
         *ngIf="!member.approved"
         mat-button

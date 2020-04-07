@@ -7,11 +7,11 @@ import { environment } from "src/environments/environment";
 @Injectable({ providedIn: "root" })
 export class MemberService {
   constructor(private http: HttpClient) {}
-  private graphQLUrl = environment.backEndGraphQlUrl;
+  private graphQLUrl = environment.backEndGraphQlUrl2;
   private usersUpdated = new Subject<Member[]>();
   private users: Member[] = [];
 
-  getMember(memberId: string) {
+  getMember() {
     const graphqlQuery = {
       query: `
         {

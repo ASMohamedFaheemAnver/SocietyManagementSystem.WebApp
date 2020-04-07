@@ -17,3 +17,9 @@ mat-card img {
 mat-card .flex-item {
   margin: 0 1rem;
 }
+
+mat-spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

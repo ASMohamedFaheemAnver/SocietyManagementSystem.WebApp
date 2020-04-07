@@ -6,7 +6,7 @@ import { Member } from "./society-members/member.model";
 
 @Injectable({ providedIn: "root" })
 export class SocietyService {
-  private graphQLUrl = environment.backEndGraphQlUrl;
+  private graphQLUrl = environment.backEndGraphQlUrl2;
   private societyStatusListenner = new Subject<boolean>();
   private membersUpdated = new Subject<Member[]>();
   private members: Member[] = [];
