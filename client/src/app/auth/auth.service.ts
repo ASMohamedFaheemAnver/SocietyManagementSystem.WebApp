@@ -112,6 +112,7 @@ export class AuthService {
       (res) => {
         console.log(res);
         imageUrl = res["imageUrl"];
+        this.imgToken = res["token"];
         const graphqlQuery = {
           query: `
             mutation{
