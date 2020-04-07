@@ -289,7 +289,7 @@ module.exports = {
     };
   },
 
-  getOneMember: async ({ memberId }, req) => {
+  getMember: async ({ memberId }, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -351,7 +351,7 @@ module.exports = {
     return { message: "society deleted!" };
   },
 
-  getOneSociety: async ({ societyId }, req) => {
+  getSociety: async ({ societyId }, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -383,5 +383,16 @@ module.exports = {
     fileDeletor(member.imageUrl);
     await member.delete();
     return { message: "member deleted!" };
+  },
+
+  deleteImage({}, req) {
+    if (!req.isImg) {
+      const error = new Error("not allowed to delete this image!");
+      error.code = 401;
+      throw error;
+    }
+
+    fileDeletor(req.imageUrl);
+    return { message: "image deleted!" };
   },
 };

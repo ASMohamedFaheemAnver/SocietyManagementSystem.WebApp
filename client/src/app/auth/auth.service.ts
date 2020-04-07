@@ -16,6 +16,7 @@ export class AuthService {
   private isUserLoggedIn: boolean;
   private tokenTimer: NodeJS.Timer;
   private userCategory: string;
+  private imgToken: string;
 
   getAuthStatusListener() {
     return this.authStatusListenner;
@@ -44,10 +45,12 @@ export class AuthService {
   ) {
     const formData = new FormData();
     formData.append("image", image);
+    let imageUrl;
     this.http.post(this.restImageUploadUrl, formData).subscribe(
       (res) => {
         console.log(res);
-        const imageUrl = res["imageUrl"];
+        imageUrl = res["imageUrl"];
+        this.imgToken = res["token"];
         const graphqlQuery = {
           query: `
             mutation{
@@ -66,6 +69,22 @@ export class AuthService {
           },
           (err) => {
             console.log(err);
+            const graphqlQuery = {
+              query: `
+                mutation{
+                  deleteImage{
+                    message
+                  }
+                }`,
+            };
+            this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+              (res) => {
+                console.log(res);
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
             this.authStatusListenner.next(false);
           }
         );
@@ -88,10 +107,11 @@ export class AuthService {
   ) {
     const formData = new FormData();
     formData.append("image", image);
+    let imageUrl;
     this.http.post(this.restImageUploadUrl, formData).subscribe(
       (res) => {
         console.log(res);
-        const imageUrl = res["imageUrl"];
+        imageUrl = res["imageUrl"];
         const graphqlQuery = {
           query: `
             mutation{
@@ -108,6 +128,22 @@ export class AuthService {
           },
           (err) => {
             console.log(err);
+            const graphqlQuery = {
+              query: `
+                mutation{
+                  deleteImage{
+                    message
+                  }
+                }`,
+            };
+            this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+              (res) => {
+                console.log(res);
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
             this.authStatusListenner.next(false);
           }
         );
@@ -281,6 +317,10 @@ export class AuthService {
 
   getToken() {
     return this.token;
+  }
+
+  getImgToken() {
+    return this.imgToken;
   }
 
   getUserCategory() {

@@ -13,10 +13,10 @@ export class SocietyService {
 
   constructor(private http: HttpClient) {}
 
-  getOneSociety(societyId: string) {
+  getSociety(societyId: string) {
     const graphqlQuery = {
       query: `{
-        getOneSociety(societyId: "${societyId}"){
+        getSociety(societyId: "${societyId}"){
    	      _id
           name
           email

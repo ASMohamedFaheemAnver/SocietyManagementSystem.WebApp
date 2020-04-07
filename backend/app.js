@@ -6,7 +6,10 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 
+const jwt = require("jsonwebtoken");
+
 const auth = require("./middleware/auth");
+const imageDelete = require("./middleware/img-delete");
 
 const Developer = require("./model/developer");
 
@@ -22,7 +25,10 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "OPTIONS, GET, POST, PUT, PATCH, DELETE"
   );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, Delete-Image"
+  );
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
@@ -30,6 +36,7 @@ app.use((req, res, next) => {
 });
 
 app.use(auth);
+app.use(imageDelete);
 
 app.use("/images", express.static(path.join("images")));
 
@@ -42,9 +49,13 @@ app.post("/upload-profile", extractFile, (req, res, next) => {
   // const imageUrl = url + "/" + req.file.path;
   const imageUrl = req.file.path;
 
+  const token = jwt.sign({ imageUrl: imageUrl }, process.env.secret_word, {
+    expiresIn: 2 * 60,
+  });
+
   return res
     .status(201)
-    .json({ message: "image uploaded!", imageUrl: imageUrl });
+    .json({ message: "image uploaded!", imageUrl: imageUrl, token: token });
 });
 
 app.use(

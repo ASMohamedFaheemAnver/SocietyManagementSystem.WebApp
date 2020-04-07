@@ -14,7 +14,8 @@ import { ErrorInterceptor } from "./error-interceptor";
 import { ErrorComponent } from "./error/error.component";
 import { MemberHomeComponent } from "./member/member-home/member-home.component";
 import { SocietyHomeComponent } from "./society/society-home/society-home.component";
-import { SocietyMembersComponent } from './society/society-members/society-members.component';
+import { SocietyMembersComponent } from "./society/society-members/society-members.component";
+import { ImgDeleteInterceptor } from "./auth/img-interceptor";
 
 @NgModule({
   declarations: [
@@ -43,6 +44,11 @@ import { SocietyMembersComponent } from './society/society-members/society-membe
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ImgDeleteInterceptor,
       multi: true,
     },
   ],

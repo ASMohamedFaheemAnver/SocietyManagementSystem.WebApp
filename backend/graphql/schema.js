@@ -62,11 +62,11 @@ module.exports = buildSchema(`
     loginMember(email: String!, password: String!): AuthData!
     loginSociety(email: String!, password: String!): AuthData!
     loginDeveloper(email: String!, password: String!): AuthData!
-    getOneMember(memberId: String!): Member!
+    getMember(memberId: String!): Member!
     getAllSocietyMembers(societyId: String!): [Member!]!
     getBasicSocietyDetailes: [BasicSocietyData!]!
     getAllSocieties: [Society!]!
-    getOneSociety(societyId: String!): Society!
+    getSociety(societyId: String!): Society!
   }
 
   type RootMutation{
@@ -78,6 +78,7 @@ module.exports = buildSchema(`
     deleteSociety(societyId: String!): Message!
     disApproveMember(memberId: String!): Message!
     deleteMember(memberId: String!): Message!
+    deleteImage: Message!
   }
 
   schema{

@@ -29,14 +29,14 @@ export class SocietyHomeComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
     this.societyId = this.authService.getUserId();
-    this.societyService.getOneSociety(this.societyId).subscribe(
+    this.societyService.getSociety(this.societyId).subscribe(
       (society) => {
         console.log(society);
-        this.email = society["data"].getOneSociety.email;
-        this.name = society["data"].getOneSociety.name;
-        this.imageUrl = society["data"].getOneSociety.imageUrl;
-        this.address = society["data"].getOneSociety.address;
-        this.regNo = society["data"].getOneSociety.regNo;
+        this.email = society["data"].getSociety.email;
+        this.name = society["data"].getSociety.name;
+        this.imageUrl = society["data"].getSociety.imageUrl;
+        this.address = society["data"].getSociety.address;
+        this.regNo = society["data"].getSociety.regNo;
         this.isLoading = false;
       },
       (err) => {
