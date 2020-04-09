@@ -44,7 +44,8 @@ export class DevHomeComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.loadingCSS = {
       top: $event.y + "px",
-      left: $event.x + "px",
+      // top: $event.y + "px",
+      // left: $event.x + "px",
     };
 
     this.devService.approveSociety(societyId);
@@ -54,7 +55,8 @@ export class DevHomeComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.loadingCSS = {
       top: $event.y + "px",
-      left: $event.x + "px",
+      // top: $event.y + "px",
+      // left: $event.x + "px",
     };
     this.devService.disApproveSociety(societyId);
   }
@@ -63,7 +65,8 @@ export class DevHomeComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.loadingCSS = {
       top: $event.y + "px",
-      left: $event.x + "px",
+      // top: $event.y + "px",
+      // left: $event.x + "px",
     };
     this.devService.deleteSociety(societyId);
   }

@@ -1,51 +1,58 @@
-<mat-toolbar>
-  <span
-    ><a
-      href="{{ homeUrl }}"
-      routerLink="{{ homeUrl }}"
-      routerLinkActive="mat-accent"
-      >VIFA Management System</a
-    ></span
-  >
-  <span
-    ><a
-      *ngIf="isAuth && !isDeveloper"
-      href="{{ membersUrl }}"
-      routerLink="{{ membersUrl }}"
-      routerLinkActive="mat-accent"
-      >MEMBERS</a
-    ></span
-  >
-  <ul>
-    <li>
-      <a
-        *ngIf="!isAuth"
-        href="./auth/login"
-        routerLink="./auth/login"
-        routerLinkActive="mat-accent"
-        >LOGIN</a
-      >
-    </li>
-    <li>
-      <a
-        *ngIf="!isAuth"
-        href="./auth/signup-member"
-        routerLink="./auth/signup-member"
-        routerLinkActive="mat-accent"
-        >SIGNUP MEMBER</a
-      >
-    </li>
-    <li>
-      <a
-        *ngIf="!isAuth"
-        href="./auth/signup-society"
-        routerLink="./auth/signup-society"
-        routerLinkActive="mat-accent"
-        >SIGNUP SOCIETY</a
-      >
-    </li>
-    <li>
-      <button (click)="onLogOut()" mat-button *ngIf="isAuth">LOGOUT</button>
-    </li>
-  </ul>
-</mat-toolbar>
+<nav>
+  <div class="left">
+    <ul>
+      <li>
+        <a
+          href="{{ homeUrl }}"
+          routerLink="{{ homeUrl }}"
+          routerLinkActive="mat-accent"
+          >VIFA Management System</a
+        >
+      </li>
+      <li>
+        <a
+          *ngIf="isAuth && !isDeveloper"
+          href="{{ membersUrl }}"
+          routerLink="{{ membersUrl }}"
+          routerLinkActive="mat-accent"
+          >MEMBERS</a
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div class="right">
+    <ul>
+      <li [style]="isAuth ? 'flex: 0;' : 'flex: 1;'">
+        <a
+          *ngIf="!isAuth"
+          href="./auth/login"
+          routerLink="./auth/login"
+          routerLinkActive="mat-accent"
+          >LOGIN</a
+        >
+      </li>
+      <li [style]="isAuth ? 'flex: 0;' : 'flex: 1;'">
+        <a
+          *ngIf="!isAuth"
+          href="./auth/signup-member"
+          routerLink="./auth/signup-member"
+          routerLinkActive="mat-accent"
+          >SIGNUP MEMBER</a
+        >
+      </li>
+      <li [style]="isAuth ? 'flex: 0;' : 'flex: 1;'">
+        <a
+          *ngIf="!isAuth"
+          href="./auth/signup-society"
+          routerLink="./auth/signup-society"
+          routerLinkActive="mat-accent"
+          >SIGNUP SOCIETY</a
+        >
+      </li>
+      <li [style]="isAuth ? 'flex: 1;' : 'flex: 0'">
+        <button (click)="onLogOut()" mat-button *ngIf="isAuth">LOGOUT</button>
+      </li>
+    </ul>
+  </div>
+</nav>

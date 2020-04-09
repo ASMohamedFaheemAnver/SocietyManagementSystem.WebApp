@@ -203,7 +203,7 @@ module.exports = {
       error.code = 401;
       throw error;
     }
-
+    console.log(member.approved);
     if (!member.approved) {
       const error = new Error("member doesn't approved yet!");
       error.code = 401;
@@ -333,7 +333,7 @@ module.exports = {
     return societies;
   },
 
-  deleteSociety: async ({}, req) => {
+  deleteSociety: async ({ societyId }, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -344,7 +344,14 @@ module.exports = {
       error.code = 401;
       throw error;
     }
-    const society = await Society.findById(req.decryptedId);
+    const society = await Society.findById(societyId).populate("members");
+
+    society.members.forEach(async (memberId) => {
+      const member = await Member.findById(memberId);
+      fileDeletor(member.imageUrl);
+      member.delete();
+    });
+
     fileDeletor(society.imageUrl);
     await society.delete();
     return { message: "society deleted!" };
@@ -364,7 +371,7 @@ module.exports = {
     const society = await Society.findById(req.decryptedId);
     return society;
   },
-  deleteMember: async ({}, req) => {
+  deleteMember: async ({ memberId }, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -375,7 +382,7 @@ module.exports = {
       error.code = 401;
       throw error;
     }
-    const member = await Member.findById(req.decryptedId).populate("society");
+    const member = await Member.findById(memberId).populate("society");
     member.society.members.pop(memberId);
     await member.society.save();
     fileDeletor(member.imageUrl);

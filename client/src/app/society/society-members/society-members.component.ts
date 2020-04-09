@@ -48,7 +48,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   onApproveMember($event: MouseEvent, memberId: string) {
     this.loadingCSS = {
       top: $event.y + "px",
-      left: $event.x + "px",
+      // left: $event.x + "px",
     };
 
     this.isLoading = true;
@@ -58,7 +58,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   onDeleteMember($event: MouseEvent, memberId: string) {
     this.loadingCSS = {
       top: $event.y + "px",
-      left: $event.x + "px",
+      // left: $event.x + "px",
     };
     this.isLoading = true;
     this.societyServie.deleteMember(memberId);
@@ -67,7 +67,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   onDisApproveMember($event: MouseEvent, memberId: string) {
     this.loadingCSS = {
       top: $event.y + "px",
-      left: $event.x + "px",
+      // left: $event.x + "px",
     };
     this.isLoading = true;
     this.societyServie.disApproveMember(memberId);
