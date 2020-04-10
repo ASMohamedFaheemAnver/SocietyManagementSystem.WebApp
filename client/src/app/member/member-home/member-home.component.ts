@@ -22,8 +22,9 @@ export class MemberHomeComponent implements OnInit {
   address: string;
   arrears: number;
   backeEndBaseUrl = environment.backeEndBaseUrl2;
-
+  isLoading: boolean;
   ngOnInit(): void {
+    this.isLoading = true;
     // this.memberId = this.authService.getUserId();
     this.memberService.getMember().subscribe((member) => {
       console.log(member);
@@ -33,6 +34,7 @@ export class MemberHomeComponent implements OnInit {
       this.imageUrl = member["data"].getMember.imageUrl;
       this.address = member["data"].getMember.address;
       this.arrears = member["data"].getMember.arrears;
+      this.isLoading = false;
     });
   }
 }

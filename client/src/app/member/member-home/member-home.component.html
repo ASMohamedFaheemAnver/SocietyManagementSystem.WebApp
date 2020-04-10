@@ -1,22 +1,30 @@
-<mat-card>
-  <h1>PROFILE</h1>
-  <img
-    *ngIf="imageUrl"
-    src="{{ backeEndBaseUrl + imageUrl }}"
-    alt="Profile picture!"
-  />
-  <h3>{{ name }}</h3>
-
-  <div class="box">
-    <strong>Email</strong>
-    <p>{{ email }}</p>
+<div class="parent">
+  <div class="profile" *ngIf="!isLoading">
+    <div>
+      <h1>PROFILE</h1>
+      <img
+        *ngIf="imageUrl"
+        src="{{ backeEndBaseUrl + imageUrl }}"
+        alt="Profile
+  picture!"
+      />
+    </div>
+    <div>
+      <strong>Name</strong>
+      <h3>{{ name }}</h3>
+    </div>
+    <div>
+      <strong>Email</strong>
+      <p>{{ email }}</p>
+    </div>
+    <div>
+      <strong>Address</strong>
+      <p>{{ address }}</p>
+    </div>
+    <div>
+      <strong>Arrears</strong>
+      <p>{{ arrears }}</p>
+    </div>
   </div>
-  <div class="box">
-    <strong>Address</strong>
-    <p>{{ address }}</p>
-  </div>
-  <div class="box">
-    <strong>Arrears</strong>
-    <p>{{ arrears }} RS</p>
-  </div>
-</mat-card>
+</div>
+<mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
