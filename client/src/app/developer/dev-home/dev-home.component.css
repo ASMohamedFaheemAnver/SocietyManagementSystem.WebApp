@@ -1,21 +1,9 @@
 .parent {
   display: flex;
-  flex-direction: column;
-}
-mat-card {
-  display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   margin: 1rem;
-}
-
-mat-card img {
-  width: 75px;
-  height: 75px;
-}
-
-mat-card .flex-item {
-  margin: 0 1rem;
 }
 
 mat-spinner {
@@ -23,4 +11,45 @@ mat-spinner {
   top: 0;
   left: 0;
   right: 0;
+}
+
+/* card */
+.card {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.25rem;
+  margin: 0.5rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card div {
+  padding: 0.25rem;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card div {
+  flex: 1;
+}
+
+.card img {
+  width: 100px;
+}
+
+@media (max-width: 992px) {
+  .card {
+    flex-direction: column;
+    width: 40%;
+  }
+}
+@media (max-width: 700px) {
+  .card {
+    flex-direction: column;
+    width: 80%;
+  }
 }

@@ -1,27 +1,18 @@
-<div class="container">
-  <mat-card *ngFor="let member of members; index as i">
-    <h1>PROFILE</h1>
-    <img
-      *ngIf="member.imageUrl"
-      src="{{ backeEndBaseUrl + member.imageUrl }}"
-      alt="Profile
-  picture!"
-    />
-    <h3>{{ member.name }}</h3>
-
-    <div class="box">
-      <strong>Email</strong>
-      <p>{{ member.email }}</p>
+<div class="parent">
+  <div class="card" *ngFor="let member of members">
+    <div>
+      <img src="{{ backeEndBaseUrl + member.imageUrl }}" alt="member image" />
     </div>
-    <div class="box">
-      <strong>Address</strong>
+    <div>
+      <p>{{ member.name }}</p>
+    </div>
+    <div>
       <p>{{ member.address }}</p>
     </div>
-    <div class="box">
-      <strong>Arrears</strong>
-      <p>{{ member.arrears }}</p>
+    <div>
+      <p>{{ member.email }}</p>
     </div>
-    <mat-card-actions *ngIf="!isLoading" class="flex-item">
+    <div *ngIf="!isLoading">
       <button
         *ngIf="!member.approved"
         mat-button
@@ -45,8 +36,8 @@
       >
         DELETE
       </button>
-    </mat-card-actions>
-  </mat-card>
+    </div>
+  </div>
 </div>
 <mat-spinner
   [ngStyle]="loadingCSS"

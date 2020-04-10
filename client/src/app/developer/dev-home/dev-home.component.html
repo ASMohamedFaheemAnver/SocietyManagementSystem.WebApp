@@ -1,14 +1,24 @@
 <div class="parent">
-  <mat-card *ngFor="let society of societies">
-    <div class="flex-item">
+  <div class="card" *ngFor="let society of societies">
+    <div>
       <img src="{{ backeEndBaseUrl + society.imageUrl }}" alt="society image" />
     </div>
-    <p class="flex-item">{{ society.name }}</p>
-    <p class="flex-item">{{ society.address }}</p>
-    <p class="flex-item">{{ society.regNo }}</p>
-    <p class="flex-item">{{ society.email }}</p>
-    <p class="flex-item">{{ society.phoneNumber }}</p>
-    <mat-card-actions *ngIf="!isLoading" class="flex-item">
+    <div>
+      <p>{{ society.name }}</p>
+    </div>
+    <div>
+      <p>{{ society.address }}</p>
+    </div>
+    <div>
+      <p>{{ society.regNo }}</p>
+    </div>
+    <div>
+      <p>{{ society.email }}</p>
+    </div>
+    <div>
+      <p>{{ society.phoneNumber }}</p>
+    </div>
+    <div *ngIf="!isLoading">
       <button
         *ngIf="!society.approved"
         mat-button
@@ -32,8 +42,8 @@
       >
         DELETE
       </button>
-    </mat-card-actions>
-  </mat-card>
+    </div>
+  </div>
 </div>
 <mat-spinner
   [ngStyle]="loadingCSS"

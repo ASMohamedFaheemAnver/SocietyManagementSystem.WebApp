@@ -18,9 +18,16 @@ ul {
   display: flex;
 }
 
-nav > .right > ul > li,
-nav > .left > ul > li {
-  align-self: center;
+nav > .right {
+  flex: 1;
+}
+
+nav .right ul {
+  justify-content: space-between;
+}
+
+nav > .left {
+  flex: 1;
 }
 
 a {
@@ -28,23 +35,23 @@ a {
   color: #fff;
   padding: 0.75rem;
   display: inline-block;
+  width: 100%;
 }
 
 nav > .right > ul > li > button {
   color: #fff;
   background-color: inherit;
   border: none;
-  padding: 0.75rem;
+  width: 100%;
+  /* padding: 0.75rem; */
 }
 
 a:hover {
-  background-color: lawngreen;
-  color: black;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 nav > .right > ul > li > button:hover {
-  background-color: lawngreen;
-  color: black;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 #logout {
@@ -55,7 +62,7 @@ nav > .right > ul > li > button:hover {
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 920px) {
   nav {
     display: block;
   }
@@ -124,4 +131,8 @@ nav > .right > ul > li > button:hover {
   nav div ul li button {
     width: 100%;
   }
+}
+
+.mat-accent {
+  background-color: rgba(0, 0, 0, 0.5);
 }
