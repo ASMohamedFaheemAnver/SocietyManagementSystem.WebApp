@@ -203,7 +203,7 @@ module.exports = {
       error.code = 401;
       throw error;
     }
-    console.log(member.approved);
+    // console.log(member.approved);
     if (!member.approved) {
       const error = new Error("member doesn't approved yet!");
       error.code = 401;
@@ -304,7 +304,7 @@ module.exports = {
     const member = await Member.findById(req.decryptedId);
     return member._doc;
   },
-  getAllSocietyMembers: async ({}, req) => {
+  getAllMembers: async ({}, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -401,7 +401,7 @@ module.exports = {
     return { message: "image deleted!" };
   },
 
-  getAllMembers: async ({}, req) => {
+  getAllSocietyMembers: async ({}, req) => {
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -412,5 +412,12 @@ module.exports = {
       error.code = 401;
       throw error;
     }
+
+    const member = await Member.findById(req.decryptedId).populate("society");
+    const members = [];
+    for (let i = 0; i < member.society.members.length; i++) {
+      members.push(await Member.findById(member.society.members[i]));
+    }
+    return members;
   },
 };

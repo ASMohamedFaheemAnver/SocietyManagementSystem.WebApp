@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Subject } from "rxjs";
-import { Member } from "./society-members/member.model";
+import { Member } from "../member.model";
 
 @Injectable({ providedIn: "root" })
 export class SocietyService {
@@ -32,7 +32,7 @@ export class SocietyService {
   getAllSocietyMembers() {
     const graphqlQuery = {
       query: `{
-        getAllSocietyMembers{
+        getAllMembers{
    	      _id
           name
           email

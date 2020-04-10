@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AuthService } from "src/app/auth/auth.service";
 import { SocietyService } from "../society.service";
-import { Member } from "./member.model";
+import { Member } from "../../member.model";
 import { Subscription } from "rxjs";
 import { environment } from "src/environments/environment";
 

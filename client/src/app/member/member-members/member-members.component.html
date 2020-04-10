@@ -1,25 +1,20 @@
-<div class="container">
-  <mat-card>
-    <h1>PROFILE</h1>
-    <img
-      src=""
-      alt="Profile
-  picture!"
-    />
-    <h3></h3>
-
-    <div class="box">
-      <strong>Email</strong>
-      <p></p>
+<div class="parent">
+  <div class="card" *ngFor="let member of members">
+    <div>
+      <img src="{{ backeEndBaseUrl + member.imageUrl }}" alt="member image" />
     </div>
-    <div class="box">
-      <strong>Address</strong>
-      <p></p>
+    <div>
+      <p>{{ member.name }}</p>
     </div>
-    <div class="box">
-      <strong>Arrears</strong>
-      <p></p>
+    <div>
+      <p>{{ member.address }}</p>
     </div>
-  </mat-card>
+    <div>
+      <p>{{ member.email }}</p>
+    </div>
+    <div>
+      <p>{{ member.arrears }}</p>
+    </div>
+  </div>
 </div>
 <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
