@@ -420,4 +420,30 @@ module.exports = {
     }
     return members;
   },
+
+  addFeeToMember: async ({ memberId, fee }, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (req.category !== "society") {
+      const error = new Error("only society can add fee to it's members!");
+      error.code = 401;
+      throw error;
+    }
+
+    const member = await Member.findById(memberId);
+    if (member.society !== req.decryptedId) {
+      const error = new Error(
+        "you can't modify other society member's details"
+      );
+      error.code = 401;
+      throw error;
+    }
+    member.arrears = member.arrears + fee;
+    await member.save();
+    return { message: "Fee added!" };
+  },
 };

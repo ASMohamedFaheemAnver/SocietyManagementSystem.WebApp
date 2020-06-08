@@ -68,6 +68,7 @@ module.exports = buildSchema(`
     getAllSocieties: [Society!]!
     getSociety: Society!
     getAllMembers: [Member!]!
+    addFeeToMember(memberId: String!, fee: Int!): Message!
   }
 
   type RootMutation{
