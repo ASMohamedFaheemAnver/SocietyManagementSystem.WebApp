@@ -311,7 +311,7 @@ module.exports = {
       throw error;
     }
     if (req.category !== "society") {
-      const error = new Error("only developer can approve societies!");
+      const error = new Error("only society can view it's members!");
       error.code = 401;
       throw error;
     }

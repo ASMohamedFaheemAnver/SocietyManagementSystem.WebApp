@@ -1,18 +1,50 @@
 <div class="parent">
+  <div class="card big-heading">
+    <div>
+      <strong>PROFILE</strong>
+    </div>
+    <div>
+      <strong>NAME</strong>
+    </div>
+    <div>
+      <strong>ADDRESS</strong>
+    </div>
+    <div>
+      <strong>EMAIL</strong>
+    </div>
+    <div>
+      <strong>ARREARS</strong>
+    </div>
+  </div>
   <div class="card" *ngFor="let member of members">
     <div>
+      <div class="small-heading">
+        <strong>PROFILE</strong>
+      </div>
       <img src="{{ backeEndBaseUrl + member.imageUrl }}" alt="member image" />
     </div>
     <div>
+      <div class="small-heading">
+        <strong>NAME</strong>
+      </div>
       <p>{{ member.name }}</p>
     </div>
     <div>
+      <div class="small-heading">
+        <strong>ADDRESS</strong>
+      </div>
       <p>{{ member.address }}</p>
     </div>
     <div>
+      <div class="small-heading">
+        <strong>EMAIL</strong>
+      </div>
       <p>{{ member.email }}</p>
     </div>
     <div>
+      <div class="small-heading">
+        <strong>ARREARS</strong>
+      </div>
       <p>{{ member.arrears }}</p>
     </div>
   </div>

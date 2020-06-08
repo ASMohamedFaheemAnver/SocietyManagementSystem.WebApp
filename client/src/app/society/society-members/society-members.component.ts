@@ -42,7 +42,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
       .subscribe((emitedBoolean) => {
         this.isLoading = emitedBoolean;
       });
-    this.societyServie.getAllSocietyMembers();
+    this.societyServie.getAllMembers();
   }
 
   onApproveMember($event: MouseEvent, memberId: string) {

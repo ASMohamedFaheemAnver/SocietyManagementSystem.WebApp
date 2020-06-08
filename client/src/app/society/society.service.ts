@@ -29,7 +29,7 @@ export class SocietyService {
     return this.http.post(this.graphQLUrl, graphqlQuery);
   }
 
-  getAllSocietyMembers() {
+  getAllMembers() {
     const graphqlQuery = {
       query: `{
         getAllMembers{
@@ -45,7 +45,8 @@ export class SocietyService {
     };
     this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
       (res) => {
-        this.members = res["data"].getAllSocietyMembers;
+        console.log(res);
+        this.members = res["data"].getAllMembers;
         this.membersUpdated.next([...this.members]);
         this.societyStatusListenner.next(false);
       },
