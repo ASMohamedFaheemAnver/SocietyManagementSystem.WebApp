@@ -51,7 +51,7 @@
       <p>{{ member.arrears }}</p>
     </div>
     <div *ngIf="!isLoading">
-      <button mat-button color="primary">
+      <button mat-button color="primary" (click)="onEditClick(member)">
         EDIT
       </button>
       <button

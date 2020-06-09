@@ -4,6 +4,8 @@ import { SocietyService } from "../society.service";
 import { Member } from "../../member.model";
 import { Subscription } from "rxjs";
 import { environment } from "src/environments/environment";
+import { MatDialog } from "@angular/material/dialog";
+import { EditMemberDialogComponent } from "../edit-member-dialog/edit-member-dialog.component";
 
 @Component({
   selector: "app-society-members",
@@ -22,7 +24,8 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private societyServie: SocietyService
+    private societyServie: SocietyService,
+    private editMemberDialog: MatDialog
   ) {}
   ngOnDestroy(): void {
     this.membersSub.unsubscribe();
@@ -71,5 +74,15 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
     };
     this.isLoading = true;
     this.societyServie.disApproveMember(memberId);
+  }
+
+  onEditClick(member: Member) {
+    console.log(member);
+    const editDialogRef = this.editMemberDialog.open(
+      EditMemberDialogComponent,
+      {
+        data: member,
+      }
+    );
   }
 }
