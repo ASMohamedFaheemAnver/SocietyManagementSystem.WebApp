@@ -16,7 +16,10 @@ import { MemberHomeComponent } from "./member/member-home/member-home.component"
 import { SocietyHomeComponent } from "./society/society-home/society-home.component";
 import { SocietyMembersComponent } from "./society/society-members/society-members.component";
 import { ImgDeleteInterceptor } from "./auth/img-interceptor";
-import { MemberMembersComponent } from './member/member-members/member-members.component';
+import { MemberMembersComponent } from "./member/member-members/member-members.component";
+import { EditMemberDialogComponent } from "./society/edit-member-dialog/edit-member-dialog.component";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatNativeDateModule } from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -28,6 +31,7 @@ import { MemberMembersComponent } from './member/member-members/member-members.c
     SocietyHomeComponent,
     SocietyMembersComponent,
     MemberMembersComponent,
+    EditMemberDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +40,8 @@ import { MemberMembersComponent } from './member/member-members/member-members.c
     AngularMaterialModule,
     HttpClientModule,
     AuthModule,
+    ReactiveFormsModule,
+    MatNativeDateModule,
   ],
   providers: [
     {
@@ -55,6 +61,6 @@ import { MemberMembersComponent } from './member/member-members/member-members.c
     },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ErrorComponent],
+  entryComponents: [ErrorComponent, EditMemberDialogComponent],
 })
 export class AppModule {}

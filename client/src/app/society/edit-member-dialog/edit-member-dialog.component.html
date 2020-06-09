@@ -1,5 +1,27 @@
 <div>
-  <h1>You are editing the member with id : {{ data._id }}</h1>
+  <h1>{{ data._id }}</h1>
   <p>Arrears : {{ data.arrears }}</p>
-  <p>Month fee:</p>
+  <p>Monthly fee:</p>
+  <p>Fine:</p>
+  <p>Other payment:</p>
+  <p>Total payment:</p>
+  <mat-tab-group>
+    <mat-tab label="Monthly fee">
+      <p>Description: Monthly payment!</p>
+      <p>Amount: 200/=</p>
+      <mat-form-field>
+        <mat-label>Pick up a date</mat-label>
+        <input matInput [matDatepicker]="dp" (dateInput)="onDate($event)" />
+        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker #dp></mat-datepicker>
+      </mat-form-field>
+    </mat-tab>
+    <mat-tab label="Fine"> Content 2 </mat-tab>
+    <mat-tab label="Other payment"> Content 3 </mat-tab>
+  </mat-tab-group>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true">
+      DONE!
+    </button>
+  </div>
 </div>

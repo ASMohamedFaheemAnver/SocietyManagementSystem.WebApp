@@ -3,7 +3,7 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpErrorResponse
+  HttpErrorResponse,
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
@@ -26,7 +26,10 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (error.error.errors[0].message) {
           this.message = error.error.errors[0].message;
         }
-        this.dialog.open(ErrorComponent, { data: { message: this.message } });
+        this.dialog.open(ErrorComponent, {
+          data: { message: this.message },
+          disableClose: true,
+        });
         return throwError(error);
       })
     );

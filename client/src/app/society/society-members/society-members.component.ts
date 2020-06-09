@@ -82,6 +82,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
       EditMemberDialogComponent,
       {
         data: member,
+        disableClose: true,
       }
     );
   }

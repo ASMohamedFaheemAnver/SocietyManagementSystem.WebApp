@@ -6,5 +6,11 @@ import { Member } from "src/app/member.model";
   templateUrl: "edit-member-dialog.component.html",
 })
 export class EditMemberDialogComponent {
+  private monthFee: number;
+  private fine: number;
   constructor(@Inject(MAT_DIALOG_DATA) public data: Member) {}
+
+  onDate(event) {
+    console.log(event.value);
+  }
 }
