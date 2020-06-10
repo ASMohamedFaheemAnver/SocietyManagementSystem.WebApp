@@ -2,19 +2,19 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const feeSchema = new Schema({
+const extraFeeSchema = new Schema({
   amount: {
     type: Number,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   date: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
-module.exports = mongoose.module("Fee", feeSchema);
+module.exports = mongoose.model("ExtraFee", extraFeeSchema);

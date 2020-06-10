@@ -26,5 +26,12 @@
       <p>{{ regNo }}</p>
     </div>
   </div>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onAddMonthlyFeeToEveryone()"
+  >
+    ADD MONTHLY FEE TO EVERONE!
+  </button>
 </div>
 <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>

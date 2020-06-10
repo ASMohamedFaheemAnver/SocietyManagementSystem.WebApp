@@ -43,4 +43,8 @@ export class SocietyHomeComponent implements OnInit {
       }
     );
   }
+
+  onAddMonthlyFeeToEveryone() {
+    this.societyService.addMonthlyFeeToEveryone();
+  }
 }

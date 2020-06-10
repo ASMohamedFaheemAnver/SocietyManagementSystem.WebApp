@@ -5,37 +5,37 @@ const Schema = mongoose.Schema;
 const societySchema = new Schema({
   email: {
     type: String,
-    required: true
+    required: true,
   },
   regNo: {
     type: String,
-    required: true
+    required: true,
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
   imageUrl: {
     type: String,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   phoneNumber: {
     type: String,
-    required: true
+    required: true,
   },
   address: {
     type: String,
-    required: true
+    required: true,
   },
   approved: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  members: [{ type: Schema.Types.ObjectId, ref: "Member" }]
+  members: [{ type: Schema.Types.ObjectId, ref: "Member" }],
 });
 
 module.exports = mongoose.model("Society", societySchema);

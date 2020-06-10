@@ -2,17 +2,10 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const logSchema = new Schema({
+const monthFeeSchema = new Schema({
   amount: {
     type: Number,
     required: true,
-  },
-  category: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
   },
   date: {
     type: String,
@@ -20,4 +13,4 @@ const logSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Log", logSchema);
+module.exports = mongoose.model("MonthFee", monthFeeSchema);

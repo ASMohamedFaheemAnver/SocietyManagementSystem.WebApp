@@ -12,6 +12,8 @@ const validator = require("validator");
 
 const fileDeletor = require("../util/delete-file");
 
+const MonthFee = require("../model/month-fee");
+
 module.exports = {
   getBasicSocietyDetailes: async () => {
     const societies = await Society.find();
@@ -445,5 +447,36 @@ module.exports = {
     member.arrears = member.arrears + fee;
     await member.save();
     return { message: "Fee added!" };
+  },
+
+  addMonthlyFeeToEveryone: async ({}, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (req.category !== "society") {
+      const error = new Error("only society can add fee to it's members!");
+      error.code = 401;
+      throw error;
+    }
+
+    const society = await Society.findById(req.decryptedId).populate("members");
+    // console.log(society);
+    // console.log(society.members);
+    for (let i = 0; i < society.members.length; i++) {
+      const monthFee = new MonthFee({
+        amount: 200,
+        date: new Date(),
+      });
+      await monthFee.save();
+      const member = await Member.findById(society.members[i]);
+      member.arrears += 200;
+      member.month_fee.push(monthFee);
+      await member.save();
+    }
+
+    return { message: "month fee added to all members!" };
   },
 };

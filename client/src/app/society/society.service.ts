@@ -150,4 +150,19 @@ export class SocietyService {
       }
     );
   }
+
+  addMonthlyFeeToEveryone() {
+    const graphqlQuery = {
+      query: `
+      mutation{
+        addMonthlyFeeToEveryone{
+          message
+        }
+      }`,
+    };
+
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res) => {
+      console.log(res);
+    });
+  }
 }

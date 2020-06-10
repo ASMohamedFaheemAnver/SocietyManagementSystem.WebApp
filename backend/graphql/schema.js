@@ -81,6 +81,7 @@ module.exports = buildSchema(`
     disApproveMember(memberId: String!): Message!
     deleteMember(memberId: String!): Message!
     deleteImage: Message!
+    addMonthlyFeeToEveryone: Message!
   }
 
   schema{

@@ -5,16 +5,16 @@ const Schema = mongoose.Schema;
 const fineSchema = new Schema({
   amount: {
     type: Number,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   date: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
-module.exports = mongoose.module("Fine", fineSchema);
+module.exports = mongoose.model("Fine", fineSchema);

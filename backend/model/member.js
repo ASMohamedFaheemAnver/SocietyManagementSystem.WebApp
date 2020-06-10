@@ -5,40 +5,41 @@ const Schema = mongoose.Schema;
 const memberSchema = new Schema({
   email: {
     type: String,
-    required: true
+    required: true,
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
   imageUrl: {
     type: String,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   arrears: {
     type: Number,
-    required: true
+    required: true,
   },
   address: {
     type: String,
-    required: true
+    required: true,
   },
   approved: {
     type: Boolean,
-    default: false
+    default: false,
   },
   phoneNumber: {
     type: String,
-    required: true
+    required: true,
   },
   society: { type: Schema.Types.ObjectId, ref: "Society" },
   fines: [{ type: Schema.Types.ObjectId, ref: "Fine" }],
-  fees: [{ type: Schema.Types.ObjectId, ref: "Fee" }],
-  logs: [{ type: Schema.Types.ObjectId, ref: "Log" }]
+  extra_fee: [{ type: Schema.Types.ObjectId, ref: "ExtraFee" }],
+  month_fee: [{ type: Schema.Types.ObjectId, ref: "MonthFee" }],
+  logs: [{ type: Schema.Types.ObjectId, ref: "Log" }],
 });
 
 module.exports = mongoose.model("Member", memberSchema);
