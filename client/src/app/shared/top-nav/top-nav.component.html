@@ -15,7 +15,7 @@
           href="{{ membersUrl }}"
           routerLink="{{ membersUrl }}"
           routerLinkActive="mat-accent"
-          >MEMBERS</a
+          >Members</a
         >
       </li>
     </ul>
@@ -29,7 +29,7 @@
           href="./auth/login"
           routerLink="./auth/login"
           routerLinkActive="mat-accent"
-          >LOGIN</a
+          >Login</a
         >
       </li>
       <li [style]="isAuth ? 'flex: 0;' : 'flex: 1;'">
@@ -38,7 +38,7 @@
           href="./auth/signup-member"
           routerLink="./auth/signup-member"
           routerLinkActive="mat-accent"
-          >SIGNUP MEMBER</a
+          >Signup member</a
         >
       </li>
       <li [style]="isAuth ? 'flex: 0;' : 'flex: 1;'">
@@ -47,11 +47,11 @@
           href="./auth/signup-society"
           routerLink="./auth/signup-society"
           routerLinkActive="mat-accent"
-          >SIGNUP SOCIETY</a
+          >Signup society</a
         >
       </li>
       <li [style]="isAuth ? 'margin-right: 1rem;' : 'flex: 0'">
-        <button (click)="onLogOut()" mat-button *ngIf="isAuth">LOGOUT</button>
+        <button (click)="onLogOut()" mat-button *ngIf="isAuth">Logout</button>
       </li>
     </ul>
   </div>

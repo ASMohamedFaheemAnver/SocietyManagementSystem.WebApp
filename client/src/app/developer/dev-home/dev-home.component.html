@@ -25,7 +25,7 @@
         class="btn-green"
         (click)="onApproveSociety($event, society._id)"
       >
-        APPROVE
+        Approve
       </button>
       <button
         *ngIf="society.approved"
@@ -33,14 +33,14 @@
         color="warn"
         (click)="onDisApproveSociety($event, society._id)"
       >
-        DISAPPROVE
+        Disapprove
       </button>
       <button
         (click)="onDeleteSociety($event, society._id)"
         mat-button
         color="warn"
       >
-        DELETE
+        Delete
       </button>
     </div>
   </div>

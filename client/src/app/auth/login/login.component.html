@@ -1,33 +1,33 @@
 <form *ngIf="!isLoading" [formGroup]="form" class="form" (submit)="onLogin()">
-  <h3>USER LOGIN</h3>
+  <h3>User login</h3>
 
   <mat-form-field appearance="outline">
-    <mat-label>Enter your email!</mat-label>
+    <mat-label>Enter your email</mat-label>
     <input formControlName="email" matInput />
   </mat-form-field>
 
   <mat-form-field appearance="fill">
-    <mat-label>User category!</mat-label>
+    <mat-label>User category</mat-label>
     <mat-select formControlName="category">
-      <mat-option value="member">MEMBER</mat-option>
-      <mat-option value="society">SOCIETY</mat-option>
-      <mat-option value="developer">DEVELOPER</mat-option>
+      <mat-option value="member">Member</mat-option>
+      <mat-option value="society">Society</mat-option>
+      <mat-option value="developer">Developer</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Enter your password!</mat-label>
+    <mat-label>Enter your password</mat-label>
     <input formControlName="password" type="password" matInput />
   </mat-form-field>
 
   <div>
-    <p>Forgot your password? click <a href="#">here!</a></p>
+    <p>Forgot your password? click <a href="#">here</a></p>
   </div>
 
-  <button type="submit" mat-raised-button color="primary">LOGIN</button>
+  <button type="submit" mat-raised-button color="primary">Login</button>
 
   <div class="extra">
-    <p>Don't have an account? click <a href="#">here!</a></p>
+    <p>Don't have an account? click <a href="#">here</a></p>
   </div>
 </form>
 <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>

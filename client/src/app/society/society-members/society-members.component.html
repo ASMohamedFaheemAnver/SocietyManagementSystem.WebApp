@@ -1,58 +1,58 @@
 <div class="parent">
   <div class="card big-heading">
     <div>
-      <strong>PROFILE</strong>
+      <strong>Profile</strong>
     </div>
     <div>
-      <strong>NAME</strong>
+      <strong>Name</strong>
     </div>
     <div>
-      <strong>ADDRESS</strong>
+      <strong>Address</strong>
     </div>
     <div>
-      <strong>EMAIL</strong>
+      <strong>Email</strong>
     </div>
     <div>
-      <strong>ARREARS</strong>
+      <strong>Arrears</strong>
     </div>
     <div>
-      <strong>ACTION</strong>
+      <strong>Action</strong>
     </div>
   </div>
   <div class="card" *ngFor="let member of members">
     <div>
       <div class="small-heading">
-        <strong>PROFILE</strong>
+        <strong>Profile</strong>
       </div>
       <img src="{{ backeEndBaseUrl + member.imageUrl }}" alt="member image" />
     </div>
     <div>
       <div class="small-heading">
-        <strong>NAME</strong>
+        <strong>Name</strong>
       </div>
       <p>{{ member.name }}</p>
     </div>
     <div>
       <div class="small-heading">
-        <strong>ADDRESS</strong>
+        <strong>Address</strong>
       </div>
       <p>{{ member.address }}</p>
     </div>
     <div>
       <div class="small-heading">
-        <strong>EMAIL</strong>
+        <strong>Email</strong>
       </div>
       <p>{{ member.email }}</p>
     </div>
     <div>
       <div class="small-heading">
-        <strong>ARREARS</strong>
+        <strong>Arrears</strong>
       </div>
       <p>{{ member.arrears }}</p>
     </div>
     <div *ngIf="!isLoading">
       <button mat-button color="primary" (click)="onEditClick(member)">
-        EDIT
+        Edit
       </button>
       <button
         *ngIf="!member.approved"
@@ -60,7 +60,7 @@
         class="btn-green"
         (click)="onApproveMember($event, member._id)"
       >
-        APPROVE
+        Approve
       </button>
       <button
         *ngIf="member.approved"
@@ -68,14 +68,14 @@
         color="warn"
         (click)="onDisApproveMember($event, member._id)"
       >
-        DISAPPROVE
+        Disapprove
       </button>
       <button
         mat-button
         color="warn"
         (click)="onDeleteMember($event, member._id)"
       >
-        DELETE
+        Delete
       </button>
     </div>
   </div>
