@@ -6,10 +6,10 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); */
   width: 40%;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .profile img {
@@ -25,5 +25,12 @@
 }
 
 .right {
+  width: 100%;
   padding: 2rem;
+}
+
+.right .action-buttons {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 }

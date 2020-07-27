@@ -6,24 +6,11 @@
   <p>Other payment:</p>
   <p>Total payment:</p>
   <mat-tab-group>
-    <mat-tab label="Monthly fee">
-      <p>Description: Monthly payment!</p>
-      <p>Amount: 200/=</p>
-      <mat-form-field>
-        <mat-label>Pick up a date</mat-label>
-        <input matInput [matDatepicker]="dp" (dateInput)="onDate($event)" />
-        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-        <mat-datepicker #dp></mat-datepicker>
-      </mat-form-field>
-      <br />
-      <button mat-button color="primary">ADD</button>
-      <button mat-button color="warn">REMOVE</button>
-    </mat-tab>
     <mat-tab label="Fine"> Content 2 </mat-tab>
     <mat-tab label="Other payment"> Content 3 </mat-tab>
   </mat-tab-group>
   <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="true">
+    <button mat-raised-button color="primary" [mat-dialog-close]="true">
       DONE!
     </button>
   </div>

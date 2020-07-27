@@ -3,6 +3,8 @@ import { AuthService } from "src/app/auth/auth.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { SocietyService } from "../society.service";
 import { environment } from "src/environments/environment";
+import { MatDialog } from "@angular/material/dialog";
+import { AddPaymentDialogComponent } from "../add-payment-dialog/add-payment-dialog.component";
 
 @Component({
   selector: "app-society-home",
@@ -13,7 +15,8 @@ export class SocietyHomeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private societyService: SocietyService,
-    private authService: AuthService
+    private authService: AuthService,
+    private addPaymentDialog: MatDialog
   ) {}
   societyId: string;
   email: string;
@@ -46,5 +49,25 @@ export class SocietyHomeComponent implements OnInit {
 
   onAddMonthlyFeeToEveryone() {
     this.societyService.addMonthlyFeeToEveryone();
+  }
+
+  addMonthlyFee() {
+    const editDialogRef = this.addPaymentDialog.open(
+      AddPaymentDialogComponent,
+      {
+        data: { emittedBoolean: true },
+        disableClose: true,
+      }
+    );
+  }
+
+  addExtraFee() {
+    const editDialogRef = this.addPaymentDialog.open(
+      AddPaymentDialogComponent,
+      {
+        data: { emittedBoolean: false },
+        disableClose: true,
+      }
+    );
   }
 }

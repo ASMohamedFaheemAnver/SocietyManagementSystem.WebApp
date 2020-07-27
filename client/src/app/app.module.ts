@@ -20,6 +20,7 @@ import { MemberMembersComponent } from "./member/member-members/member-members.c
 import { EditMemberDialogComponent } from "./society/edit-member-dialog/edit-member-dialog.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatNativeDateModule } from "@angular/material/core";
+import { AddPaymentDialogComponent } from "./society/add-payment-dialog/add-payment-dialog.component";
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { MatNativeDateModule } from "@angular/material/core";
     SocietyMembersComponent,
     MemberMembersComponent,
     EditMemberDialogComponent,
+    AddPaymentDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,6 +63,10 @@ import { MatNativeDateModule } from "@angular/material/core";
     },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ErrorComponent, EditMemberDialogComponent],
+  entryComponents: [
+    ErrorComponent,
+    EditMemberDialogComponent,
+    AddPaymentDialogComponent,
+  ],
 })
 export class AppModule {}
