@@ -36,6 +36,11 @@ module.exports = buildSchema(`
     approved: Boolean!
   }
 
+  type MonthlyFee{
+    description: String!
+    amount: Int!
+  }
+
   type Society{
     _id: ID!
     name: String!
@@ -45,6 +50,7 @@ module.exports = buildSchema(`
     phoneNumber: String!
     regNo: String!
     approved: Boolean!
+    month_fee: MonthlyFee!
   }
 
   type BasicSocietyData{
@@ -81,7 +87,7 @@ module.exports = buildSchema(`
     disApproveMember(memberId: String!): Message!
     deleteMember(memberId: String!): Message!
     deleteImage: Message!
-    addMonthlyFeeToEveryone: Message!
+    addMonthlyFeeToEveryone(monthlyFee: Int!, description: String!): Message!
   }
 
   schema{

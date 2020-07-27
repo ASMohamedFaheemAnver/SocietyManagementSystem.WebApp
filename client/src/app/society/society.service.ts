@@ -29,6 +29,20 @@ export class SocietyService {
     return this.http.post(this.graphQLUrl, graphqlQuery);
   }
 
+  getSocietyMonthlyFee() {
+    const graphqlQuery = {
+      query: `{
+        getSociety{
+   	      month_fee{
+             amount
+             description
+           }
+        }
+      }`,
+    };
+    return this.http.post(this.graphQLUrl, graphqlQuery);
+  }
+
   getAllMembers() {
     const graphqlQuery = {
       query: `{
@@ -151,11 +165,12 @@ export class SocietyService {
     );
   }
 
-  addMonthlyFeeToEveryone() {
+  addMonthlyFeeToEveryone(monthlyFee, description) {
+    console.log(monthlyFee);
     const graphqlQuery = {
       query: `
       mutation{
-        addMonthlyFeeToEveryone{
+        addMonthlyFeeToEveryone(monthlyFee: ${monthlyFee}, description: "${description}"){
           message
         }
       }`,
@@ -163,6 +178,7 @@ export class SocietyService {
 
     this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res) => {
       console.log(res);
+      this.societyStatusListenner.next(false);
     });
   }
 }

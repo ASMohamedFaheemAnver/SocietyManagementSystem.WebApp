@@ -18,9 +18,10 @@ import { SocietyMembersComponent } from "./society/society-members/society-membe
 import { ImgDeleteInterceptor } from "./auth/img-interceptor";
 import { MemberMembersComponent } from "./member/member-members/member-members.component";
 import { EditMemberDialogComponent } from "./society/edit-member-dialog/edit-member-dialog.component";
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { MatNativeDateModule } from "@angular/material/core";
-import { AddPaymentDialogComponent } from "./society/add-payment-dialog/add-payment-dialog.component";
+import { AddMonthlyFeeDialogComponent } from "./society/add-monthly-fee-dialog/add-monthly-fee-dialog.component";
+import { AddExtraFeeDialogComponent } from "./society/add-extra-fee-dialog/add-extra-fee-dialog.component";
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { AddPaymentDialogComponent } from "./society/add-payment-dialog/add-paym
     SocietyMembersComponent,
     MemberMembersComponent,
     EditMemberDialogComponent,
-    AddPaymentDialogComponent,
+    AddMonthlyFeeDialogComponent,
+    AddExtraFeeDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +45,7 @@ import { AddPaymentDialogComponent } from "./society/add-payment-dialog/add-paym
     HttpClientModule,
     AuthModule,
     ReactiveFormsModule,
+    FormsModule,
     MatNativeDateModule,
   ],
   providers: [
@@ -66,7 +69,8 @@ import { AddPaymentDialogComponent } from "./society/add-payment-dialog/add-paym
   entryComponents: [
     ErrorComponent,
     EditMemberDialogComponent,
-    AddPaymentDialogComponent,
+    AddMonthlyFeeDialogComponent,
+    AddExtraFeeDialogComponent,
   ],
 })
 export class AppModule {}

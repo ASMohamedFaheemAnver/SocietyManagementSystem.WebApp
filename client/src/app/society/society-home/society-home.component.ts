@@ -1,23 +1,33 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AuthService } from "src/app/auth/auth.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { SocietyService } from "../society.service";
 import { environment } from "src/environments/environment";
 import { MatDialog } from "@angular/material/dialog";
-import { AddPaymentDialogComponent } from "../add-payment-dialog/add-payment-dialog.component";
+import { AddMonthlyFeeDialogComponent } from "../add-monthly-fee-dialog/add-monthly-fee-dialog.component";
+import { AddExtraFeeDialogComponent } from "../add-extra-fee-dialog/add-extra-fee-dialog.component";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-society-home",
   templateUrl: "./society-home.component.html",
   styleUrls: ["./society-home.component.css"],
 })
-export class SocietyHomeComponent implements OnInit {
+export class SocietyHomeComponent implements OnInit, OnDestroy {
+  private societyStatusSub: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private societyService: SocietyService,
     private authService: AuthService,
-    private addPaymentDialog: MatDialog
+    private addMonthlyFeetDialog: MatDialog,
+    private addExtraFeeDialog: MatDialog
   ) {}
+
+  ngOnDestroy(): void {
+    this.societyStatusSub.unsubscribe();
+  }
+
   societyId: string;
   email: string;
   name: string;
@@ -45,29 +55,51 @@ export class SocietyHomeComponent implements OnInit {
         this.isLoading = false;
       }
     );
-  }
 
-  onAddMonthlyFeeToEveryone() {
-    this.societyService.addMonthlyFeeToEveryone();
+    this.societyStatusSub = this.societyService
+      .getSocietyStatusListenner()
+      .subscribe((emitedBoolean) => {
+        this.isLoading = emitedBoolean;
+      });
   }
 
   addMonthlyFee() {
-    const editDialogRef = this.addPaymentDialog.open(
-      AddPaymentDialogComponent,
-      {
-        data: { emittedBoolean: true },
-        disableClose: true,
-      }
-    );
+    this.isLoading = true;
+    this.societyService.getSocietyMonthlyFee().subscribe((res) => {
+      this.isLoading = false;
+      const addMonthlyFeeDialogRef = this.addMonthlyFeetDialog.open(
+        AddMonthlyFeeDialogComponent,
+        {
+          data: {
+            monthlyFee: res["data"].getSociety.month_fee.amount,
+            description: res["data"].getSociety.month_fee.description,
+          },
+          disableClose: true,
+        }
+      );
+
+      addMonthlyFeeDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        this.isLoading = true;
+        this.societyService.addMonthlyFeeToEveryone(
+          data.monthFee,
+          data.description
+        );
+      });
+    });
   }
 
   addExtraFee() {
-    const editDialogRef = this.addPaymentDialog.open(
-      AddPaymentDialogComponent,
+    const addExtraFeeDialogRef = this.addExtraFeeDialog.open(
+      AddExtraFeeDialogComponent,
       {
-        data: { emittedBoolean: false },
         disableClose: true,
       }
     );
+    addExtraFeeDialogRef.afterClosed().subscribe((data) => {
+      console.log(data);
+    });
   }
 }

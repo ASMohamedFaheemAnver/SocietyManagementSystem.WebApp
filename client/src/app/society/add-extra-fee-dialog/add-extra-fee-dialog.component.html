@@ -1,0 +1,24 @@
+<div>
+  <p>Enter extra fees.</p>
+  <mat-form-field>
+    <input matInput min="0" type="number" [(ngModel)]="extraFee" />
+  </mat-form-field>
+  <br />
+  <p>Enter descripton.</p>
+  <mat-form-field>
+    <input matInput type="text" [(ngModel)]="description" />
+  </mat-form-field>
+
+  <div mat-dialog-actions>
+    <button
+      mat-raised-button
+      color="primary"
+      [mat-dialog-close]="{ extraFee: extraFee, description: description }"
+    >
+      Done
+    </button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="false">
+      Cancel
+    </button>
+  </div>
+</div>

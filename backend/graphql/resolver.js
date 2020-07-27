@@ -449,7 +449,8 @@ module.exports = {
     return { message: "Fee added!" };
   },
 
-  addMonthlyFeeToEveryone: async ({}, req) => {
+  addMonthlyFeeToEveryone: async ({ monthlyFee, description }, req) => {
+    console.log(monthlyFee, description);
     if (!req.isAuth) {
       const error = new Error("not authenticated!");
       error.code = 401;
@@ -465,15 +466,19 @@ module.exports = {
     const society = await Society.findById(req.decryptedId).populate("members");
     // console.log(society);
     // console.log(society.members);
+    const monthFee = new MonthFee({
+      amount: monthlyFee,
+      date: new Date(),
+      description: description,
+    });
+    await monthFee.save();
+    society.month_fees.push(monthFee);
+    await society.save();
+
     for (let i = 0; i < society.members.length; i++) {
-      const monthFee = new MonthFee({
-        amount: 200,
-        date: new Date(),
-      });
-      await monthFee.save();
       const member = await Member.findById(society.members[i]);
-      member.arrears += 200;
-      member.month_fee.push(monthFee);
+      member.arrears += monthlyFee;
+      member.month_fees.push(monthFee);
       await member.save();
     }
 

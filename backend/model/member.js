@@ -37,8 +37,8 @@ const memberSchema = new Schema({
   },
   society: { type: Schema.Types.ObjectId, ref: "Society" },
   fines: [{ type: Schema.Types.ObjectId, ref: "Fine" }],
-  extra_fee: [{ type: Schema.Types.ObjectId, ref: "ExtraFee" }],
-  month_fee: [{ type: Schema.Types.ObjectId, ref: "MonthFee" }],
+  extra_fees: [{ type: Schema.Types.ObjectId, ref: "ExtraFee" }],
+  month_fees: [{ type: Schema.Types.ObjectId, ref: "MonthFee" }],
   logs: [{ type: Schema.Types.ObjectId, ref: "Log" }],
 });
 
