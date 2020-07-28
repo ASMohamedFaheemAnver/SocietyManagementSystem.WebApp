@@ -88,6 +88,7 @@ module.exports = buildSchema(`
     deleteMember(memberId: String!): Message!
     deleteImage: Message!
     addMonthlyFeeToEveryone(monthlyFee: Int!, description: String!): Message!
+    addExtraFeeToEveryone(extraFee: Int!, description: String!): Message!
   }
 
   schema{

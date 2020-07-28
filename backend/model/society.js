@@ -35,6 +35,14 @@ const societySchema = new Schema({
     type: Boolean,
     default: false,
   },
+  expected_income: {
+    type: Number,
+    default: 0,
+  },
+  current_income: {
+    type: Number,
+    default: 0,
+  },
 
   month_fee: {
     type: { description: String, amount: Number },

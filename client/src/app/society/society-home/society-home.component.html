@@ -28,7 +28,7 @@
     </div>
   </div>
 
-  <div class="right">
+  <div class="right" *ngIf="!isLoading">
     <div class="actions">
       <h1>Society actions</h1>
       <div class="action-buttons">
@@ -39,6 +39,10 @@
           Add extra fees
         </button>
       </div>
+    </div>
+
+    <div class="activity">
+      <h1>Recent society activity</h1>
     </div>
   </div>
 </div>

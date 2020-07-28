@@ -31,6 +31,13 @@
 
 .right .action-buttons {
   display: flex;
-  justify-content: space-evenly;
   flex-wrap: wrap;
+}
+
+.right .action-buttons button:not(:first-child) {
+  margin-left: 20px;
+}
+
+.right .activity {
+  margin-top: 50px;
 }

@@ -13,6 +13,7 @@ const validator = require("validator");
 const fileDeletor = require("../util/delete-file");
 
 const MonthFee = require("../model/month-fee");
+const ExtraFee = require("../model/extra-fee");
 
 module.exports = {
   getBasicSocietyDetailes: async () => {
@@ -223,9 +224,9 @@ module.exports = {
     const token = jwt.sign(
       { encryptedId: member._id.toString(), category: "member" },
       process.env.secret_word,
-      { expiresIn: "1h" }
+      { expiresIn: "10h" }
     );
-    return { token: token, _id: member._id.toString(), expiresIn: 3600 };
+    return { token: token, _id: member._id.toString(), expiresIn: 36000 };
   },
 
   loginSociety: async ({ email, password }) => {
@@ -254,10 +255,10 @@ module.exports = {
     const token = jwt.sign(
       { encryptedId: society._id.toString(), category: "society" },
       process.env.secret_word,
-      { expiresIn: "1h" }
+      { expiresIn: "10h" }
     );
 
-    return { token: token, _id: society._id.toString(), expiresIn: 3600 };
+    return { token: token, _id: society._id.toString(), expiresIn: 36000 };
   },
 
   loginDeveloper: async ({ email, password }) => {
@@ -280,13 +281,13 @@ module.exports = {
     const token = jwt.sign(
       { encryptedId: developer._id.toString(), category: "developer" },
       process.env.secret_word,
-      { expiresIn: "1h" }
+      { expiresIn: "10h" }
     );
 
     return {
       token: token,
       _id: developer._id.toString(),
-      expiresIn: 3600,
+      expiresIn: 36000,
     };
   },
 
@@ -473,15 +474,54 @@ module.exports = {
     });
     await monthFee.save();
     society.month_fees.push(monthFee);
-    await society.save();
 
     for (let i = 0; i < society.members.length; i++) {
       const member = await Member.findById(society.members[i]);
       member.arrears += monthlyFee;
+      society.expected_income += monthlyFee;
       member.month_fees.push(monthFee);
       await member.save();
     }
 
+    await society.save();
+
     return { message: "month fee added to all members!" };
+  },
+  addExtraFeeToEveryone: async ({ extraFee, description }, req) => {
+    console.log(extraFee, description);
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (req.category !== "society") {
+      const error = new Error("only society can add fee to it's members!");
+      error.code = 401;
+      throw error;
+    }
+
+    const society = await Society.findById(req.decryptedId).populate("members");
+    // console.log(society);
+    // console.log(society.members);
+    const extraFeeObj = new ExtraFee({
+      amount: extraFee,
+      date: new Date(),
+      description: description,
+    });
+    await extraFeeObj.save();
+    society.extra_fees.push(extraFeeObj);
+
+    for (let i = 0; i < society.members.length; i++) {
+      const member = await Member.findById(society.members[i]);
+      member.arrears += extraFee;
+      society.expected_income += extraFee;
+      member.extra_fees.push(extraFeeObj);
+      await member.save();
+    }
+
+    await society.save();
+
+    return { message: "extra fee added to all members!" };
   },
 };

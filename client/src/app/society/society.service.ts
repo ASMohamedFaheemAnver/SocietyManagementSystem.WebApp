@@ -181,4 +181,21 @@ export class SocietyService {
       this.societyStatusListenner.next(false);
     });
   }
+
+  addExtraFeeToEveryone(extraFee, description) {
+    console.log(extraFee);
+    const graphqlQuery = {
+      query: `
+      mutation{
+        addExtraFeeToEveryone(extraFee: ${extraFee}, description: "${description}"){
+          message
+        }
+      }`,
+    };
+
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res) => {
+      console.log(res);
+      this.societyStatusListenner.next(false);
+    });
+  }
 }

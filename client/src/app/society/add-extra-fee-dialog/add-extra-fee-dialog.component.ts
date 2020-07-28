@@ -6,6 +6,6 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 })
 export class AddExtraFeeDialogComponent {
   public extraFee: number = 0;
-  public description: string = "";
+  public description: string = "Extra fees.";
   constructor(@Inject(MAT_DIALOG_DATA) public data: {}) {}
 }

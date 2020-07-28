@@ -99,7 +99,14 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
       }
     );
     addExtraFeeDialogRef.afterClosed().subscribe((data) => {
-      console.log(data);
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.addExtraFeeToEveryone(
+        data.extraFee,
+        data.description
+      );
     });
   }
 }
