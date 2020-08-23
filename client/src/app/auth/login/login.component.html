@@ -1,24 +1,30 @@
 <form *ngIf="!isLoading" [formGroup]="form" class="form" (submit)="onLogin()">
-  <h3>User login</h3>
+  <h1>User login</h1>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Enter your email</mat-label>
-    <input formControlName="email" matInput />
-  </mat-form-field>
+  <div class="input-wrapper">
+    <p>Enter your email</p>
+    <mat-form-field appearance="outline">
+      <input formControlName="email" matInput />
+    </mat-form-field>
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>User category</mat-label>
-    <mat-select formControlName="category">
-      <mat-option value="member">Member</mat-option>
-      <mat-option value="society">Society</mat-option>
-      <mat-option value="developer">Developer</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div class="input-wrapper">
+    <p>User category</p>
+    <mat-form-field appearance="fill">
+      <mat-select formControlName="category">
+        <mat-option value="member">Member</mat-option>
+        <mat-option value="society">Society</mat-option>
+        <mat-option value="developer">Developer</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Enter your password</mat-label>
-    <input formControlName="password" type="password" matInput />
-  </mat-form-field>
+  <div class="input-wrapper">
+    <p>Enter your password</p>
+    <mat-form-field appearance="outline">
+      <input formControlName="password" type="password" matInput />
+    </mat-form-field>
+  </div>
 
   <div>
     <p>Forgot your password? click <a href="#">here</a></p>

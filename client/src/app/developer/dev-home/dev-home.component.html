@@ -1,21 +1,62 @@
 <div class="parent">
+  <div class="card big-heading">
+    <div>
+      <strong>PROFILE</strong>
+    </div>
+    <div>
+      <strong>NAME</strong>
+    </div>
+    <div>
+      <strong>ADDRESS</strong>
+    </div>
+    <div>
+      <strong>REGISTRATION NUMBER</strong>
+    </div>
+    <div>
+      <strong>EMAIL</strong>
+    </div>
+    <div>
+      <strong>PHONE NUMBER</strong>
+    </div>
+    <div>
+      <strong>ACTIONS</strong>
+    </div>
+  </div>
   <div class="card" *ngFor="let society of societies">
     <div>
+      <div class="small-heading">
+        <strong>PROFILE</strong>
+      </div>
       <img src="{{ backeEndBaseUrl + society.imageUrl }}" alt="society image" />
     </div>
     <div>
+      <div class="small-heading">
+        <strong>NAME</strong>
+      </div>
       <p>{{ society.name }}</p>
     </div>
     <div>
+      <div class="small-heading">
+        <strong>ADDRESS</strong>
+      </div>
       <p>{{ society.address }}</p>
     </div>
     <div>
+      <div class="small-heading">
+        <strong>REGISTARTION NUMBER</strong>
+      </div>
       <p>{{ society.regNo }}</p>
     </div>
     <div>
+      <div class="small-heading">
+        <strong>EMAIL</strong>
+      </div>
       <p>{{ society.email }}</p>
     </div>
     <div>
+      <div class="small-heading">
+        <strong>PHONE NUMBER</strong>
+      </div>
       <p>{{ society.phoneNumber }}</p>
     </div>
     <div *ngIf="!isLoading">

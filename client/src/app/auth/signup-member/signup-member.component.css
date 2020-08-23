@@ -28,3 +28,40 @@
   width: 250px;
   border-radius: 50%;
 }
+
+.input-wrapper {
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-wrapper mat-form-field {
+  flex: 2;
+}
+
+.input-wrapper mat-form-field input {
+  height: 15px;
+}
+
+.input-wrapper p {
+  flex: 1;
+}
+
+@media (max-width: 420px) {
+  .input-wrapper {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  h1 {
+    padding-bottom: 50px;
+  }
+
+  .form {
+    margin-top: 20px;
+  }
+  .profile-pic img {
+    width: 150px;
+  }
+}

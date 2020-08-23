@@ -1,5 +1,5 @@
 <form *ngIf="!isLoading" [formGroup]="form" class="form" (submit)="onSignUp()">
-  <h3>Society signup</h3>
+  <h1>Society signup</h1>
 
   <div class="profile-pic">
     <img src="{{ imageUrl }}" alt="Profile picture!" />
@@ -15,36 +15,49 @@
     </button>
     <br />
   </div>
+  <div class="input-wrapper">
+    <p>Enter society's email</p>
+    <mat-form-field appearance="outline">
+      <input formControlName="email" matInput />
+    </mat-form-field>
+  </div>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Enter society's email</mat-label>
-    <input formControlName="email" matInput />
-  </mat-form-field>
+  <div class="input-wrapper">
+    <p>Enter scoiety's registration number</p>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Enter scoiety's registration number</mat-label>
-    <input formControlName="regNo" matInput />
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <input formControlName="regNo" matInput />
+    </mat-form-field>
+  </div>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Enter society's name</mat-label>
-    <input formControlName="name" matInput />
-  </mat-form-field>
+  <div class="input-wrapper">
+    <p>Enter society's name</p>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Enter society's address</mat-label>
-    <textarea formControlName="address" rows="4" matInput></textarea>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <input formControlName="name" matInput />
+    </mat-form-field>
+  </div>
+  <div class="input-wrapper">
+    <p>Enter society's address</p>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Enter society's phone number</mat-label>
-    <input formControlName="phoneNumber" matInput />
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <textarea formControlName="address" rows="4" matInput></textarea>
+    </mat-form-field>
+  </div>
+  <div class="input-wrapper">
+    <p>Enter society's phone number</p>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Enter society's password!</mat-label>
-    <input formControlName="password" type="password" matInput />
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <input formControlName="phoneNumber" matInput />
+    </mat-form-field>
+  </div>
+  <div class="input-wrapper">
+    <p>Enter society's password!</p>
+
+    <mat-form-field appearance="outline">
+      <input formControlName="password" type="password" matInput />
+    </mat-form-field>
+  </div>
 
   <button mat-raised-button color="primary">Signup</button>
 </form>

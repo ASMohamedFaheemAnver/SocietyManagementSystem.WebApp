@@ -22,7 +22,9 @@ export class DevHomeComponent implements OnInit, OnDestroy {
   private societiesSub: Subscription;
   private devStatusSub: Subscription;
 
-  loadingCSS;
+  loadingCSS = {
+    top: "100px",
+  };
 
   ngOnInit(): void {
     this.isLoading = true;
