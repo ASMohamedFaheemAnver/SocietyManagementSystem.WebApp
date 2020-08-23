@@ -3,13 +3,16 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Subject } from "rxjs";
 import { Member } from "../member.model";
+import { Log } from "../log.model";
 
 @Injectable({ providedIn: "root" })
 export class SocietyService {
   private graphQLUrl = environment.backEndGraphQlUrl2;
   private societyStatusListenner = new Subject<boolean>();
   private membersUpdated = new Subject<Member[]>();
+  private logsUpdated = new Subject<Log[]>();
   private members: Member[] = [];
+  private logs: Log[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -23,6 +26,8 @@ export class SocietyService {
           imageUrl
           regNo
           address
+          expected_income
+          current_income
         }
       }`,
     };
@@ -77,6 +82,10 @@ export class SocietyService {
 
   getSocietyStatusListenner() {
     return this.societyStatusListenner;
+  }
+
+  getSocietyLogListenner() {
+    return this.logsUpdated;
   }
 
   approveMember(memberId: string) {
@@ -195,6 +204,39 @@ export class SocietyService {
 
     this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res) => {
       console.log(res);
+      this.societyStatusListenner.next(false);
+    });
+  }
+
+  getSocietyLogs(page_number) {
+    console.log(page_number);
+    const graphqlQuery = {
+      query: `{
+        getSocietyLogs(page_number: ${page_number}){
+          _id
+          kind
+          fee{
+            _id
+            date
+            amount
+            description
+          }
+        }
+      }`,
+    };
+    // const graphqlQuery = {
+    //   query: `
+    //   mutation{
+    //     getSocietyLogs(page_number: ${page_number}){
+    //       _id
+    //     }
+    //   }`,
+    // };
+
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res: Log[]) => {
+      console.log(res);
+      this.logs = res["data"].getSocietyLogs;
+      this.logsUpdated.next(this.logs);
       this.societyStatusListenner.next(false);
     });
   }

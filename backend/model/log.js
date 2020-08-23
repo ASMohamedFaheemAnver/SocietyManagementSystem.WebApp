@@ -3,21 +3,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const logSchema = new Schema({
-  amount: {
-    type: Number,
-    required: true,
-  },
-  category: {
+  kind: {
     type: String,
     required: true,
   },
-  description: {
-    type: String,
-  },
-  date: {
-    type: String,
-    required: true,
-  },
+  item: { type: Schema.Types.ObjectId, refPath: "kind" },
 });
 
 module.exports = mongoose.model("Log", logSchema);

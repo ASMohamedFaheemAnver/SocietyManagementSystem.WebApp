@@ -7,6 +7,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { AddMonthlyFeeDialogComponent } from "../add-monthly-fee-dialog/add-monthly-fee-dialog.component";
 import { AddExtraFeeDialogComponent } from "../add-extra-fee-dialog/add-extra-fee-dialog.component";
 import { Subscription } from "rxjs";
+import { PageEvent } from "@angular/material/paginator";
+import { Log } from "src/app/log.model";
 
 @Component({
   selector: "app-society-home",
@@ -15,6 +17,7 @@ import { Subscription } from "rxjs";
 })
 export class SocietyHomeComponent implements OnInit, OnDestroy {
   private societyStatusSub: Subscription;
+  private societyLogSub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,6 +29,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.societyStatusSub.unsubscribe();
+    this.societyLogSub.unsubscribe();
   }
 
   societyId: string;
@@ -34,13 +38,21 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   imageUrl: string;
   address: string;
   regNo: string;
+  expected_income: number;
+  current_income: number;
 
   isLoading: Boolean;
+  currentPage = 0;
+
+  logs: Log[];
 
   backeEndBaseUrl = environment.backeEndBaseUrl2;
 
   ngOnInit(): void {
     this.isLoading = true;
+
+    this.societyService.getSocietyLogs(this.currentPage);
+
     this.societyService.getSociety().subscribe(
       (society) => {
         console.log(society);
@@ -49,6 +61,8 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         this.imageUrl = society["data"].getSociety.imageUrl;
         this.address = society["data"].getSociety.address;
         this.regNo = society["data"].getSociety.regNo;
+        this.expected_income = society["data"].getSociety.expected_income;
+        this.current_income = society["data"].getSociety.current_income;
         this.isLoading = false;
       },
       (err) => {
@@ -60,6 +74,13 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
       .getSocietyStatusListenner()
       .subscribe((emitedBoolean) => {
         this.isLoading = emitedBoolean;
+      });
+
+    this.societyLogSub = this.societyService
+      .getSocietyLogListenner()
+      .subscribe((logs) => {
+        this.logs = logs;
+        console.log(logs);
       });
   }
 
@@ -108,5 +129,9 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         data.description
       );
     });
+  }
+
+  onPageChange(event: PageEvent) {
+    this.societyService.getSocietyLogs(event.pageIndex);
   }
 }

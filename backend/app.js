@@ -32,7 +32,9 @@ app.use((req, res, next) => {
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
-  next();
+  setTimeout(() => {
+    next();
+  }, 500);
 });
 
 app.use(auth);

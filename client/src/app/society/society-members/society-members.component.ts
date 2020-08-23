@@ -20,7 +20,10 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   private membersSub: Subscription;
   private societyStatusSub: Subscription;
 
-  loadingCSS;
+  loadingCSS = {
+    top: "100px",
+    // left: $event.x + "px",
+  };
 
   constructor(
     private authService: AuthService,

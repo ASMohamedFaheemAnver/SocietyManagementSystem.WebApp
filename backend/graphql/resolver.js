@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const Member = require("../model/member");
 
 const Society = require("../model/society");
+const Log = require("../model/log");
 
 const Developer = require("../model/developer");
 
@@ -475,15 +476,22 @@ module.exports = {
     await monthFee.save();
     society.month_fees.push(monthFee);
 
+    const log = new Log({ kind: "MonthFee", item: monthFee });
+    await log.save();
+
     for (let i = 0; i < society.members.length; i++) {
       const member = await Member.findById(society.members[i]);
       member.arrears += monthlyFee;
       society.expected_income += monthlyFee;
       member.month_fees.push(monthFee);
+      member.logs.push(log);
       await member.save();
     }
-
+    society.logs.push(log);
     await society.save();
+
+    // const updatedSociety = await Society.findById(req.decryptedId);
+    // console.log(updatedSociety.logs);
 
     return { message: "month fee added to all members!" };
   },
@@ -512,16 +520,63 @@ module.exports = {
     await extraFeeObj.save();
     society.extra_fees.push(extraFeeObj);
 
+    const log = new Log({ kind: "ExtraFee", item: extraFeeObj });
+    await log.save();
+
     for (let i = 0; i < society.members.length; i++) {
       const member = await Member.findById(society.members[i]);
       member.arrears += extraFee;
       society.expected_income += extraFee;
       member.extra_fees.push(extraFeeObj);
+      member.logs.push(log);
       await member.save();
     }
 
+    society.logs.push(log);
+
     await society.save();
 
+    // const updatedSociety = await Society.findById(req.decryptedId).populate(
+    //   "logs.item"
+    // );
+    // console.log(updatedSociety.logs);
+
     return { message: "extra fee added to all members!" };
+  },
+
+  getSocietyLogs: async ({ page_number }, req) => {
+    if (!req.isAuth) {
+      const error = new Error("not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
+    if (req.category !== "society") {
+      const error = new Error("only society can add fee to it's members!");
+      error.code = 401;
+      throw error;
+    }
+
+    const society = await Society.findById(req.decryptedId).populate([
+      {
+        path: "logs",
+        options: { skip: page_number * 5, limit: 5 },
+        populate: {
+          path: "item",
+        },
+      },
+    ]);
+
+    // console.log(society.logs);
+
+    society.logs.map((log) => {
+      if (log.kind === "MonthFee" || log.kind === "ExtraFee") {
+        log.fee = log.item;
+      }
+
+      return log;
+    });
+
+    return society.logs;
   },
 };

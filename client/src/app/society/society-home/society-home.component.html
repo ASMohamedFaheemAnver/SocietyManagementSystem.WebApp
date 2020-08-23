@@ -25,6 +25,14 @@
         <strong>Registration number</strong>
         <p>{{ regNo }}</p>
       </div>
+      <div>
+        <strong>Current income</strong>
+        <p>{{ current_income }}</p>
+      </div>
+      <div>
+        <strong>Expected income</strong>
+        <p>{{ expected_income }}</p>
+      </div>
     </div>
   </div>
 
@@ -43,6 +51,42 @@
 
     <div class="activity">
       <h1>Recent society activity</h1>
+      <div class="parent2">
+        <div class="card big-heading">
+          <div>
+            <strong>Type</strong>
+          </div>
+          <div>
+            <strong>Ammount</strong>
+          </div>
+          <div>
+            <strong>Description</strong>
+          </div>
+          <div>
+            <strong>Date</strong>
+          </div>
+        </div>
+        <div class="card" *ngFor="let log of logs">
+          <div>
+            <p>{{ log.kind }}</p>
+          </div>
+          <div>
+            <p>{{ log.fee.amount }}</p>
+          </div>
+          <div>
+            <p>{{ log.fee.description }}</p>
+          </div>
+          <div>
+            <p>{{ log.fee.date.slice(4, 15) }}</p>
+          </div>
+        </div>
+      </div>
+      <mat-paginator
+        [length]="20"
+        [pageSize]="10"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
     </div>
   </div>
 </div>

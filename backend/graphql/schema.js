@@ -51,11 +51,26 @@ module.exports = buildSchema(`
     regNo: String!
     approved: Boolean!
     month_fee: MonthlyFee!
+    expected_income: Int!
+    current_income: Int!
   }
 
   type BasicSocietyData{
     _id: ID!
     name: String!
+  }
+
+    type Fee{
+    _id: ID!
+    amount: Int!
+    date: String!
+    description: String!
+  }
+
+  type SocietyLog{
+    _id: ID!
+    kind: String!
+    fee: Fee
   }
 
   type AuthData{
@@ -75,6 +90,7 @@ module.exports = buildSchema(`
     getSociety: Society!
     getAllMembers: [Member!]!
     addFeeToMember(memberId: String!, fee: Int!): Message!
+    getSocietyLogs(page_number: Int!): [SocietyLog!]!
   }
 
   type RootMutation{
