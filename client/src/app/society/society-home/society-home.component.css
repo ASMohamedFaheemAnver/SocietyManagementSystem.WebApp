@@ -20,7 +20,8 @@
 
 @media (max-width: 500px) {
   .profile img {
-    width: 80%;
+    width: 150px;
+    height: 150px;
   }
 }
 

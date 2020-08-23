@@ -1,6 +1,6 @@
 .parent {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   flex-wrap: wrap;
   margin: 1rem;
@@ -38,7 +38,9 @@ mat-spinner {
 }
 
 .card img {
-  width: 100px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
 }
 
 @media (max-width: 992px) {
