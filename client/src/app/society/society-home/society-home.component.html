@@ -1,7 +1,7 @@
 <div class="parent">
   <div class="left">
     <div class="profile" *ngIf="!isLoading">
-      <div>
+      <div class="profile-inner-left">
         <h1>Profile</h1>
         <img
           *ngIf="imageUrl"
@@ -9,29 +9,31 @@
           alt="Profile picture!"
         />
       </div>
-      <div>
-        <strong>Name</strong>
-        <h3>{{ name }}</h3>
-      </div>
-      <div>
-        <strong>Email</strong>
-        <p>{{ email }}</p>
-      </div>
-      <div>
-        <strong>Address</strong>
-        <p>{{ address }}</p>
-      </div>
-      <div>
-        <strong>Registration number</strong>
-        <p>{{ regNo }}</p>
-      </div>
-      <div>
-        <strong>Current income</strong>
-        <p>{{ current_income }}</p>
-      </div>
-      <div>
-        <strong>Expected income</strong>
-        <p>{{ expected_income }}</p>
+      <div class="profile-inner-right">
+        <div>
+          <strong>Name</strong>
+          <h3>{{ name }}</h3>
+        </div>
+        <div>
+          <strong>Email</strong>
+          <p>{{ email }}</p>
+        </div>
+        <div>
+          <strong>Address</strong>
+          <p>{{ address }}</p>
+        </div>
+        <div>
+          <strong>Registration number</strong>
+          <p>{{ regNo }}</p>
+        </div>
+        <div>
+          <strong>Current income</strong>
+          <p>{{ current_income }}</p>
+        </div>
+        <div>
+          <strong>Expected income</strong>
+          <p>{{ expected_income }}</p>
+        </div>
       </div>
     </div>
   </div>

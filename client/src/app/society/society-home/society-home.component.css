@@ -81,3 +81,94 @@ mat-form-field {
 button:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 792px) {
+  .parent {
+    flex-direction: column;
+  }
+
+  .parent .left {
+    width: 100%;
+    padding: 0;
+  }
+
+  .parent .left .profile {
+    display: flex;
+    padding: 20px;
+  }
+
+  .profile-inner-left {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-inner-left img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-inner-right {
+    width: 100%;
+    margin-left: 40px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .profile-inner-right div {
+    width: 90%;
+  }
+}
+
+@media (max-width: 650px) {
+  .parent .left .profile img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .parent .left .profile {
+    flex-direction: column;
+  }
+
+  .profile-inner-left {
+    text-align: start;
+    align-items: center;
+  }
+
+  .profile-inner-right {
+    padding: 40px 0;
+    margin: 0;
+    grid-template-columns: repeat(3, auto);
+  }
+
+  .profile-inner-right div {
+    word-wrap: break-word;
+  }
+
+  .profile {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .profile-inner-right {
+    grid-template-columns: repeat(2, auto);
+  }
+}
+
+@media (max-width: 400px) {
+  .profile-inner-right {
+    padding: 10px 20px;
+    grid-template-columns: repeat(1, auto);
+  }
+
+  .profile-inner-right div {
+    width: 100%;
+  }
+}
+
+@media (max-width: 350px) {
+  .right .action-buttons button {
+    margin: 10px 5px !important;
+  }
+}
