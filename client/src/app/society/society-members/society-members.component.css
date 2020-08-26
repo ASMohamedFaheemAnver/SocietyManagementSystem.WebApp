@@ -43,6 +43,11 @@ mat-spinner {
   border-radius: 50%;
 }
 
+.actions {
+  display: flex;
+  flex-direction: column;
+}
+
 @media (max-width: 992px) {
   .card {
     flex-direction: column;

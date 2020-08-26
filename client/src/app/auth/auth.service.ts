@@ -54,8 +54,14 @@ export class AuthService {
         const graphqlQuery = {
           query: `
             mutation{
-              createMember(memberInput: {email: "${email}", name: "${name}" password: "${password}", 
-              imageUrl: "${imageUrl}", address: """${address}""", societyId: "${societyId}", phoneNumber: "${phoneNumber}"}){
+              createMember(memberInput: {
+                email: "${email}", 
+                name: "${name}" 
+                password: "${password}", 
+                imageUrl: """${imageUrl}""", 
+                address: """${address}""", 
+                societyId: "${societyId}", 
+                phoneNumber: "${phoneNumber}"}){
                 _id
                 email
                 name
@@ -116,7 +122,14 @@ export class AuthService {
         const graphqlQuery = {
           query: `
             mutation{
-              createSociety(societyInput: {email: "${email}", name: "${name}", password: "${password}", imageUrl: "${imageUrl}", address: """${address}""", phoneNumber: "${phoneNumber}", regNo: "${regNo}"}){
+              createSociety(societyInput: {
+                email: "${email}", 
+                name: "${name}", 
+                password: "${password}", 
+                imageUrl: """${imageUrl}""", 
+                address: """${address}""", 
+                phoneNumber: "${phoneNumber}", 
+                regNo: "${regNo}"}){
                 _id
               }
             }   
