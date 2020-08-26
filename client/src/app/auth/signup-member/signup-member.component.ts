@@ -23,7 +23,6 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
   societies = [];
 
   private phoneNumberPattern = "[+]*[0-9]{3,13}";
-  private regIdPattern = "([0-9]|[a-z]|[A-Z]{3,10})";
 
   constructor(private authService: AuthService, private dialog: MatDialog) {}
 
@@ -55,10 +54,7 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
         asyncValidators: [mimeType],
       }),
       societyId: new FormControl(null, {
-        validators: [
-          Validators.required,
-          Validators.pattern(this.regIdPattern),
-        ],
+        validators: [Validators.required],
       }),
       name: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)],
