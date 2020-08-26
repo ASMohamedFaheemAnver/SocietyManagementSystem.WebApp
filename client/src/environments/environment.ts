@@ -7,9 +7,9 @@ export const environment = {
   backeEndBaseUrl2: "http://localhost:3000/",
   backEndGraphQlUrl2: "http://localhost:3000/graphql",
   backEndPicUploadUrl2: "http://localhost:3000/upload-profile",
-  backeEndBaseUrl: "https://rifa-sms.herokuapp.com/",
-  backEndGraphQlUrl: "https://rifa-sms.herokuapp.com/graphql",
-  backEndPicUploadUrl: "https://rifa-sms.herokuapp.com/upload-profile",
+  backeEndBaseUrl: "https://freedom-sms.herokuapp.com/",
+  backEndGraphQlUrl: "https://freedom-sms.herokuapp.com/graphql",
+  backEndPicUploadUrl: "https://freedom-sms.herokuapp.com/upload-profile",
 };
 
 /*
