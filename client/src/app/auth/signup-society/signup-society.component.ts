@@ -15,7 +15,7 @@ export class SignupSocietyComponent implements OnInit {
 
   isLoading = false;
 
-  imageUrl: any = "../../../assets/img/add-img.png";
+  imageUrl: any = "./assets/img/add-img.png";
 
   private authStatusSub: Subscription;
 
@@ -94,7 +94,7 @@ export class SignupSocietyComponent implements OnInit {
       console.log("ON_UPLOAD");
       if (!this.form.get("image").valid) {
         console.log("ON_UPLOAD_EXIT");
-        this.imageUrl = "../../../assets/img/invalid-img.jpg";
+        this.imageUrl = "./assets/img/invalid-img.jpg";
         // console.log(this.imageUrl);
         return;
       }
