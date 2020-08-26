@@ -16,7 +16,7 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
 
   isLoading = false;
 
-  imageUrl: any = "../../../assets/img/add-img.png";
+  imageUrl: any = "./assets/img/add-img.png";
 
   private authStatusSub: Subscription;
 
@@ -111,7 +111,7 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
       console.log(!this.form.get("image").valid);
       console.log("ON_UPLOAD");
       if (!this.form.get("image").valid) {
-        this.imageUrl = "../../../assets/img/invalid-img.jpg";
+        this.imageUrl = "./assets/img/invalid-img.jpg";
         // console.log(this.imageUrl);
         return;
       }
