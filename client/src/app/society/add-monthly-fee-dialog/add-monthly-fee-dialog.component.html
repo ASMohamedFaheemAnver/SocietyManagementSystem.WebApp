@@ -1,19 +1,36 @@
-<div>
+<form>
   <p>Enter monthly fees.</p>
   <mat-form-field>
-    <input matInput min="0" type="number" [(ngModel)]="monthFee" />
+    <input
+      #ngMonthlyFee="ngModel"
+      matInput
+      required
+      name="monthly_fee"
+      type="number"
+      pattern="[0-9]{1,5}"
+      [(ngModel)]="monthFee"
+    />
   </mat-form-field>
   <br />
   <p>Enter descripton.</p>
   <mat-form-field>
-    <input matInput type="text" [(ngModel)]="description" />
+    <input
+      #ngDescription="ngModel"
+      matInput
+      required
+      type="text"
+      name="description"
+      [(ngModel)]="description"
+    />
   </mat-form-field>
-  <p>
-    You can edit your default monthly fees and description if you want.
-  </p>
+  <p>You can edit your default monthly fees and description if you want.</p>
 
   <div mat-dialog-actions>
     <button
+      type="submit"
+      [disabled]="
+        !ngMonthlyFee.valid || ngMonthlyFee.value < 20 || !ngDescription.valid
+      "
       mat-raised-button
       color="primary"
       [mat-dialog-close]="{ monthFee: monthFee, description: description }"
@@ -24,4 +41,4 @@
       Cancel
     </button>
   </div>
-</div>
+</form>

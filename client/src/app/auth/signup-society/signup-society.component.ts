@@ -2,42 +2,64 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
+
+import { mimeType } from "../../util/mime-type.validator";
+
 @Component({
   selector: "app-signup-society",
   templateUrl: "./signup-society.component.html",
-  styleUrls: ["./signup-society.component.css"]
+  styleUrls: ["./signup-society.component.css"],
 })
 export class SignupSocietyComponent implements OnInit {
   form: FormGroup;
 
   isLoading = false;
 
-  imageUrl: any =
-    "https://icons-for-free.com/iconfiles/png/512/add+profile+seo+user+icon-1320191017476245273.png";
+  imageUrl: any = "../../../assets/img/add-img.png";
 
   private authStatusSub: Subscription;
+
+  private phoneNumberPattern = "[+]*[0-9]{3,13}";
+  private regIdPattern = "([0-9]|[a-z]|[A-Z]){3,10}";
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.authStatusSub = this.authService
       .getAuthStatusListener()
-      .subscribe(emittedBoolean => {
+      .subscribe((emittedBoolean) => {
         this.isLoading = emittedBoolean;
       });
 
     this.form = new FormGroup({
-      image: new FormControl(null, { validators: [Validators.required] }),
-      regNo: new FormControl(null, { validators: [Validators.required] }),
-      name: new FormControl(null, { validators: [Validators.required] }),
-      email: new FormControl(null, {
-        validators: [Validators.required, Validators.email]
+      image: new FormControl(null, {
+        validators: [Validators.required],
+        asyncValidators: [mimeType],
       }),
-      address: new FormControl(null, { validators: [Validators.required] }),
-      phoneNumber: new FormControl(null, { validators: [Validators.required] }),
+      regNo: new FormControl(null, {
+        validators: [
+          Validators.required,
+          Validators.pattern(this.regIdPattern),
+        ],
+      }),
+      name: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      email: new FormControl(null, {
+        validators: [Validators.required, Validators.email],
+      }),
+      address: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(10)],
+      }),
+      phoneNumber: new FormControl(null, {
+        validators: [
+          Validators.required,
+          Validators.pattern(this.phoneNumberPattern),
+        ],
+      }),
       password: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(8)]
-      })
+        validators: [Validators.required, Validators.minLength(8)],
+      }),
     });
   }
 
@@ -66,11 +88,26 @@ export class SignupSocietyComponent implements OnInit {
     this.form.patchValue({ image: file });
     this.form.get("image").updateValueAndValidity();
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+    this.form.statusChanges.subscribe((_) => {
+      // console.log(this.form.get("image").errors);
+      console.log(!this.form.get("image").valid);
+      console.log("ON_UPLOAD");
+      if (!this.form.get("image").valid) {
+        console.log("ON_UPLOAD_EXIT");
+        this.imageUrl = "../../../assets/img/invalid-img.jpg";
+        // console.log(this.imageUrl);
+        return;
+      }
 
-    reader.onload = () => {
-      this.imageUrl = reader.result;
-    };
+      console.log("ON_UPLOAD_PASS");
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        console.log("ON_UPLOAD_ON_LOAD");
+        this.imageUrl = reader.result;
+      };
+    });
   }
 }

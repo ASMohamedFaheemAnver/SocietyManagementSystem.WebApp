@@ -1,20 +1,36 @@
-<div>
+<form>
   <p>Enter extra fees.</p>
   <mat-form-field>
-    <input matInput min="0" type="number" [(ngModel)]="extraFee" />
+    <input
+      #ngExtraFee="ngModel"
+      matInput
+      required
+      name="extra_fee"
+      type="number"
+      [(ngModel)]="extraFee"
+      pattern="[0-9]{1,5}"
+    />
   </mat-form-field>
   <br />
   <p>Enter descripton.</p>
   <mat-form-field>
-    <input matInput type="text" [(ngModel)]="description" />
+    <input
+      #ngDescription="ngModel"
+      name="description"
+      matInput
+      required
+      type="text"
+      [(ngModel)]="description"
+    />
   </mat-form-field>
 
-  <p>
-    You can edit default description if you want.
-  </p>
-
+  <p>You can edit default description if you want.</p>
+  <p>{{ ngExtraFee.value.type }}</p>
   <div mat-dialog-actions>
     <button
+      [disabled]="
+        !ngExtraFee.valid || !ngDescription.valid || ngExtraFee.value < 20
+      "
       mat-raised-button
       color="primary"
       [mat-dialog-close]="{ extraFee: extraFee, description: description }"
@@ -25,4 +41,4 @@
       Cancel
     </button>
   </div>
-</div>
+</form>

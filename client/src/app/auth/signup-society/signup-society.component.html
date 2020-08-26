@@ -4,7 +4,7 @@
   <div class="profile-pic">
     <img src="{{ imageUrl }}" alt="Profile picture!" />
     <input
-      style="display: none;"
+      style="display: none"
       #inputImage
       type="file"
       (change)="onImageUpload($event)"
@@ -59,6 +59,13 @@
     </mat-form-field>
   </div>
 
-  <button mat-raised-button color="primary">Signup</button>
+  <button
+    type="submit"
+    [disabled]="!this.form.valid"
+    mat-raised-button
+    color="primary"
+  >
+    Signup
+  </button>
 </form>
 <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>

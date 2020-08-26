@@ -68,7 +68,7 @@
             <strong>Date</strong>
           </div>
         </div>
-        <div class="warn pdt-1" *ngIf="logs.length < 1">
+        <div class="warn pdt-1" *ngIf="logs ? logs.length < 1 : false">
           <p>No recent activities to view!</p>
         </div>
         <div class="card" *ngFor="let log of logs">
