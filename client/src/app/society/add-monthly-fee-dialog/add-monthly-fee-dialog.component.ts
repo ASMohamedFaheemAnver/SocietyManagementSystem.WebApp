@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
   templateUrl: "add-monthly-fee-dialog.component.html",
 })
 export class AddMonthlyFeeDialogComponent implements OnInit {
-  public monthFee: number = 0;
+  public monthFee: number = 20;
   public description: string = "";
   constructor(@Inject(MAT_DIALOG_DATA) public data: {}) {}
   ngOnInit(): void {
