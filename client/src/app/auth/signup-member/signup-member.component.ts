@@ -102,7 +102,7 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
     this.form.patchValue({ image: file });
     this.form.get("image").updateValueAndValidity();
 
-    this.form.statusChanges.subscribe((_) => {
+    this.form.get("image").statusChanges.subscribe((_) => {
       // console.log(this.form.get("image").errors);
       console.log(!this.form.get("image").valid);
       console.log("ON_UPLOAD");
