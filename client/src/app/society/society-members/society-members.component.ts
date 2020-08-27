@@ -21,7 +21,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   private societyStatusSub: Subscription;
 
   loadingCSS = {
-    top: "100px",
+    top: "200px",
     // left: $event.x + "px",
   };
 
@@ -88,5 +88,13 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
         disableClose: true,
       }
     );
+  }
+
+  changeDefaultUrl(member: Member) {
+    member.imageUrl = "./assets/img/invalid-img.jpg";
+  }
+
+  onImageLoaded(member: Member) {
+    member.isLoading = false;
   }
 }

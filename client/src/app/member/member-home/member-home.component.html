@@ -3,9 +3,13 @@
     <div class="profile" *ngIf="!isLoading">
       <div>
         <h1>PROFILE</h1>
+        <mat-spinner *ngIf="isImageLoading"></mat-spinner>
         <img
+          [style.display]="isImageLoading ? 'none' : 'block'"
+          (error)="changeDefaultUrl()"
           *ngIf="imageUrl"
-          src="{{ backeEndBaseUrl + imageUrl }}"
+          src="{{ imageUrl }}"
+          (load)="onImageLoaded()"
           alt="Profile picture!"
         />
       </div>

@@ -24,7 +24,18 @@
       <div class="small-heading">
         <strong>Profile</strong>
       </div>
-      <img src="{{ backeEndBaseUrl + member.imageUrl }}" alt="member image" />
+      <div>
+        <div>
+          <mat-spinner *ngIf="member.isLoading"></mat-spinner>
+          <img
+            [style.display]="member.isLoading ? 'none' : 'block'"
+            src="{{ member.imageUrl }}"
+            alt="member image"
+            (error)="changeDefaultUrl(member)"
+            (load)="onImageLoaded(member)"
+          />
+        </div>
+      </div>
     </div>
     <div>
       <div class="small-heading">

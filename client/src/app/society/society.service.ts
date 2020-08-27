@@ -13,7 +13,7 @@ export class SocietyService {
   private logsUpdated = new Subject<Log[]>();
   private members: Member[] = [];
   private logs: Log[] = [];
-
+  backeEndBaseUrl = environment.backeEndBaseUrl2;
   constructor(private http: HttpClient) {}
 
   getSociety() {
@@ -65,7 +65,13 @@ export class SocietyService {
     this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
       (res) => {
         console.log(res);
-        this.members = res["data"].getAllMembers;
+        this.members = res["data"].getAllMembers.map((member) => {
+          return {
+            ...member,
+            imageUrl: this.backeEndBaseUrl + member.imageUrl,
+            isLoading: true,
+          };
+        });
         this.membersUpdated.next([...this.members]);
         this.societyStatusListenner.next(false);
       },
