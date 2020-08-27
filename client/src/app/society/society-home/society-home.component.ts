@@ -47,10 +47,10 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   logs: Log[];
 
   backeEndBaseUrl = environment.backeEndBaseUrl2;
-
+  isImageLoading = false;
   ngOnInit(): void {
     this.isLoading = true;
-
+    this.isImageLoading = true;
     this.societyService.getSocietyLogs(this.currentPage);
 
     this.societyService.getSociety().subscribe(
@@ -58,7 +58,8 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         console.log(society);
         this.email = society["data"].getSociety.email;
         this.name = society["data"].getSociety.name;
-        this.imageUrl = society["data"].getSociety.imageUrl;
+        this.imageUrl =
+          this.backeEndBaseUrl + society["data"].getSociety.imageUrl;
         this.address = society["data"].getSociety.address;
         this.regNo = society["data"].getSociety.regNo;
         this.expected_income = society["data"].getSociety.expected_income;
@@ -131,7 +132,16 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  changeDefaultUrl() {
+    this.imageUrl = "./assets/img/invalid-img.jpg";
+  }
+
+  onImageLoaded() {
+    this.isImageLoading = false;
+  }
+
   onPageChange(event: PageEvent) {
+    // this.isLoading = true;
     this.societyService.getSocietyLogs(event.pageIndex);
   }
 }

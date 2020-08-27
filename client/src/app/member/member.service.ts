@@ -12,6 +12,8 @@ export class MemberService {
   private members: Member[] = [];
   private memberStatusListenner = new Subject<boolean>();
 
+  private backeEndBaseUrl = environment.backeEndBaseUrl2;
+
   getMember() {
     const graphqlQuery = {
       query: `
@@ -54,7 +56,13 @@ export class MemberService {
     };
     this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
       (res) => {
-        this.members = res["data"].getAllSocietyMembers;
+        this.members = res["data"].getAllSocietyMembers.map((member) => {
+          return {
+            ...member,
+            isLoading: true,
+            imageUrl: this.backeEndBaseUrl + member["imageUrl"],
+          };
+        });
         this.membersUpdated.next([...this.members]);
         this.memberStatusListenner.next(false);
       },

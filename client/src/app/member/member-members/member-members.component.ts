@@ -14,7 +14,6 @@ export class MemberMembersComponent implements OnInit, OnDestroy {
   private membersSub: Subscription;
   private memberStatusSub: Subscription;
   members: Member[];
-  backeEndBaseUrl = environment.backeEndBaseUrl2;
 
   constructor(private memberService: MemberService) {}
 
@@ -24,6 +23,7 @@ export class MemberMembersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.memberService.getAllSocietyMembers();
     this.memberStatusSub = this.memberService
       .getMemberStatusListenner()
@@ -36,5 +36,13 @@ export class MemberMembersComponent implements OnInit, OnDestroy {
         this.members = members;
         console.log(this.members);
       });
+  }
+
+  changeDefaultUrl(member: Member) {
+    member.imageUrl = "./assets/img/invalid-img.jpg";
+  }
+
+  onImageLoaded(member: Member) {
+    member.isLoading = false;
   }
 }

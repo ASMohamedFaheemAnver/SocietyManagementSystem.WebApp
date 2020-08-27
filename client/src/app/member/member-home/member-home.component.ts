@@ -23,7 +23,9 @@ export class MemberHomeComponent implements OnInit {
   arrears: number;
   backeEndBaseUrl = environment.backeEndBaseUrl2;
   isLoading: boolean;
+  isImageLoading: boolean;
   ngOnInit(): void {
+    this.isImageLoading = true;
     this.isLoading = true;
     // this.memberId = this.authService.getUserId();
     this.memberService.getMember().subscribe((member) => {
@@ -31,10 +33,18 @@ export class MemberHomeComponent implements OnInit {
       this.email = member["data"].getMember.email;
       this.name = member["data"].getMember.name;
       this.memberId = member["data"].getMember._id;
-      this.imageUrl = member["data"].getMember.imageUrl;
+      this.imageUrl = this.backeEndBaseUrl + member["data"].getMember.imageUrl;
       this.address = member["data"].getMember.address;
       this.arrears = member["data"].getMember.arrears;
       this.isLoading = false;
     });
+  }
+
+  changeDefaultUrl() {
+    this.imageUrl = "./assets/img/invalid-img.jpg";
+  }
+
+  onImageLoaded() {
+    this.isImageLoading = false;
   }
 }
