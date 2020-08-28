@@ -3,6 +3,9 @@
     <div class="profile" *ngIf="!isLoading">
       <div class="profile-inner-left">
         <h1>Profile</h1>
+        <p *ngIf="this.society ? false : true" class="warn">
+          Profile not exist!
+        </p>
         <mat-spinner *ngIf="society ? society.isLoading : false"></mat-spinner>
         <img
           [style.display]="society.isLoading ? 'none' : 'block'"
@@ -47,7 +50,7 @@
       <h1>Society actions</h1>
       <div class="action-buttons">
         <button
-          [disabled]="!this.society.number_of_members"
+          [disabled]="this.society ? !this.society.number_of_members : true"
           mat-raised-button
           color="primary"
           (click)="addMonthlyFee()"
@@ -55,7 +58,7 @@
           Add monthly fees
         </button>
         <button
-          [disabled]="!this.society.number_of_members"
+          [disabled]="this.society ? !this.society.number_of_members : true"
           mat-raised-button
           color="primary"
           (click)="addExtraFee()"
@@ -63,7 +66,12 @@
           Add extra fees
         </button>
       </div>
-      <p *ngIf="!this.society.number_of_members && !isLoading" class="warn">
+      <p
+        *ngIf="
+          this.society ? !this.society.number_of_members && !isLoading : true
+        "
+        class="warn"
+      >
         There is no member to perform these actions!
       </p>
     </div>
@@ -72,31 +80,41 @@
       <h1>Recent society activity</h1>
       <div class="parent2">
         <div class="card big-heading">
-          <div>
+          <!-- <div>
             <strong>Type</strong>
-          </div>
-          <div>
-            <strong>Ammount</strong>
-          </div>
+          </div> -->
           <div>
             <strong>Description</strong>
+          </div>
+          <div>
+            <strong>Amount</strong>
           </div>
           <div>
             <strong>Date</strong>
           </div>
         </div>
-        <div class="warn pdt-1" *ngIf="logs ? logs.length < 1 : false">
+        <div
+          class="warn pdt-1"
+          *ngIf="
+            (logs ? logs.length < 1 : false) ||
+            (this.society
+              ? !this.society.number_of_members && !isLoading
+              : true)
+          "
+        >
           <p>No recent activities to view!</p>
         </div>
         <div class="card" *ngFor="let log of logs">
-          <div>
+          <!-- <div>
             <p>{{ log.kind }}</p>
-          </div>
-          <div>
-            <p>{{ log.fee.amount }}</p>
-          </div>
+          </div> -->
+
           <div>
             <p>{{ log.fee.description }}</p>
+          </div>
+
+          <div>
+            <p>{{ log.fee.amount }}</p>
           </div>
           <div>
             <p>{{ log.fee.date.slice(4, 15) }}</p>

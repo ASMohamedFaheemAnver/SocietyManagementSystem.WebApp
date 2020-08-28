@@ -223,6 +223,9 @@ export class SocietyService {
         console.log(res);
         this.newLog = res["data"].addMonthlyFeeToEveryone;
         this.logUpdated.next(this.newLog);
+        this.society.expected_income +=
+          monthlyFee * this.society.number_of_members;
+        this.societyUpdated.next(this.society);
         this.societyStatusListenner.next(false);
       },
       (err) => {
@@ -255,6 +258,8 @@ export class SocietyService {
         console.log(res);
         this.newLog = res["data"].addExtraFeeToEveryone;
         this.logUpdated.next(this.newLog);
+        this.society.expected_income +=
+          extraFee * this.society.number_of_members;
         this.societyStatusListenner.next(false);
       },
       (err) => {
