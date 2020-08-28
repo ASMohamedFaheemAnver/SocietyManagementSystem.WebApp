@@ -13,7 +13,7 @@
           (load)="onImageLoaded()"
         />
       </div>
-      <div class="profile-inner-right">
+      <div *ngIf="society" class="profile-inner-right">
         <div>
           <strong>Name</strong>
           <h3>{{ society.name }}</h3>
