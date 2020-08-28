@@ -2,11 +2,12 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"]
+  styleUrls: ["./login.component.css"],
 })
 export class LoginComponent implements OnInit, OnDestroy {
   form: FormGroup;
@@ -15,23 +16,26 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private authStatusSub: Subscription;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
+    if (this.authService.isUserAuth()) {
+      this.router.navigateByUrl(`/${this.authService.getUserCategory()}/home`);
+    }
     this.authStatusSub = this.authService
       .getAuthStatusListener()
-      .subscribe(emittedBoolean => {
+      .subscribe((emittedBoolean) => {
         this.isLoading = emittedBoolean;
       });
 
     this.form = new FormGroup({
       email: new FormControl(null, {
-        validators: [Validators.required, Validators.email]
+        validators: [Validators.required, Validators.email],
       }),
       category: new FormControl(null, { validators: [Validators.required] }),
       password: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(8)]
-      })
+        validators: [Validators.required, Validators.minLength(8)],
+      }),
     });
   }
 

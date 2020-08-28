@@ -4,16 +4,22 @@ import { environment } from "src/environments/environment";
 import { Subject } from "rxjs";
 import { Member } from "../member.model";
 import { Log } from "../log.model";
+import { Society } from "../society.model";
 
 @Injectable({ providedIn: "root" })
 export class SocietyService {
   private graphQLUrl = environment.backEndGraphQlUrl2;
   private societyStatusListenner = new Subject<boolean>();
   private membersUpdated = new Subject<Member[]>();
-  private logsUpdated = new Subject<Log[]>();
+  private logsUpdated = new Subject<{ logs: Log[]; logs_count: number }>();
   private members: Member[] = [];
   private logs: Log[] = [];
-  backeEndBaseUrl = environment.backeEndBaseUrl2;
+  private backeEndBaseUrl = environment.backeEndBaseUrl2;
+  private society: Society;
+  private newLog: Log;
+  private logUpdated = new Subject<Log>();
+  private societyUpdated = new Subject<Society>();
+
   constructor(private http: HttpClient) {}
 
   getSociety() {
@@ -29,24 +35,29 @@ export class SocietyService {
           expected_income
           current_income
           number_of_members
-        }
-      }`,
-    };
-    return this.http.post(this.graphQLUrl, graphqlQuery);
-  }
-
-  getSocietyMonthlyFee() {
-    const graphqlQuery = {
-      query: `{
-        getSociety{
-   	      month_fee{
+          month_fee{
              amount
              description
            }
         }
       }`,
     };
-    return this.http.post(this.graphQLUrl, graphqlQuery);
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      (res) => {
+        console.log(res);
+        this.society = {
+          ...res["data"].getSociety,
+          isLoading: true,
+          imageUrl: this.backeEndBaseUrl + res["data"].getSociety.imageUrl,
+        };
+        this.societyStatusListenner.next(false);
+        this.societyUpdated.next(this.society);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
   }
 
   getAllMembers() {
@@ -85,6 +96,14 @@ export class SocietyService {
 
   getMembersUpdateListenner() {
     return this.membersUpdated;
+  }
+
+  getSocietyUpdatedListenner() {
+    return this.societyUpdated;
+  }
+
+  getlogUpdatedLintenner() {
+    return this.logUpdated;
   }
 
   getSocietyStatusListenner() {
@@ -187,7 +206,14 @@ export class SocietyService {
       query: `
       mutation{
         addMonthlyFeeToEveryone(monthlyFee: ${monthlyFee}, description: "${description}"){
-          message
+          _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+          }
         }
       }`,
     };
@@ -195,6 +221,8 @@ export class SocietyService {
     this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
       (res) => {
         console.log(res);
+        this.newLog = res["data"].addMonthlyFeeToEveryone;
+        this.logUpdated.next(this.newLog);
         this.societyStatusListenner.next(false);
       },
       (err) => {
@@ -210,7 +238,14 @@ export class SocietyService {
       query: `
       mutation{
         addExtraFeeToEveryone(extraFee: ${extraFee}, description: "${description}"){
-          message
+          _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+          }
         }
       }`,
     };
@@ -218,6 +253,8 @@ export class SocietyService {
     this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
       (res) => {
         console.log(res);
+        this.newLog = res["data"].addExtraFeeToEveryone;
+        this.logUpdated.next(this.newLog);
         this.societyStatusListenner.next(false);
       },
       (err) => {
@@ -227,36 +264,32 @@ export class SocietyService {
     );
   }
 
-  getSocietyLogs(page_number) {
+  getSocietyLogs(page_number, page_size) {
     console.log(page_number);
     const graphqlQuery = {
       query: `{
-        getSocietyLogs(page_number: ${page_number}){
-          _id
-          kind
-          fee{
-            _id
-            date
-            amount
-            description
+        getSocietyLogs(page_number: ${page_number}, page_size: ${page_size}){
+          logs{
+              _id
+              kind
+              fee{
+                _id
+                date
+                amount
+                description
+              }
+            }
+          logs_count
           }
-        }
       }`,
     };
-    // const graphqlQuery = {
-    //   query: `
-    //   mutation{
-    //     getSocietyLogs(page_number: ${page_number}){
-    //       _id
-    //     }
-    //   }`,
-    // };
 
     this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
       (res: Log[]) => {
         console.log(res);
-        this.logs = res["data"].getSocietyLogs;
-        this.logsUpdated.next(this.logs);
+        this.logs = res["data"].getSocietyLogs.logs;
+        const logs_count = res["data"].getSocietyLogs.logs_count;
+        this.logsUpdated.next({ logs: this.logs, logs_count: logs_count });
         this.societyStatusListenner.next(false);
       },
       (err) => {

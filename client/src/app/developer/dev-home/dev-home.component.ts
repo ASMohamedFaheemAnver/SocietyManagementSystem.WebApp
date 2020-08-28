@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { DevService } from "../dev.service";
 import { Subscription } from "rxjs";
-import { Society } from "../society.model";
+import { Society } from "../../society.model";
 
 @Component({
   selector: "app-dev-home",

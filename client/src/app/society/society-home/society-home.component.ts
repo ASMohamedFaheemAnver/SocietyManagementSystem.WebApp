@@ -9,6 +9,7 @@ import { AddExtraFeeDialogComponent } from "../add-extra-fee-dialog/add-extra-fe
 import { Subscription } from "rxjs";
 import { PageEvent } from "@angular/material/paginator";
 import { Log } from "src/app/log.model";
+import { Society } from "src/app/society.model";
 
 @Component({
   selector: "app-society-home",
@@ -18,6 +19,9 @@ import { Log } from "src/app/log.model";
 export class SocietyHomeComponent implements OnInit, OnDestroy {
   private societyStatusSub: Subscription;
   private societyLogSub: Subscription;
+  private societySub: Subscription;
+
+  private logSub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,7 +34,11 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.societyStatusSub.unsubscribe();
     this.societyLogSub.unsubscribe();
+    this.societySub.unsubscribe();
+    this.logSub.unsubscribe();
   }
+
+  society: Society;
 
   societyId: string;
   email: string;
@@ -46,32 +54,24 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   currentPage = 0;
 
   logs: Log[];
+  logs_count: number;
+  page_size = 5;
+  page_size_options = [5, 10, 15, 20];
 
   backeEndBaseUrl = environment.backeEndBaseUrl2;
   isImageLoading = false;
   ngOnInit(): void {
     this.isLoading = true;
     this.isImageLoading = true;
-    this.societyService.getSocietyLogs(this.currentPage);
+    this.societyService.getSocietyLogs(this.currentPage, this.page_size);
+    this.societyService.getSociety();
 
-    this.societyService.getSociety().subscribe(
-      (society) => {
-        console.log(society);
-        this.email = society["data"].getSociety.email;
-        this.name = society["data"].getSociety.name;
-        this.imageUrl =
-          this.backeEndBaseUrl + society["data"].getSociety.imageUrl;
-        this.address = society["data"].getSociety.address;
-        this.regNo = society["data"].getSociety.regNo;
-        this.expected_income = society["data"].getSociety.expected_income;
-        this.current_income = society["data"].getSociety.current_income;
-        this.number_of_members = society["data"].getSociety.number_of_members;
-        this.isLoading = false;
-      },
-      (err) => {
-        this.isLoading = false;
-      }
-    );
+    this.societySub = this.societyService
+      .getSocietyUpdatedListenner()
+      .subscribe((society) => {
+        console.log({ msg: "Emitted society.", data: society });
+        this.society = society;
+      });
 
     this.societyStatusSub = this.societyService
       .getSocietyStatusListenner()
@@ -81,37 +81,42 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
 
     this.societyLogSub = this.societyService
       .getSocietyLogListenner()
-      .subscribe((logs) => {
-        this.logs = logs;
-        console.log(logs);
+      .subscribe((logsInfo) => {
+        this.logs = logsInfo.logs;
+        this.logs_count = logsInfo.logs_count;
+        console.log(logsInfo);
+      });
+
+    this.logSub = this.societyService
+      .getlogUpdatedLintenner()
+      .subscribe((newLog: Log) => {
+        this.logs.unshift(newLog);
+        this.logs_count++;
       });
   }
 
   addMonthlyFee() {
-    this.isLoading = true;
-    this.societyService.getSocietyMonthlyFee().subscribe((res) => {
-      this.isLoading = false;
-      const addMonthlyFeeDialogRef = this.addMonthlyFeetDialog.open(
-        AddMonthlyFeeDialogComponent,
-        {
-          data: {
-            monthlyFee: res["data"].getSociety.month_fee.amount,
-            description: res["data"].getSociety.month_fee.description,
-          },
-          disableClose: true,
-        }
-      );
+    this.isLoading = false;
+    const addMonthlyFeeDialogRef = this.addMonthlyFeetDialog.open(
+      AddMonthlyFeeDialogComponent,
+      {
+        data: {
+          monthlyFee: this.society.month_fee.amount,
+          description: this.society.month_fee.description,
+        },
+        disableClose: true,
+      }
+    );
 
-      addMonthlyFeeDialogRef.afterClosed().subscribe((data) => {
-        if (!data) {
-          return;
-        }
-        this.isLoading = true;
-        this.societyService.addMonthlyFeeToEveryone(
-          data.monthFee,
-          data.description
-        );
-      });
+    addMonthlyFeeDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.addMonthlyFeeToEveryone(
+        data.monthFee,
+        data.description
+      );
     });
   }
 
@@ -135,15 +140,22 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   }
 
   changeDefaultUrl() {
-    this.imageUrl = "./assets/img/invalid-img.jpg";
+    this.society.imageUrl = "./assets/img/invalid-img.jpg";
   }
 
   onImageLoaded() {
-    this.isImageLoading = false;
+    this.society.isLoading = false;
   }
 
   onPageChange(event: PageEvent) {
-    // this.isLoading = true;
-    this.societyService.getSocietyLogs(event.pageIndex);
+    if (
+      this.page_size === event.pageSize &&
+      this.currentPage === event.pageIndex
+    ) {
+      return;
+    }
+    this.currentPage = event.pageIndex;
+    this.page_size = event.pageSize;
+    this.societyService.getSocietyLogs(event.pageIndex, this.page_size);
   }
 }
