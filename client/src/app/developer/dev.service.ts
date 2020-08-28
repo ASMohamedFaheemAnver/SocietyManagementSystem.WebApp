@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
-import { Society } from "./society.model";
+import { Society } from "../society.model";
 import { environment } from "src/environments/environment";
 
 @Injectable({ providedIn: "root" })

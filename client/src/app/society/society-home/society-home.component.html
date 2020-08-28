@@ -3,11 +3,11 @@
     <div class="profile" *ngIf="!isLoading">
       <div class="profile-inner-left">
         <h1>Profile</h1>
-        <mat-spinner *ngIf="isImageLoading"></mat-spinner>
+        <mat-spinner *ngIf="society ? society.isLoading : false"></mat-spinner>
         <img
-          [style.display]="isImageLoading ? 'none' : 'block'"
-          *ngIf="imageUrl"
-          src="{{ imageUrl }}"
+          [style.display]="society.isLoading ? 'none' : 'block'"
+          *ngIf="society"
+          src="{{ society.imageUrl }}"
           alt="Profile picture!"
           (error)="changeDefaultUrl()"
           (load)="onImageLoaded()"
@@ -16,27 +16,27 @@
       <div class="profile-inner-right">
         <div>
           <strong>Name</strong>
-          <h3>{{ name }}</h3>
+          <h3>{{ society.name }}</h3>
         </div>
         <div>
           <strong>Email</strong>
-          <p>{{ email }}</p>
+          <p>{{ society.email }}</p>
         </div>
         <div>
           <strong>Address</strong>
-          <p>{{ address }}</p>
+          <p>{{ society.address }}</p>
         </div>
         <div>
           <strong>Registration number</strong>
-          <p>{{ regNo }}</p>
+          <p>{{ society.regNo }}</p>
         </div>
         <div>
           <strong>Current income</strong>
-          <p>{{ current_income }}</p>
+          <p>{{ society.current_income }}</p>
         </div>
         <div>
           <strong>Expected income</strong>
-          <p>{{ expected_income }}</p>
+          <p>{{ society.expected_income }}</p>
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
       <h1>Society actions</h1>
       <div class="action-buttons">
         <button
-          [disabled]="!number_of_members"
+          [disabled]="!this.society.number_of_members"
           mat-raised-button
           color="primary"
           (click)="addMonthlyFee()"
@@ -55,7 +55,7 @@
           Add monthly fees
         </button>
         <button
-          [disabled]="!number_of_members"
+          [disabled]="!this.society.number_of_members"
           mat-raised-button
           color="primary"
           (click)="addExtraFee()"
@@ -63,7 +63,7 @@
           Add extra fees
         </button>
       </div>
-      <p *ngIf="!number_of_members && !isLoading" class="warn">
+      <p *ngIf="!this.society.number_of_members && !isLoading" class="warn">
         There is no member to perform these actions!
       </p>
     </div>
@@ -104,8 +104,9 @@
         </div>
       </div>
       <mat-paginator
-        [length]="20"
-        [pageSize]="10"
+        [length]="logs_count"
+        [pageSize]="page_size"
+        [pageSizeOptions]="page_size_options"
         (page)="onPageChange($event)"
       >
       </mat-paginator>
