@@ -11,25 +11,36 @@
       [(ngModel)]="monthFee"
     />
   </mat-form-field>
+  <p *ngIf="!ngMonthlyFee.valid" class="warn">Invalid amount!</p>
   <br />
   <p>Enter descripton.</p>
   <mat-form-field>
-    <input
+    <textarea
       #ngDescription="ngModel"
       matInput
       required
       type="text"
       name="description"
       [(ngModel)]="description"
-    />
+    ></textarea>
   </mat-form-field>
+  <p
+    *ngIf="ngDescription.value ? ngDescription.value.length > 100 : false"
+    class="warn"
+  >
+    Invalid description!
+  </p>
+  <br />
   <p>You can edit your default monthly fees and description if you want.</p>
 
   <div mat-dialog-actions>
     <button
       type="submit"
       [disabled]="
-        !ngMonthlyFee.valid || ngMonthlyFee.value < 20 || !ngDescription.valid
+        !ngMonthlyFee.valid ||
+        ngMonthlyFee.value < 20 ||
+        !ngDescription.valid ||
+        ngDescription.value.length > 100
       "
       mat-raised-button
       color="primary"

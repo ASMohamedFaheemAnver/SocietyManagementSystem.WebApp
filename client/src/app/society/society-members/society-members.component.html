@@ -1,5 +1,5 @@
 <div class="parent">
-  <div class="card big-heading">
+  <div *ngIf="members.length" class="card big-heading">
     <div>
       <strong>Profile</strong>
     </div>
@@ -19,6 +19,7 @@
       <strong>Action</strong>
     </div>
   </div>
+  <p *ngIf="!members.length && !isLoading" class="warn">No members to show!</p>
   <div class="card" *ngFor="let member of members">
     <div>
       <div class="small-heading">

@@ -6,7 +6,7 @@
   margin: 1rem;
 }
 
-mat-spinner {
+.spinner {
   position: absolute;
   top: 0;
   left: 0;

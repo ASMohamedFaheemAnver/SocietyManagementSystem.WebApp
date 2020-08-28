@@ -1,5 +1,6 @@
 <div class="parent">
-  <div class="card big-heading">
+  <p *ngIf="societies.length < 1 && !isLoading">No societies registered yet!</p>
+  <div *ngIf="societies.length > 0" class="card big-heading">
     <div>
       <strong>PROFILE</strong>
     </div>
@@ -27,7 +28,14 @@
       <div class="small-heading">
         <strong>PROFILE</strong>
       </div>
-      <img src="{{ backeEndBaseUrl + society.imageUrl }}" alt="society image" />
+      <mat-spinner *ngIf="society.isLoading"></mat-spinner>
+      <img
+        [style.display]="society.isLoading ? 'none' : 'block'"
+        src="{{ society.imageUrl }}"
+        alt="society image"
+        (error)="changeDefaultUrl(society)"
+        (load)="onImageLoaded(society)"
+      />
     </div>
     <div>
       <div class="small-heading">

@@ -46,13 +46,26 @@
     <div class="actions">
       <h1>Society actions</h1>
       <div class="action-buttons">
-        <button mat-raised-button color="primary" (click)="addMonthlyFee()">
+        <button
+          [disabled]="!number_of_members"
+          mat-raised-button
+          color="primary"
+          (click)="addMonthlyFee()"
+        >
           Add monthly fees
         </button>
-        <button mat-raised-button color="primary" (click)="addExtraFee()">
+        <button
+          [disabled]="!number_of_members"
+          mat-raised-button
+          color="primary"
+          (click)="addExtraFee()"
+        >
           Add extra fees
         </button>
       </div>
+      <p *ngIf="!number_of_members && !isLoading" class="warn">
+        There is no member to perform these actions!
+      </p>
     </div>
 
     <div class="activity">

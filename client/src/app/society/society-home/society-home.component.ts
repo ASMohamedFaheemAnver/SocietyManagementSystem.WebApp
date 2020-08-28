@@ -40,6 +40,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   regNo: string;
   expected_income: number;
   current_income: number;
+  number_of_members: number;
 
   isLoading: Boolean;
   currentPage = 0;
@@ -64,6 +65,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         this.regNo = society["data"].getSociety.regNo;
         this.expected_income = society["data"].getSociety.expected_income;
         this.current_income = society["data"].getSociety.current_income;
+        this.number_of_members = society["data"].getSociety.number_of_members;
         this.isLoading = false;
       },
       (err) => {
