@@ -11,6 +11,8 @@ export class DevService {
   private societiesUpdated = new Subject<Society[]>();
   private societies: Society[];
 
+  private backeEndBaseUrl = environment.backeEndBaseUrl2;
+
   constructor(private http: HttpClient) {}
   getAllSociety() {
     const graphqlQuery = {
@@ -27,11 +29,24 @@ export class DevService {
         }
       }`,
     };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res) => {
-      this.societies = res["data"].getAllSocieties;
-      console.log(this.societies);
-      this.societiesUpdated.next([...this.societies]);
-    });
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      (res) => {
+        this.societies = res["data"].getAllSocieties.map((society) => {
+          return {
+            ...society,
+            isLoading: true,
+            imageUrl: this.backeEndBaseUrl + society["imageUrl"],
+          };
+        });
+        console.log(this.societies);
+        this.devStatusListenner.next(false);
+        this.societiesUpdated.next([...this.societies]);
+      },
+      (err) => {
+        console.log(err);
+        this.devStatusListenner.next(false);
+      }
+    );
   }
 
   approveSociety(societyId: string) {

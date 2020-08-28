@@ -28,6 +28,7 @@ export class SocietyService {
           address
           expected_income
           current_income
+          number_of_members
         }
       }`,
     };
@@ -191,10 +192,16 @@ export class SocietyService {
       }`,
     };
 
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res) => {
-      console.log(res);
-      this.societyStatusListenner.next(false);
-    });
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      (res) => {
+        console.log(res);
+        this.societyStatusListenner.next(false);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
   }
 
   addExtraFeeToEveryone(extraFee, description) {
@@ -208,10 +215,16 @@ export class SocietyService {
       }`,
     };
 
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res) => {
-      console.log(res);
-      this.societyStatusListenner.next(false);
-    });
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      (res) => {
+        console.log(res);
+        this.societyStatusListenner.next(false);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
   }
 
   getSocietyLogs(page_number) {
@@ -239,11 +252,17 @@ export class SocietyService {
     //   }`,
     // };
 
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res: Log[]) => {
-      console.log(res);
-      this.logs = res["data"].getSocietyLogs;
-      this.logsUpdated.next(this.logs);
-      this.societyStatusListenner.next(false);
-    });
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      (res: Log[]) => {
+        console.log(res);
+        this.logs = res["data"].getSocietyLogs;
+        this.logsUpdated.next(this.logs);
+        this.societyStatusListenner.next(false);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
   }
 }

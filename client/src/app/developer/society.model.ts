@@ -7,4 +7,5 @@ export interface Society {
   phoneNumber: string;
   regNo: string;
   approved: boolean;
+  isLoading: boolean;
 }

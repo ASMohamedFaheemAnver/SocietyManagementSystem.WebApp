@@ -27,3 +27,7 @@ mat-label {
 .btn-green {
   color: green;
 }
+
+.warn {
+  color: red;
+}

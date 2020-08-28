@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { DevService } from "../dev.service";
 import { Subscription } from "rxjs";
 import { Society } from "../society.model";
-import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-dev-home",
@@ -11,7 +10,6 @@ import { environment } from "src/environments/environment";
 })
 export class DevHomeComponent implements OnInit, OnDestroy {
   isLoading = false;
-  backeEndBaseUrl = environment.backeEndBaseUrl2;
 
   constructor(private devService: DevService) {}
   ngOnDestroy(): void {
@@ -71,5 +69,13 @@ export class DevHomeComponent implements OnInit, OnDestroy {
       // left: $event.x + "px",
     };
     this.devService.deleteSociety(societyId);
+  }
+
+  changeDefaultUrl(society: Society) {
+    society.imageUrl = "./assets/img/invalid-img.jpg";
+  }
+
+  onImageLoaded(society: Society) {
+    society.isLoading = false;
   }
 }
