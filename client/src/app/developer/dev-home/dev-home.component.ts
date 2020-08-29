@@ -40,35 +40,22 @@ export class DevHomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  onApproveSociety($event, societyId: string) {
-    this.isLoading = true;
-    this.loadingCSS = {
-      top: $event.y + "px",
-      // top: $event.y + "px",
-      // left: $event.x + "px",
-    };
+  onApproveSociety(society: Society) {
+    society.isActionLoading = true;
 
-    this.devService.approveSociety(societyId);
+    this.devService.approveSociety(society._id);
   }
 
-  onDisApproveSociety($event, societyId: string) {
-    this.isLoading = true;
-    this.loadingCSS = {
-      top: $event.y + "px",
-      // top: $event.y + "px",
-      // left: $event.x + "px",
-    };
-    this.devService.disApproveSociety(societyId);
+  onDisApproveSociety(society: Society) {
+    society.isActionLoading = true;
+
+    this.devService.disApproveSociety(society._id);
   }
 
-  onDeleteSociety($event, societyId: string) {
-    this.isLoading = true;
-    this.loadingCSS = {
-      top: $event.y + "px",
-      // top: $event.y + "px",
-      // left: $event.x + "px",
-    };
-    this.devService.deleteSociety(societyId);
+  onDeleteSociety(society: Society) {
+    society.isActionLoading = true;
+
+    this.devService.deleteSociety(society._id);
   }
 
   changeDefaultUrl(society: Society) {
@@ -76,6 +63,6 @@ export class DevHomeComponent implements OnInit, OnDestroy {
   }
 
   onImageLoaded(society: Society) {
-    society.isLoading = false;
+    society.isImageLoading = false;
   }
 }

@@ -27,9 +27,9 @@
       </div>
       <div>
         <div>
-          <mat-spinner *ngIf="member.isLoading"></mat-spinner>
+          <mat-spinner *ngIf="member.isImageLoading"></mat-spinner>
           <img
-            [style.display]="member.isLoading ? 'none' : 'block'"
+            [style.display]="member.isImageLoading ? 'none' : 'block'"
             src="{{ member.imageUrl }}"
             alt="member image"
             (error)="changeDefaultUrl(member)"
@@ -62,7 +62,8 @@
       </div>
       <p>{{ member.arrears }}</p>
     </div>
-    <div class="actions" *ngIf="!isLoading">
+    <mat-spinner *ngIf="member.isActionLoading"></mat-spinner>
+    <div class="actions" *ngIf="!member.isActionLoading">
       <!-- <button mat-button color="primary" (click)="onEditClick(member)">
         Edit
       </button> -->
@@ -70,7 +71,7 @@
         *ngIf="!member.approved"
         mat-button
         class="btn-green"
-        (click)="onApproveMember($event, member._id)"
+        (click)="onApproveMember(member)"
       >
         Approve
       </button>
@@ -78,22 +79,21 @@
         *ngIf="member.approved"
         mat-button
         color="warn"
-        (click)="onDisApproveMember($event, member._id)"
+        (click)="onDisApproveMember(member)"
       >
         Disapprove
       </button>
-      <button
-        mat-button
-        color="warn"
-        (click)="onDeleteMember($event, member._id)"
-      >
+      <button mat-button color="warn" (click)="onDeleteMember(member)">
         Delete
       </button>
     </div>
   </div>
 </div>
-<mat-spinner
+<!-- <mat-spinner
   [ngStyle]="loadingCSS"
   *ngIf="isLoading"
   class="spinner"
-></mat-spinner>
+></mat-spinner> -->
+<div *ngIf="isLoading" class="page-wrapper">
+  <mat-spinner></mat-spinner>
+</div>

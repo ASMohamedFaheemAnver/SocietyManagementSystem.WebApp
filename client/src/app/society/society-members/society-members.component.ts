@@ -51,32 +51,19 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
     this.societyServie.getAllMembers();
   }
 
-  onApproveMember($event: MouseEvent, memberId: string) {
-    this.loadingCSS = {
-      top: $event.y + "px",
-      // left: $event.x + "px",
-    };
-
-    this.isLoading = true;
-    this.societyServie.approveMember(memberId);
+  onApproveMember(member: Member) {
+    member.isActionLoading = true;
+    this.societyServie.approveMember(member._id);
   }
 
-  onDeleteMember($event: MouseEvent, memberId: string) {
-    this.loadingCSS = {
-      top: $event.y + "px",
-      // left: $event.x + "px",
-    };
-    this.isLoading = true;
-    this.societyServie.deleteMember(memberId);
+  onDeleteMember(member: Member) {
+    member.isActionLoading = true;
+    this.societyServie.deleteMember(member._id);
   }
 
-  onDisApproveMember($event: MouseEvent, memberId: string) {
-    this.loadingCSS = {
-      top: $event.y + "px",
-      // left: $event.x + "px",
-    };
-    this.isLoading = true;
-    this.societyServie.disApproveMember(memberId);
+  onDisApproveMember(member: Member) {
+    member.isActionLoading = true;
+    this.societyServie.disApproveMember(member._id);
   }
 
   onEditClick(member: Member) {
@@ -95,6 +82,6 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   }
 
   onImageLoaded(member: Member) {
-    member.isLoading = false;
+    member.isImageLoading = false;
   }
 }

@@ -6,5 +6,6 @@ export interface Member {
   address: string;
   arrears: number;
   approved: boolean;
-  isLoading: boolean;
+  isImageLoading: boolean;
+  isActionLoading: boolean;
 }

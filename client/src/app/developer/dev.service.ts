@@ -34,7 +34,8 @@ export class DevService {
         this.societies = res["data"].getAllSocieties.map((society) => {
           return {
             ...society,
-            isLoading: true,
+            isImageLoading: true,
+            isActionLoading: false,
             imageUrl: this.backeEndBaseUrl + society["imageUrl"],
           };
         });
@@ -64,7 +65,7 @@ export class DevService {
         let updatedSocieties = this.societies;
         updatedSocieties = updatedSocieties.map((society) => {
           if (society._id === societyId) {
-            return { ...society, approved: true };
+            return { ...society, approved: true, isActionLoading: false };
           }
           return society;
         });
@@ -94,7 +95,7 @@ export class DevService {
         let updatedSocieties = this.societies;
         updatedSocieties = updatedSocieties.map((society) => {
           if (society._id === societyId) {
-            return { ...society, approved: false };
+            return { ...society, approved: false, isActionLoading: false };
           }
           return society;
         });

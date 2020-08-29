@@ -43,6 +43,6 @@ export class MemberMembersComponent implements OnInit, OnDestroy {
   }
 
   onImageLoaded(member: Member) {
-    member.isLoading = false;
+    member.isImageLoading = false;
   }
 }

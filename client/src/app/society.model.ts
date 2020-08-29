@@ -7,7 +7,8 @@ export interface Society {
   phoneNumber: string;
   regNo: string;
   approved: boolean;
-  isLoading: boolean;
+  isImageLoading: boolean;
+  isActionLoading: boolean;
   month_fee: {
     description: string;
     amount: number;
