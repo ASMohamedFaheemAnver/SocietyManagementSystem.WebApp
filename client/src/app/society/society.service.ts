@@ -47,7 +47,7 @@ export class SocietyService {
         console.log(res);
         this.society = {
           ...res["data"].getSociety,
-          isLoading: true,
+          isImageLoading: true,
           imageUrl: this.backeEndBaseUrl + res["data"].getSociety.imageUrl,
         };
         this.societyStatusListenner.next(false);
@@ -81,7 +81,7 @@ export class SocietyService {
           return {
             ...member,
             imageUrl: this.backeEndBaseUrl + member.imageUrl,
-            isLoading: true,
+            isImageLoading: true,
           };
         });
         this.membersUpdated.next([...this.members]);
@@ -130,6 +130,7 @@ export class SocietyService {
         updatedMembers = updatedMembers.map((member) => {
           if (member._id === memberId) {
             member.approved = true;
+            member.isActionLoading = false;
           }
           return member;
         });
@@ -159,6 +160,7 @@ export class SocietyService {
         updatedMembers = updatedMembers.map((member) => {
           if (member._id === memberId) {
             member.approved = false;
+            member.isActionLoading = false;
           }
           return member;
         });

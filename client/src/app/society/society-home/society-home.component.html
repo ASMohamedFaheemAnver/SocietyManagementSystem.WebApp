@@ -1,14 +1,16 @@
-<div class="parent">
+<div class="parent" *ngIf="society">
   <div class="left">
-    <div class="profile" *ngIf="!isLoading">
+    <div class="profile">
       <div class="profile-inner-left">
         <h1>Profile</h1>
         <p *ngIf="this.society ? false : true" class="warn">
           Profile not exist!
         </p>
-        <mat-spinner *ngIf="society ? society.isLoading : false"></mat-spinner>
+        <mat-spinner
+          *ngIf="society ? society.isImageLoading : false"
+        ></mat-spinner>
         <img
-          [style.display]="society.isLoading ? 'none' : 'block'"
+          [style.display]="society.isImageLoading ? 'none' : 'block'"
           *ngIf="society"
           src="{{ society.imageUrl }}"
           alt="Profile picture!"
@@ -45,7 +47,7 @@
     </div>
   </div>
 
-  <div class="right" *ngIf="!isLoading">
+  <div class="right">
     <div class="actions">
       <h1>Society actions</h1>
       <div class="action-buttons">
@@ -131,4 +133,6 @@
     </div>
   </div>
 </div>
-<mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
+<div *ngIf="isLoading" class="page-wrapper">
+  <mat-spinner class="spinner"></mat-spinner>
+</div>

@@ -144,7 +144,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   }
 
   onImageLoaded() {
-    this.society.isLoading = false;
+    this.society.isImageLoading = false;
   }
 
   onPageChange(event: PageEvent) {
