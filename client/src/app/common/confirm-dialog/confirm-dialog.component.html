@@ -1,0 +1,11 @@
+<form>
+  <h1>{{ data.msg }}</h1>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true">
+      Continue
+    </button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="false">
+      Cancel
+    </button>
+  </div>
+</form>

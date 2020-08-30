@@ -22,6 +22,7 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { AddMonthlyFeeDialogComponent } from "./society/add-monthly-fee-dialog/add-monthly-fee-dialog.component";
 import { AddExtraFeeDialogComponent } from "./society/add-extra-fee-dialog/add-extra-fee-dialog.component";
 import { FineMemberDialogComponent } from "./society/fine-member-dialog/fine-member-dialog.component";
+import { ConfirmDialogComponent } from "./common/confirm-dialog/confirm-dialog.component";
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { FineMemberDialogComponent } from "./society/fine-member-dialog/fine-mem
     FineMemberDialogComponent,
     AddMonthlyFeeDialogComponent,
     AddExtraFeeDialogComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +73,7 @@ import { FineMemberDialogComponent } from "./society/fine-member-dialog/fine-mem
     FineMemberDialogComponent,
     AddMonthlyFeeDialogComponent,
     AddExtraFeeDialogComponent,
+    ConfirmDialogComponent,
   ],
 })
 export class AppModule {}

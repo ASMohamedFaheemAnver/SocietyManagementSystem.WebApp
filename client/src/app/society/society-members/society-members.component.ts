@@ -6,6 +6,7 @@ import { Subscription } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MatDialog } from "@angular/material/dialog";
 import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
+import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "app-society-members",
@@ -23,7 +24,8 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private societyServie: SocietyService,
-    private editMemberDialog: MatDialog
+    private editMemberDialog: MatDialog,
+    private confirmDialog: MatDialog
   ) {}
   ngOnDestroy(): void {
     this.membersSub.unsubscribe();
@@ -47,18 +49,51 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   }
 
   onApproveMember(member: Member) {
-    member.isActionLoading = true;
-    this.societyServie.approveMember(member._id);
+    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+      data: {
+        msg:
+          "Approved member can be able to login and view society informations, Do you want to continue?",
+      },
+      disableClose: true,
+    });
+
+    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+      if (isConfirmed) {
+        member.isActionLoading = true;
+        this.societyServie.approveMember(member._id);
+      }
+    });
   }
 
   onDeleteMember(member: Member) {
-    member.isActionLoading = true;
-    this.societyServie.deleteMember(member._id);
+    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+      data: { msg: "You can't undo this action, Do you want to continue?" },
+      disableClose: true,
+    });
+
+    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+      if (isConfirmed) {
+        member.isActionLoading = true;
+        this.societyServie.deleteMember(member._id);
+      }
+    });
   }
 
   onDisApproveMember(member: Member) {
-    member.isActionLoading = true;
-    this.societyServie.disApproveMember(member._id);
+    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+      data: {
+        msg:
+          "Disappoved member can't be able to login or view society information, Do you want to continue?",
+      },
+      disableClose: true,
+    });
+
+    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+      if (isConfirmed) {
+        member.isActionLoading = true;
+        this.societyServie.disApproveMember(member._id);
+      }
+    });
   }
 
   onEditClick(member: Member) {

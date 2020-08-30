@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { DevService } from "../dev.service";
 import { Subscription } from "rxjs";
 import { Society } from "../../society.model";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "app-dev-home",
@@ -11,7 +13,10 @@ import { Society } from "../../society.model";
 export class DevHomeComponent implements OnInit, OnDestroy {
   isLoading = false;
 
-  constructor(private devService: DevService) {}
+  constructor(
+    private devService: DevService,
+    private confirmDialog: MatDialog
+  ) {}
   ngOnDestroy(): void {
     this.societiesSub.unsubscribe();
     this.devStatusSub.unsubscribe();
@@ -41,21 +46,56 @@ export class DevHomeComponent implements OnInit, OnDestroy {
   }
 
   onApproveSociety(society: Society) {
-    society.isActionLoading = true;
+    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+      data: {
+        msg:
+          "Approved society can use all feature provided by our system, Do you want to continue?",
+      },
+      disableClose: true,
+    });
 
-    this.devService.approveSociety(society._id);
+    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+      if (isConfirmed) {
+        society.isActionLoading = true;
+
+        this.devService.approveSociety(society._id);
+      }
+    });
   }
 
   onDisApproveSociety(society: Society) {
-    society.isActionLoading = true;
+    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+      data: {
+        msg:
+          "Disapproved society can't be able to login or use system features, Do you want to continue?",
+      },
+      disableClose: true,
+    });
 
-    this.devService.disApproveSociety(society._id);
+    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+      if (isConfirmed) {
+        society.isActionLoading = true;
+
+        this.devService.disApproveSociety(society._id);
+      }
+    });
   }
 
   onDeleteSociety(society: Society) {
-    society.isActionLoading = true;
+    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: "You can't undo this operation, Do you want to continue?",
+      },
+      disableClose: true,
+    });
 
-    this.devService.deleteSociety(society._id);
+    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+      if (isConfirmed) {
+        society.isActionLoading = true;
+
+        this.devService.deleteSociety(society._id);
+      }
+    });
   }
 
   changeDefaultUrl(society: Society) {
