@@ -68,4 +68,7 @@
     Signup
   </button>
 </form>
-<mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
+<!-- <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner> -->
+<div *ngIf="isLoading" class="page-wrapper">
+  <mat-spinner class="spinner"></mat-spinner>
+</div>
