@@ -148,6 +148,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   }
 
   onPageChange(event: PageEvent) {
+    this.isLoading = true;
     if (
       this.page_size === event.pageSize &&
       this.currentPage === event.pageIndex

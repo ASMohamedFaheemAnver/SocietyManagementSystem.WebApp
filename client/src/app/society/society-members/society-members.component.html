@@ -64,9 +64,10 @@
     </div>
     <mat-spinner *ngIf="member.isActionLoading"></mat-spinner>
     <div class="actions" *ngIf="!member.isActionLoading">
-      <!-- <button mat-button color="primary" (click)="onEditClick(member)">
-        Edit
-      </button> -->
+      <button mat-button color="primary">Log</button>
+      <button mat-button class="warn" (click)="onEditClick(member)">
+        Fine
+      </button>
       <button
         *ngIf="!member.approved"
         mat-button

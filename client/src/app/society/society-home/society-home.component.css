@@ -69,20 +69,55 @@
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.card div {
+.card > div {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.25rem;
+  flex: 1;
 }
 
-.card:hover {
+.card > div > div i {
+  margin: 10px;
+}
+
+.fa-edit {
+  color: green;
+  /* padding: 5px; */
+}
+
+.description-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.description-wrapper p {
+  flex: 4;
+}
+
+.description-wrapper div {
+  flex: 1;
+}
+
+.fa-trash-alt {
+  color: red;
+  /* padding: 5px; */
+}
+
+.fa-edit:hover {
+  cursor: pointer;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
-.card div {
-  flex: 1;
+.fa-trash-alt:hover {
+  cursor: pointer;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
+
+/* .card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+} */
 
 mat-form-field {
   width: 100px;

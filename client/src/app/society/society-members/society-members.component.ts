@@ -5,7 +5,7 @@ import { Member } from "../../member.model";
 import { Subscription } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MatDialog } from "@angular/material/dialog";
-import { EditMemberDialogComponent } from "../edit-member-dialog/edit-member-dialog.component";
+import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
 
 @Component({
   selector: "app-society-members",
@@ -19,11 +19,6 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   private membersSub: Subscription;
   private societyStatusSub: Subscription;
-
-  loadingCSS = {
-    top: "200px",
-    // left: $event.x + "px",
-  };
 
   constructor(
     private authService: AuthService,
@@ -68,8 +63,8 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
 
   onEditClick(member: Member) {
     console.log(member);
-    const editDialogRef = this.editMemberDialog.open(
-      EditMemberDialogComponent,
+    const fineDialogRef = this.editMemberDialog.open(
+      FineMemberDialogComponent,
       {
         data: member,
         disableClose: true,

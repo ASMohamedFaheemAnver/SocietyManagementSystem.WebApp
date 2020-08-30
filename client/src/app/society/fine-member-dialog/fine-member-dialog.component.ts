@@ -3,11 +3,9 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Member } from "src/app/member.model";
 
 @Component({
-  templateUrl: "edit-member-dialog.component.html",
+  templateUrl: "fine-member-dialog.component.html",
 })
-export class EditMemberDialogComponent {
-  private monthFee: number;
-  private fine: number;
+export class FineMemberDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: Member) {}
 
   onDate(event) {

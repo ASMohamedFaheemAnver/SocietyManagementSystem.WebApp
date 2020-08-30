@@ -85,14 +85,15 @@
           <!-- <div>
             <strong>Type</strong>
           </div> -->
+
           <div>
-            <strong>Description</strong>
+            <strong>Date</strong>
           </div>
           <div>
             <strong>Amount</strong>
           </div>
           <div>
-            <strong>Date</strong>
+            <strong>Description</strong>
           </div>
         </div>
         <div
@@ -110,16 +111,20 @@
           <!-- <div>
             <p>{{ log.kind }}</p>
           </div> -->
-
           <div>
-            <p>{{ log.fee.description }}</p>
+            <p>{{ log.fee.date.slice(4, 15) }}</p>
           </div>
 
           <div>
             <p>{{ log.fee.amount }}</p>
           </div>
-          <div>
-            <p>{{ log.fee.date.slice(4, 15) }}</p>
+
+          <div class="description-wrapper">
+            <p>{{ log.fee.description }}</p>
+            <div>
+              <i class="far fa-edit"> </i>
+              <i *ngIf="log.kind !== 'MonthFee'" class="far fa-trash-alt"></i>
+            </div>
           </div>
         </div>
       </div>

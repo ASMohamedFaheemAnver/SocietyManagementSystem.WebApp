@@ -17,11 +17,11 @@ import { SocietyHomeComponent } from "./society/society-home/society-home.compon
 import { SocietyMembersComponent } from "./society/society-members/society-members.component";
 import { ImgDeleteInterceptor } from "./auth/img-interceptor";
 import { MemberMembersComponent } from "./member/member-members/member-members.component";
-import { EditMemberDialogComponent } from "./society/edit-member-dialog/edit-member-dialog.component";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { MatNativeDateModule } from "@angular/material/core";
 import { AddMonthlyFeeDialogComponent } from "./society/add-monthly-fee-dialog/add-monthly-fee-dialog.component";
 import { AddExtraFeeDialogComponent } from "./society/add-extra-fee-dialog/add-extra-fee-dialog.component";
+import { FineMemberDialogComponent } from "./society/fine-member-dialog/fine-member-dialog.component";
 
 @NgModule({
   declarations: [
@@ -33,7 +33,7 @@ import { AddExtraFeeDialogComponent } from "./society/add-extra-fee-dialog/add-e
     SocietyHomeComponent,
     SocietyMembersComponent,
     MemberMembersComponent,
-    EditMemberDialogComponent,
+    FineMemberDialogComponent,
     AddMonthlyFeeDialogComponent,
     AddExtraFeeDialogComponent,
   ],
@@ -68,7 +68,7 @@ import { AddExtraFeeDialogComponent } from "./society/add-extra-fee-dialog/add-e
   bootstrap: [AppComponent],
   entryComponents: [
     ErrorComponent,
-    EditMemberDialogComponent,
+    FineMemberDialogComponent,
     AddMonthlyFeeDialogComponent,
     AddExtraFeeDialogComponent,
   ],
