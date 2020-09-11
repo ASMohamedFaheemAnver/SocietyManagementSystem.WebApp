@@ -10,6 +10,7 @@ import { Subscription } from "rxjs";
 import { PageEvent } from "@angular/material/paginator";
 import { Log } from "src/app/log.model";
 import { Society } from "src/app/society.model";
+import { EditMonthlyFeeLogDialogComponent } from "../edit-monthly-fee-log-dialog/edit-monthly-fee-log-dialog.component";
 
 @Component({
   selector: "app-society-home",
@@ -28,7 +29,8 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     private societyService: SocietyService,
     private authService: AuthService,
     private addMonthlyFeetDialog: MatDialog,
-    private addExtraFeeDialog: MatDialog
+    private addExtraFeeDialog: MatDialog,
+    private editSocietyLogFeeDialog: MatDialog
   ) {}
 
   ngOnDestroy(): void {
@@ -96,7 +98,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   }
 
   addMonthlyFee() {
-    this.isLoading = false;
+    // this.isLoading = false;
     const addMonthlyFeeDialogRef = this.addMonthlyFeetDialog.open(
       AddMonthlyFeeDialogComponent,
       {
@@ -158,5 +160,17 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     this.currentPage = event.pageIndex;
     this.page_size = event.pageSize;
     this.societyService.getSocietyLogs(event.pageIndex, this.page_size);
+  }
+
+  onMonthFeeLogEdit(log_id: string) {
+    const editSocietyFeeLogDialogRef = this.editSocietyLogFeeDialog.open(
+      EditMonthlyFeeLogDialogComponent,
+      {
+        data: {
+          log_id: log_id,
+        },
+        disableClose: true,
+      }
+    );
   }
 }

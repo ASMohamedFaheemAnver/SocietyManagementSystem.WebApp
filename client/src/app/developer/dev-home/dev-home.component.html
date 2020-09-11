@@ -1,5 +1,7 @@
 <div class="parent">
-  <p *ngIf="societies.length < 1 && !isLoading">No societies registered yet!</p>
+  <p class="warn" *ngIf="societies.length < 1 && !isLoading">
+    No societies registered yet!
+  </p>
   <div *ngIf="societies.length > 0" class="card big-heading">
     <div>
       <strong>PROFILE</strong>

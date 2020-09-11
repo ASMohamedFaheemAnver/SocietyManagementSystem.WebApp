@@ -23,6 +23,7 @@ import { AddMonthlyFeeDialogComponent } from "./society/add-monthly-fee-dialog/a
 import { AddExtraFeeDialogComponent } from "./society/add-extra-fee-dialog/add-extra-fee-dialog.component";
 import { FineMemberDialogComponent } from "./society/fine-member-dialog/fine-member-dialog.component";
 import { ConfirmDialogComponent } from "./common/confirm-dialog/confirm-dialog.component";
+import { EditMonthlyFeeLogDialogComponent } from "./society/edit-monthly-fee-log-dialog/edit-monthly-fee-log-dialog.component";
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ConfirmDialogComponent } from "./common/confirm-dialog/confirm-dialog.c
     AddMonthlyFeeDialogComponent,
     AddExtraFeeDialogComponent,
     ConfirmDialogComponent,
+    EditMonthlyFeeLogDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +76,7 @@ import { ConfirmDialogComponent } from "./common/confirm-dialog/confirm-dialog.c
     AddMonthlyFeeDialogComponent,
     AddExtraFeeDialogComponent,
     ConfirmDialogComponent,
+    EditMonthlyFeeLogDialogComponent,
   ],
 })
 export class AppModule {}
