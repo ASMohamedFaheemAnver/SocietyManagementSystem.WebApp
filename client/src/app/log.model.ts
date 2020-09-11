@@ -6,5 +6,16 @@ export interface Log {
     description: string;
     _id: string;
     date: string;
+    tracks: [
+      {
+        _id: string;
+        is_paid: boolean;
+        member: {
+          _id: string;
+          name: string;
+          imageUrl: string;
+        };
+      }
+    ];
   };
 }

@@ -14,6 +14,7 @@ export class SocietyService {
   private logsUpdated = new Subject<{ logs: Log[]; logs_count: number }>();
   private members: Member[] = [];
   private logs: Log[] = [];
+  private offlineLog: Log;
   private backeEndBaseUrl = environment.backeEndBaseUrl2;
   private society: Society;
   private newLog: Log;
@@ -284,6 +285,15 @@ export class SocietyService {
                 date
                 amount
                 description
+                tracks{
+                  _id
+                  member{
+                    _id
+                    imageUrl
+                    name
+                  }
+                  is_paid
+                }
               }
             }
           logs_count
@@ -304,5 +314,19 @@ export class SocietyService {
         this.societyStatusListenner.next(false);
       }
     );
+  }
+
+  getOneSocietyOfflineLog(log_id: string) {
+    if (this.logs.length === 0) {
+      return;
+    }
+
+    this.offlineLog = this.logs.find((log) => {
+      return log._id === log_id;
+    });
+
+    console.log(this.offlineLog);
+
+    return this.offlineLog;
   }
 }

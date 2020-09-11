@@ -1,0 +1,9 @@
+<div class="card" *ngFor="let track of offlineLog.fee.tracks">
+  <img src="{{ track.member.imageUrl }}" alt="Image" />
+  <p>{{ track.member.name }}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [mat-dialog-close]="false">
+    Done
+  </button>
+</div>
