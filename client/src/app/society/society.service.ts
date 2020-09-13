@@ -216,6 +216,15 @@ export class SocietyService {
             amount
             date
             description
+            tracks{
+                  _id
+                  member{
+                    _id
+                    imageUrl
+                    name
+                  }
+                  is_paid
+                }
           }
         }
       }`,
@@ -251,6 +260,15 @@ export class SocietyService {
             amount
             date
             description
+            tracks{
+                _id
+                member{
+                _id
+                imageUrl
+                name
+                }
+                is_paid
+              }
           }
         }
       }`,
@@ -328,5 +346,111 @@ export class SocietyService {
     console.log(this.offlineLog);
 
     return this.offlineLog;
+  }
+
+  makeFeePaidForOneMember(track_id: string, log_id: string) {
+    if (!track_id) {
+      return;
+    }
+
+    const graphqlQuery = {
+      query: `
+      mutation{
+        makeFeePaidForOneMember(track_id: "${track_id}", log_id: "${log_id}"){
+          message
+        }
+      }`,
+    };
+
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      (res) => {
+        console.log({
+          oneMakeFeePaidForOneMember: res["data"].makeFeePaidForOneMember,
+        });
+
+        this.logs.map((log) => {
+          return {
+            ...log,
+            fee: {
+              ...log.fee,
+              tracks: log.fee.tracks.map((track) => {
+                if (track._id === track_id) {
+                  track.is_paid = true;
+                }
+                return track;
+              }),
+            },
+          };
+        });
+
+        this.society.current_income += this.logs.find((log) => {
+          return log._id === log_id;
+        }).fee.amount;
+
+        this.societyUpdated.next(this.society);
+
+        this.logsUpdated.next({
+          logs: this.logs,
+          logs_count: this.logs.length,
+        });
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
+  }
+
+  makeFeeUnPaidForOneMember(track_id: string, log_id: string) {
+    if (!track_id) {
+      return;
+    }
+
+    const graphqlQuery = {
+      query: `
+      mutation{
+        makeFeeUnPaidForOneMember(track_id: "${track_id}", log_id: "${log_id}"){
+          message
+        }
+      }`,
+    };
+
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      (res) => {
+        console.log({
+          oneMakeFeePaidForOneMember: res["data"].makeFeePaidForOneMember,
+        });
+
+        this.logs.map((log) => {
+          return {
+            ...log,
+            fee: {
+              ...log.fee,
+              tracks: log.fee.tracks.map((track) => {
+                if (track._id === track_id) {
+                  track.is_paid = false;
+                }
+                return track;
+              }),
+            },
+          };
+        });
+
+        this.society.current_income -= this.logs.find((log) => {
+          return log._id === log_id;
+        }).fee.amount;
+
+        this.societyUpdated.next(this.society);
+
+        this.logsUpdated.next({
+          logs: this.logs,
+          logs_count: this.logs.length,
+        });
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
   }
 }
