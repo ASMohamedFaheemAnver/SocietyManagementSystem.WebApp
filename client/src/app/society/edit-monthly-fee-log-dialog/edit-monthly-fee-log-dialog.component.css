@@ -2,6 +2,29 @@ img {
   width: 50px;
   height: 50px;
   margin-right: 20px;
+  border-radius: 50%;
+}
+
+p {
+  margin-right: 20px;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.done:hover {
+  cursor: pointer;
+  box-shadow: 0 0 2px green;
+}
+
+.cancel:hover {
+  cursor: pointer;
+  box-shadow: 0 0 2px red;
 }
 
 .card {
@@ -10,4 +33,14 @@ img {
   align-items: center;
   padding: 5px;
   height: 80px;
+}
+
+.card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-heading p {
+  font-weight: 800;
 }

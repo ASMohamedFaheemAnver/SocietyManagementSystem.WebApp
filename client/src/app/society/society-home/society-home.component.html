@@ -95,6 +95,9 @@
           <div>
             <strong>Description</strong>
           </div>
+          <div>
+            <strong>Actions</strong>
+          </div>
         </div>
         <div
           class="warn pdt-1"
@@ -121,10 +124,14 @@
 
           <div class="description-wrapper">
             <p>{{ log.fee.description }}</p>
-            <div>
-              <i (click)="onMonthFeeLogEdit(log._id)" class="far fa-edit"> </i>
-              <i *ngIf="log.kind !== 'MonthFee'" class="far fa-trash-alt"></i>
-            </div>
+          </div>
+          <div>
+            <i
+              (click)="onMonthFeeLogEdit(log._id)"
+              class="fas fa-bars green"
+            ></i>
+            <i class="far fa-edit"> </i>
+            <i *ngIf="log.kind !== 'MonthFee'" class="far fa-trash-alt"></i>
           </div>
         </div>
       </div>

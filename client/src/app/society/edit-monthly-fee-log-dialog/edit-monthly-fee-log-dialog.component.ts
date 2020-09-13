@@ -18,4 +18,12 @@ export class EditMonthlyFeeLogDialogComponent implements OnInit {
       this.data.log_id
     );
   }
+
+  oneMakeFeePaidForOneMember(track_id, log_id) {
+    this.societyService.makeFeePaidForOneMember(track_id, log_id);
+  }
+
+  oneMakeFeeUnPaidForOneMember(track_id, log_id) {
+    this.societyService.makeFeeUnPaidForOneMember(track_id, log_id);
+  }
 }
