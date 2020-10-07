@@ -5,6 +5,7 @@ import { Subject } from "rxjs";
 import { Member } from "../member.model";
 import { Log } from "../log.model";
 import { Society } from "../society.model";
+import { log } from "console";
 
 @Injectable({ providedIn: "root" })
 export class SocietyService {
@@ -52,7 +53,7 @@ export class SocietyService {
           imageUrl: this.backeEndBaseUrl + res["data"].getSociety.imageUrl,
         };
         this.societyStatusListenner.next(false);
-        this.societyUpdated.next(this.society);
+        this.societyUpdated.next({ ...this.society, isImageLoading: false });
       },
       (err) => {
         console.log(err);
@@ -234,10 +235,10 @@ export class SocietyService {
       (res) => {
         console.log(res);
         this.newLog = res["data"].addMonthlyFeeToEveryone;
-        this.logUpdated.next(this.newLog);
+        this.logUpdated.next({ ...this.newLog });
         this.society.expected_income +=
           monthlyFee * this.society.number_of_members;
-        this.societyUpdated.next(this.society);
+        this.societyUpdated.next({ ...this.society, isImageLoading: false });
         this.societyStatusListenner.next(false);
       },
       (err) => {
@@ -278,9 +279,11 @@ export class SocietyService {
       (res) => {
         console.log(res);
         this.newLog = res["data"].addExtraFeeToEveryone;
-        this.logUpdated.next(this.newLog);
+        this.logs.unshift(this.newLog);
+        this.logUpdated.next({ ...this.newLog });
         this.society.expected_income +=
           extraFee * this.society.number_of_members;
+        this.societyUpdated.next({ ...this.society, isImageLoading: false });
         this.societyStatusListenner.next(false);
       },
       (err) => {
@@ -324,7 +327,7 @@ export class SocietyService {
         console.log(res);
         this.logs = res["data"].getSocietyLogs.logs;
         const logs_count = res["data"].getSocietyLogs.logs_count;
-        this.logsUpdated.next({ logs: this.logs, logs_count: logs_count });
+        this.logsUpdated.next({ logs: [...this.logs], logs_count: logs_count });
         this.societyStatusListenner.next(false);
       },
       (err) => {
@@ -387,10 +390,10 @@ export class SocietyService {
           return log._id === log_id;
         }).fee.amount;
 
-        this.societyUpdated.next(this.society);
+        this.societyUpdated.next({ ...this.society, isImageLoading: false });
 
         this.logsUpdated.next({
-          logs: this.logs,
+          logs: [...this.logs],
           logs_count: this.logs.length,
         });
       },
@@ -440,10 +443,10 @@ export class SocietyService {
           return log._id === log_id;
         }).fee.amount;
 
-        this.societyUpdated.next(this.society);
+        this.societyUpdated.next({ ...this.society, isImageLoading: false });
 
         this.logsUpdated.next({
-          logs: this.logs,
+          logs: [...this.logs],
           logs_count: this.logs.length,
         });
       },
@@ -452,5 +455,74 @@ export class SocietyService {
         this.societyStatusListenner.next(false);
       }
     );
+  }
+
+  editFeeForEveryone(log_id: string, fee: number, description: string) {
+    if (!log_id) {
+      return;
+    }
+
+    const graphqlQuery = {
+      query: `
+      mutation{
+        editFeeForEveryone(log_id: "${log_id}", fee: ${fee}, description: "${description}"){
+           _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+            tracks{
+                _id
+                member{
+                _id
+                imageUrl
+                name
+                }
+                is_paid
+              }
+          }
+        }
+      }`,
+    };
+
+    this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res) => {
+      console.log({ editFeeForEveryone: res });
+      this.logs = this.logs.map((log) => {
+        if (log._id === res["data"].editFeeForEveryone._id) {
+          for (
+            let i = 0;
+            i < res["data"].editFeeForEveryone.fee.tracks.length;
+            i++
+          ) {
+            let track = res["data"].editFeeForEveryone.fee.tracks[i];
+
+            if (track.is_paid) {
+              this.society.expected_income +=
+                res["data"].editFeeForEveryone.fee.amount;
+              this.society.expected_income -= log.fee.amount;
+              this.society.current_income -= log.fee.amount;
+            } else {
+              this.society.expected_income +=
+                res["data"].editFeeForEveryone.fee.amount;
+              this.society.expected_income -= log.fee.amount;
+            }
+          }
+
+          this.societyUpdated.next({ ...this.society, isImageLoading: false });
+
+          return res["data"].editFeeForEveryone;
+        }
+        return log;
+      });
+
+      console.log({ editFeeForEveryoneUpdatedLog: this.logs });
+      this.logsUpdated.next({
+        logs: [...this.logs],
+        logs_count: this.logs.length,
+      });
+      this.societyStatusListenner.next(false);
+    });
   }
 }
