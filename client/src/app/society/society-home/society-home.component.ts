@@ -28,7 +28,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private societyService: SocietyService,
     private authService: AuthService,
-    private addMonthlyFeetDialog: MatDialog,
+    private addMonthlyFeeDialog: MatDialog,
     private addExtraFeeDialog: MatDialog,
     private editSocietyLogFeeDialog: MatDialog
   ) {}
@@ -61,10 +61,8 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   page_size_options = [5, 10, 15, 20];
 
   backeEndBaseUrl = environment.backeEndBaseUrl2;
-  isImageLoading = false;
   ngOnInit(): void {
     this.isLoading = true;
-    this.isImageLoading = true;
     this.societyService.getSocietyLogs(this.currentPage, this.page_size);
     this.societyService.getSociety();
 
@@ -99,7 +97,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
 
   addMonthlyFee() {
     // this.isLoading = false;
-    const addMonthlyFeeDialogRef = this.addMonthlyFeetDialog.open(
+    const addMonthlyFeeDialogRef = this.addMonthlyFeeDialog.open(
       AddMonthlyFeeDialogComponent,
       {
         data: {
@@ -172,5 +170,69 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         disableClose: true,
       }
     );
+  }
+
+  onFeeLogEdit(log: Log) {
+    if (log.kind === "MonthFee") {
+      const editMonthlyFeeDialogRef = this.addMonthlyFeeDialog.open(
+        AddMonthlyFeeDialogComponent,
+        {
+          data: {
+            monthlyFee: log.fee.amount,
+            description: log.fee.description,
+          },
+          disableClose: true,
+        }
+      );
+
+      editMonthlyFeeDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.monthFee === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.monthFee,
+          data.description
+        );
+        console.log({ editMonthlyFee: { ...data, id: log._id } });
+      });
+    } else {
+      const editExtraFeeDialogRef = this.addExtraFeeDialog.open(
+        AddExtraFeeDialogComponent,
+        {
+          data: {
+            extraFee: log.fee.amount,
+            description: log.fee.description,
+          },
+          disableClose: true,
+        }
+      );
+      editExtraFeeDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.extraFee === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.extraFee,
+          data.description
+        );
+        console.log({ editExtraFee: { ...data, id: log._id } });
+      });
+    }
   }
 }
