@@ -69,7 +69,7 @@ export class MemberService {
         this.members = res["data"].getAllSocietyMembers.map((member) => {
           return {
             ...member,
-            isLoading: true,
+            isImageLoading: true,
             imageUrl: this.backeEndBaseUrl + member["imageUrl"],
           };
         });
