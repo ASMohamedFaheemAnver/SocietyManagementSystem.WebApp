@@ -1,0 +1,5 @@
+# Handling 401s globally with Angular
+# https://stackoverflow.com/questions/34934009/handling-401s-globally-with-angular/37028266#37028266
+
+# Angular2 HTTP - How to understand that the backend server is down
+#https://stackoverflow.com/questions/35601795/angular2-http-how-to-understand-that-the-backend-server-is-down

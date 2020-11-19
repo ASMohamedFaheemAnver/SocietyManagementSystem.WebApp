@@ -110,33 +110,6 @@ export class DevService {
     );
   }
 
-  deleteSociety(societyId: string) {
-    const graphqlQuery = {
-      query: `
-      mutation{
-        deleteSociety(societyId: "${societyId}"){
-          message
-        }
-      }`,
-    };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-      (res) => {
-        console.log(res);
-        let updatedSocieties = this.societies;
-        updatedSocieties = updatedSocieties.filter((society) => {
-          return society._id !== societyId;
-        });
-        this.societies = updatedSocieties;
-        this.societiesUpdated.next([...updatedSocieties]);
-        this.devStatusListenner.next(false);
-      },
-      (err) => {
-        console.log(err);
-        this.devStatusListenner.next(false);
-      }
-    );
-  }
-
   getSocietiesUpdateListener() {
     return this.societiesUpdated;
   }
