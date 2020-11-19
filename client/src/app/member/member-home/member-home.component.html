@@ -32,7 +32,52 @@
     </div>
   </div>
 
-  <div class="right" *ngIf="!isLoading"></div>
+  <div class="right" *ngIf="!isLoading">
+    <div class="activity">
+      <h1>Recent activity</h1>
+      <div class="parent2">
+        <div class="card big-heading">
+          <!-- <div>
+            <strong>Type</strong>
+          </div> -->
+
+          <div>
+            <strong>Date</strong>
+          </div>
+          <div>
+            <strong>Amount</strong>
+          </div>
+          <div>
+            <strong>Description</strong>
+          </div>
+        </div>
+
+        <div class="card" *ngFor="let log of logs">
+          <!-- <div>
+            <p>{{ log.kind }}</p>
+          </div> -->
+          <div>
+            <p>{{ log.fee.date.slice(4, 15) }}</p>
+          </div>
+
+          <div>
+            <p>{{ log.fee.amount }}</p>
+          </div>
+
+          <div class="description-wrapper">
+            <p>{{ log.fee.description }}</p>
+          </div>
+        </div>
+      </div>
+      <mat-paginator
+        [length]="logs_count"
+        [pageSize]="page_size"
+        [pageSizeOptions]="page_size_options"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    </div>
+  </div>
 </div>
 <!-- <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner> -->
 <div *ngIf="isLoading" class="page-wrapper">
