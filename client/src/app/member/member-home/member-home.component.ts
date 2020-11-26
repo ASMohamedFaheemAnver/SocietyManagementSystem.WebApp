@@ -3,6 +3,9 @@ import { AuthService } from "src/app/auth/auth.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { MemberService } from "../member.service";
 import { environment } from "src/environments/environment";
+import { Log } from "src/app/log.model";
+import { PageEvent } from "@angular/material/paginator";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-member-home",
@@ -24,6 +27,16 @@ export class MemberHomeComponent implements OnInit {
   backeEndBaseUrl = environment.backeEndBaseUrl2;
   isLoading: boolean;
   isImageLoading: boolean;
+  currentPage = 0;
+
+  logs: Log[];
+  logs_count: number;
+  page_size = 5;
+  page_size_options = [5, 10, 15, 20];
+
+  private memberLogsSub: Subscription;
+  private memberStatusListenner: Subscription;
+
   ngOnInit(): void {
     this.isImageLoading = true;
     this.isLoading = true;
@@ -38,6 +51,21 @@ export class MemberHomeComponent implements OnInit {
       this.arrears = member["data"].getMember.arrears;
       this.isLoading = false;
     });
+
+    this.memberService.getMemberLogs(0, 5);
+
+    this.memberLogsSub = this.memberService
+      .getMemberLogsListenner()
+      .subscribe(({ logs, logs_count }) => {
+        this.logs = logs;
+        this.logs_count = logs_count;
+      });
+
+    this.memberStatusListenner = this.memberService
+      .getMemberStatusListenner()
+      .subscribe((isPassed) => {
+        this.isLoading = false;
+      });
   }
 
   changeDefaultUrl() {
@@ -46,5 +74,18 @@ export class MemberHomeComponent implements OnInit {
 
   onImageLoaded() {
     this.isImageLoading = false;
+  }
+
+  onPageChange(event: PageEvent) {
+    this.isLoading = true;
+    if (
+      this.page_size === event.pageSize &&
+      this.currentPage === event.pageIndex
+    ) {
+      return;
+    }
+    this.currentPage = event.pageIndex;
+    this.page_size = event.pageSize;
+    this.memberService.getMemberLogs(event.pageIndex, this.page_size);
   }
 }

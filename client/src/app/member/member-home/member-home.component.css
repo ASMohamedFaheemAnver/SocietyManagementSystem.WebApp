@@ -67,3 +67,10 @@
 .card div {
   flex: 1;
 }
+
+@media (max-width: 768px) {
+  .parent {
+    flex-direction: column;
+    align-items: center;
+  }
+}

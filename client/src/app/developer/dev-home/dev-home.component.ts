@@ -81,23 +81,6 @@ export class DevHomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  onDeleteSociety(society: Society) {
-    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
-      data: {
-        msg: "You can't undo this operation, Do you want to continue?",
-      },
-      disableClose: true,
-    });
-
-    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
-      if (isConfirmed) {
-        society.isActionLoading = true;
-
-        this.devService.deleteSociety(society._id);
-      }
-    });
-  }
-
   changeDefaultUrl(society: Society) {
     society.imageUrl = "./assets/img/invalid-img.jpg";
   }

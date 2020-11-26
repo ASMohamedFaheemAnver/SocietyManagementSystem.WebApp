@@ -65,20 +65,6 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
     });
   }
 
-  onDeleteMember(member: Member) {
-    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
-      data: { msg: "You can't undo this action, Do you want to continue?" },
-      disableClose: true,
-    });
-
-    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
-      if (isConfirmed) {
-        member.isActionLoading = true;
-        this.societyServie.deleteMember(member._id);
-      }
-    });
-  }
-
   onDisApproveMember(member: Member) {
     const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
       data: {
