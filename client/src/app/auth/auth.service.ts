@@ -3,10 +3,15 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { environment } from "src/environments/environment";
+import { Apollo, gql } from "apollo-angular";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private apollo: Apollo
+  ) {}
   private graphQLUrl = environment.backEndGraphQlUrl2;
   private restImageUploadUrl = environment.backEndPicUploadUrl2;
 
@@ -173,47 +178,54 @@ export class AuthService {
     let graphqlQuery;
     this.userCategory = userCategory;
     if (userCategory === "member") {
-      graphqlQuery = {
-        query: `{
-        loginMember(email: "${email}", password: "${password}"){
-          _id
-          token
-          expiresIn
+      console.log({ emitted: "loginUser", in: "if (member)" });
+
+      graphqlQuery = gql`
+        query {
+          loginMember(email: "${email}", password: "${password}"){
+            _id
+            token
+            expiresIn
+          }
         }
-      }`,
-      };
+      `;
     } else if (userCategory === "society") {
-      graphqlQuery = {
-        query: `{
-        loginSociety(email: "${email}", password: "${password}"){
-          _id
-          token
-          expiresIn
+      console.log({ emitted: "loginUser", in: "if (society)" });
+
+      graphqlQuery = gql`
+        query {
+          loginSociety(email: "${email}", password: "${password}"){
+            _id
+            token
+            expiresIn
+          }
         }
-      }`,
-      };
+      `;
     } else if (userCategory === "developer") {
-      graphqlQuery = {
-        query: `{
-        loginDeveloper(email: "${email}", password: "${password}"){
-          _id
-          token
-          expiresIn
+      console.log({ emitted: "loginUser", in: "if (developer)" });
+
+      graphqlQuery = gql`
+        query {
+          loginDeveloper(email: "${email}", password: "${password}"){
+            _id
+            token
+            expiresIn
+          }
         }
-      }`,
-      };
+      `;
     }
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+
+    this.apollo.query({ query: graphqlQuery }).subscribe(
       (res) => {
         console.log(res);
         let token;
 
         if (userCategory === "member") {
-          token = res["data"].loginMember.token;
+          token = res["data"]["loginMember"].token;
         } else if (userCategory === "society") {
-          token = res["data"].loginSociety.token;
+          token = res["data"]["loginSociety"].token;
         } else if (userCategory === "developer") {
-          token = res["data"].loginDeveloper.token;
+          token = res["data"]["loginDeveloper"].token;
         }
 
         if (token) {
@@ -221,14 +233,14 @@ export class AuthService {
           let userId;
 
           if (userCategory === "member") {
-            expiresIn = res["data"].loginMember.expiresIn;
-            userId = res["data"].loginMember._id;
+            expiresIn = res["data"]["loginMember"].expiresIn;
+            userId = res["data"]["loginMember"]._id;
           } else if (userCategory === "society") {
-            expiresIn = res["data"].loginSociety.expiresIn;
-            userId = res["data"].loginSociety._id;
+            expiresIn = res["data"]["loginSociety"].expiresIn;
+            userId = res["data"]["loginSociety"]._id;
           } else if (userCategory === "developer") {
-            expiresIn = res["data"].loginDeveloper.expiresIn;
-            userId = res["data"].loginDeveloper._id;
+            expiresIn = res["data"]["loginDeveloper"].expiresIn;
+            userId = res["data"]["loginDeveloper"]._id;
           }
           this.token = token;
           this.authStatusListenner.next(true);
