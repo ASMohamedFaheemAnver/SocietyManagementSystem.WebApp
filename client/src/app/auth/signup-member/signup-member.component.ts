@@ -35,7 +35,7 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
       });
     this.authService.getBasicSocietyDetailes().subscribe(
       (res) => {
-        this.societies = res["data"].getBasicSocietyDetailes;
+        this.societies = res["data"]["getBasicSocietyDetailes"];
         console.log(this.societies);
         this.isLoading = false;
       },

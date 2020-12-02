@@ -28,15 +28,15 @@ export class AuthService {
   }
 
   getBasicSocietyDetailes() {
-    const graphqlQuery = {
-      query: `{
-        getBasicSocietyDetailes{
-   	      _id
+    const graphqlQuery = gql`
+      query {
+        getBasicSocietyDetailes {
+          _id
           name
         }
-      }`,
-    };
-    return this.http.post(this.graphQLUrl, graphqlQuery);
+      }
+    `;
+    return this.apollo.query({ query: graphqlQuery });
   }
 
   createMember(
@@ -116,62 +116,38 @@ export class AuthService {
     regNo: string,
     phoneNumber: string
   ) {
-    const formData = new FormData();
-    formData.append("image", image);
-    let imageUrl;
-    this.http.post(this.restImageUploadUrl, formData).subscribe(
-      (res) => {
-        console.log(res);
-        imageUrl = res["imageUrl"];
-        this.imgToken = res["token"];
-        const graphqlQuery = {
-          query: `
-            mutation{
-              createSociety(societyInput: {
-                email: "${email}", 
-                name: "${name}", 
-                password: "${password}", 
-                imageUrl: """${imageUrl}""", 
-                address: """${address}""", 
-                phoneNumber: "${phoneNumber}", 
-                regNo: "${regNo}"}){
-                _id
-              }
-            }   
-          `,
-        };
-        this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-          (res) => {
-            console.log(res);
-            this.router.navigateByUrl("/");
-          },
-          (err) => {
-            console.log(err);
-            const graphqlQuery = {
-              query: `
-                mutation{
-                  deleteImage{
-                    message
-                  }
-                }`,
-            };
-            this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-              (res) => {
-                console.log(res);
-              },
-              (err) => {
-                console.log(err);
-              }
-            );
-            this.authStatusListenner.next(false);
-          }
-        );
-      },
-      (err) => {
-        console.log(err);
-        this.authStatusListenner.next(false);
+    const graphqlQuery = gql`
+      mutation createSocietyMutation($image: Upload!) {
+        createSociety(societyInput: {
+          email: "${email}",
+          name: "${name}",
+          password: "${password}",
+          address: """${address}""",
+          phoneNumber: "${phoneNumber}",
+          image: $image
+          regNo: "${regNo}"}){
+          _id
+        }
       }
-    );
+    `;
+
+    this.apollo
+      .mutate({
+        mutation: graphqlQuery,
+        variables: { image: image },
+        context: { useMultipart: true },
+      })
+      .subscribe(
+        (res) => {
+          console.log(res);
+          this.router.navigateByUrl("/");
+          this.authStatusListenner.next(false);
+        },
+        (err) => {
+          console.log(err);
+          this.authStatusListenner.next(false);
+        }
+      );
   }
 
   loginUser(email: string, password: string, userCategory: string) {
