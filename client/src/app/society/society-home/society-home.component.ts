@@ -69,7 +69,10 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     this.societySub = this.societyService
       .getSocietyUpdatedListenner()
       .subscribe((society) => {
-        console.log({ msg: "Emitted society.", data: society });
+        console.log({
+          emitted: "societyHomeComponent.ngOnInit",
+          society: society,
+        });
         this.society = society;
       });
 
@@ -84,7 +87,10 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
       .subscribe((logsInfo) => {
         this.logs = logsInfo.logs;
         this.logs_count = logsInfo.logs_count;
-        console.log(logsInfo);
+        console.log({
+          emitted: "societyHomeComponent.ngOnInit",
+          logsInfo: logsInfo,
+        });
       });
 
     this.logSub = this.societyService
@@ -96,7 +102,6 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   }
 
   addMonthlyFee() {
-    // this.isLoading = false;
     const addMonthlyFeeDialogRef = this.addMonthlyFeeDialog.open(
       AddMonthlyFeeDialogComponent,
       {

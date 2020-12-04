@@ -38,7 +38,10 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
       .getMembersUpdateListenner()
       .subscribe((members) => {
         this.members = members;
-        console.log(members);
+        console.log({
+          emitted: "societyMemberComponent.ngOnInit",
+          members: members,
+        });
       });
     this.societyStatusSub = this.societyServie
       .getSocietyStatusListenner()

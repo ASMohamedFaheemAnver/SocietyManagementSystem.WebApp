@@ -1,24 +1,20 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
 import { Society } from "../society.model";
-import { environment } from "src/environments/environment";
+import { Apollo, gql } from "apollo-angular";
 
 @Injectable({ providedIn: "root" })
 export class DevService {
-  private graphQLUrl = environment.backEndGraphQlUrl2;
   private devStatusListenner = new Subject<boolean>();
   private societiesUpdated = new Subject<Society[]>();
   private societies: Society[];
 
-  private backeEndBaseUrl = environment.backeEndBaseUrl2;
-
-  constructor(private http: HttpClient) {}
+  constructor(private apollo: Apollo) {}
   getAllSociety() {
-    const graphqlQuery = {
-      query: `{
-        getAllSocieties{
-   	      _id
+    const graphqlQuery = gql`
+      query {
+        getAllSocieties {
+          _id
           name
           email
           imageUrl
@@ -27,19 +23,19 @@ export class DevService {
           regNo
           approved
         }
-      }`,
-    };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      }
+    `;
+
+    this.apollo.query({ query: graphqlQuery }).subscribe(
       (res) => {
-        this.societies = res["data"].getAllSocieties.map((society) => {
+        this.societies = res["data"]["getAllSocieties"].map((society) => {
           return {
             ...society,
             isImageLoading: true,
             isActionLoading: false,
-            imageUrl: this.backeEndBaseUrl + society["imageUrl"],
           };
         });
-        console.log(this.societies);
+        console.log({ emitted: "getAllSociety", data: this.societies });
         this.devStatusListenner.next(false);
         this.societiesUpdated.next([...this.societies]);
       },
@@ -51,15 +47,15 @@ export class DevService {
   }
 
   approveSociety(societyId: string) {
-    const graphqlQuery = {
-      query: `
-      mutation{
+    const graphqlQuery = gql`
+      mutation {
         approveSociety(societyId: "${societyId}"){
           message
         }
-      }`,
-    };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
         console.log(res);
         let updatedSocieties = this.societies;
@@ -81,15 +77,14 @@ export class DevService {
   }
 
   disApproveSociety(societyId: string) {
-    const graphqlQuery = {
-      query: `
+    const graphqlQuery = gql`
       mutation{
         disApproveSociety(societyId: "${societyId}"){
           message
         }
-      }`,
-    };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      }
+    `;
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
         console.log(res);
         let updatedSocieties = this.societies;

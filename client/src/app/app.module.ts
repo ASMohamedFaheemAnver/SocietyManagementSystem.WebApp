@@ -24,6 +24,7 @@ import { AddExtraFeeDialogComponent } from "./society/add-extra-fee-dialog/add-e
 import { FineMemberDialogComponent } from "./society/fine-member-dialog/fine-member-dialog.component";
 import { ConfirmDialogComponent } from "./common/confirm-dialog/confirm-dialog.component";
 import { EditMonthlyFeeLogDialogComponent } from "./society/edit-monthly-fee-log-dialog/edit-monthly-fee-log-dialog.component";
+import { GraphQLModule } from './graphql.module';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { EditMonthlyFeeLogDialogComponent } from "./society/edit-monthly-fee-log
     ReactiveFormsModule,
     FormsModule,
     MatNativeDateModule,
+    GraphQLModule,
   ],
   providers: [
     {

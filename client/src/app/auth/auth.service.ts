@@ -3,12 +3,11 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { environment } from "src/environments/environment";
+import { Apollo, gql } from "apollo-angular";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router) {}
-  private graphQLUrl = environment.backEndGraphQlUrl2;
-  private restImageUploadUrl = environment.backEndPicUploadUrl2;
+  constructor(private router: Router, private apollo: Apollo) {}
 
   private authStatusListenner = new Subject<boolean>();
   private userId: string;
@@ -23,15 +22,15 @@ export class AuthService {
   }
 
   getBasicSocietyDetailes() {
-    const graphqlQuery = {
-      query: `{
-        getBasicSocietyDetailes{
-   	      _id
+    const graphqlQuery = gql`
+      query {
+        getBasicSocietyDetailes {
+          _id
           name
         }
-      }`,
-    };
-    return this.http.post(this.graphQLUrl, graphqlQuery);
+      }
+    `;
+    return this.apollo.query({ query: graphqlQuery });
   }
 
   createMember(
@@ -43,22 +42,13 @@ export class AuthService {
     societyId: string,
     phoneNumber: string
   ) {
-    const formData = new FormData();
-    formData.append("image", image);
-    let imageUrl;
-    this.http.post(this.restImageUploadUrl, formData).subscribe(
-      (res) => {
-        console.log(res);
-        imageUrl = res["imageUrl"];
-        this.imgToken = res["token"];
-        const graphqlQuery = {
-          query: `
-            mutation{
-              createMember(memberInput: {
+    const graphqlQuery = gql`
+      mutation createMemberMutation($image: Upload!) {
+        createMember(memberInput: {
                 email: "${email}", 
                 name: "${name}" 
                 password: "${password}", 
-                imageUrl: """${imageUrl}""", 
+                image: $image, 
                 address: """${address}""", 
                 societyId: "${societyId}", 
                 phoneNumber: "${phoneNumber}"}){
@@ -66,40 +56,26 @@ export class AuthService {
                 email
                 name
             }
-          }`,
-        };
-        this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-          (res) => {
-            console.log(res);
-            this.router.navigateByUrl("/");
-          },
-          (err) => {
-            console.log(err);
-            const graphqlQuery = {
-              query: `
-                mutation{
-                  deleteImage{
-                    message
-                  }
-                }`,
-            };
-            this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-              (res) => {
-                console.log(res);
-              },
-              (err) => {
-                console.log(err);
-              }
-            );
-            this.authStatusListenner.next(false);
-          }
-        );
-      },
-      (err) => {
-        console.log(err);
-        this.authStatusListenner.next(false);
       }
-    );
+    `;
+
+    this.apollo
+      .mutate({
+        mutation: graphqlQuery,
+        variables: { image: image },
+        context: { useMultipart: true },
+      })
+      .subscribe(
+        (res) => {
+          console.log(res);
+          this.router.navigateByUrl("/");
+          this.authStatusListenner.next(false);
+        },
+        (err) => {
+          console.log(err);
+          this.authStatusListenner.next(false);
+        }
+      );
   }
 
   createSociety(
@@ -111,109 +87,92 @@ export class AuthService {
     regNo: string,
     phoneNumber: string
   ) {
-    const formData = new FormData();
-    formData.append("image", image);
-    let imageUrl;
-    this.http.post(this.restImageUploadUrl, formData).subscribe(
-      (res) => {
-        console.log(res);
-        imageUrl = res["imageUrl"];
-        this.imgToken = res["token"];
-        const graphqlQuery = {
-          query: `
-            mutation{
-              createSociety(societyInput: {
-                email: "${email}", 
-                name: "${name}", 
-                password: "${password}", 
-                imageUrl: """${imageUrl}""", 
-                address: """${address}""", 
-                phoneNumber: "${phoneNumber}", 
-                regNo: "${regNo}"}){
-                _id
-              }
-            }   
-          `,
-        };
-        this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-          (res) => {
-            console.log(res);
-            this.router.navigateByUrl("/");
-          },
-          (err) => {
-            console.log(err);
-            const graphqlQuery = {
-              query: `
-                mutation{
-                  deleteImage{
-                    message
-                  }
-                }`,
-            };
-            this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-              (res) => {
-                console.log(res);
-              },
-              (err) => {
-                console.log(err);
-              }
-            );
-            this.authStatusListenner.next(false);
-          }
-        );
-      },
-      (err) => {
-        console.log(err);
-        this.authStatusListenner.next(false);
+    const graphqlQuery = gql`
+      mutation createSocietyMutation($image: Upload!) {
+        createSociety(societyInput: {
+          email: "${email}",
+          name: "${name}",
+          password: "${password}",
+          address: """${address}""",
+          phoneNumber: "${phoneNumber}",
+          image: $image
+          regNo: "${regNo}"}){
+          _id
+        }
       }
-    );
+    `;
+
+    this.apollo
+      .mutate({
+        mutation: graphqlQuery,
+        variables: { image: image },
+        context: { useMultipart: true },
+      })
+      .subscribe(
+        (res) => {
+          console.log(res);
+          this.router.navigateByUrl("/");
+          this.authStatusListenner.next(false);
+        },
+        (err) => {
+          console.log(err);
+          this.authStatusListenner.next(false);
+        }
+      );
   }
 
   loginUser(email: string, password: string, userCategory: string) {
     let graphqlQuery;
     this.userCategory = userCategory;
     if (userCategory === "member") {
-      graphqlQuery = {
-        query: `{
-        loginMember(email: "${email}", password: "${password}"){
-          _id
-          token
-          expiresIn
+      console.log({ emitted: "loginUser", in: "if (member)" });
+
+      graphqlQuery = gql`
+        query {
+          loginMember(email: "${email}", password: "${password}"){
+            _id
+            token
+            expiresIn
+          }
         }
-      }`,
-      };
+      `;
     } else if (userCategory === "society") {
-      graphqlQuery = {
-        query: `{
-        loginSociety(email: "${email}", password: "${password}"){
-          _id
-          token
-          expiresIn
+      console.log({ emitted: "loginUser", in: "if (society)" });
+
+      graphqlQuery = gql`
+        query {
+          loginSociety(email: "${email}", password: "${password}"){
+            _id
+            token
+            expiresIn
+          }
         }
-      }`,
-      };
+      `;
     } else if (userCategory === "developer") {
-      graphqlQuery = {
-        query: `{
-        loginDeveloper(email: "${email}", password: "${password}"){
-          _id
-          token
-          expiresIn
+      console.log({ emitted: "loginUser", in: "if (developer)" });
+
+      graphqlQuery = gql`
+        query {
+          loginDeveloper(email: "${email}", password: "${password}"){
+            _id
+            token
+            expiresIn
+          }
         }
-      }`,
-      };
+      `;
     }
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+
+    this.apollo.query({ query: graphqlQuery }).subscribe(
       (res) => {
         console.log(res);
         let token;
 
         if (userCategory === "member") {
-          token = res["data"].loginMember.token;
+          token = res["data"]["loginMember"].token;
         } else if (userCategory === "society") {
-          token = res["data"].loginSociety.token;
+          token = res["data"]["loginSociety"].token;
         } else if (userCategory === "developer") {
-          token = res["data"].loginDeveloper.token;
+          token = res["data"]["loginDeveloper"].token;
         }
 
         if (token) {
@@ -221,14 +180,14 @@ export class AuthService {
           let userId;
 
           if (userCategory === "member") {
-            expiresIn = res["data"].loginMember.expiresIn;
-            userId = res["data"].loginMember._id;
+            expiresIn = res["data"]["loginMember"].expiresIn;
+            userId = res["data"]["loginMember"]._id;
           } else if (userCategory === "society") {
-            expiresIn = res["data"].loginSociety.expiresIn;
-            userId = res["data"].loginSociety._id;
+            expiresIn = res["data"]["loginSociety"].expiresIn;
+            userId = res["data"]["loginSociety"]._id;
           } else if (userCategory === "developer") {
-            expiresIn = res["data"].loginDeveloper.expiresIn;
-            userId = res["data"].loginDeveloper._id;
+            expiresIn = res["data"]["loginDeveloper"].expiresIn;
+            userId = res["data"]["loginDeveloper"]._id;
           }
           this.token = token;
           this.authStatusListenner.next(true);
