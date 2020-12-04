@@ -5,11 +5,10 @@ import { Subject } from "rxjs";
 import { Member } from "../member.model";
 import { Log } from "../log.model";
 import { Society } from "../society.model";
-import { log } from "console";
+import { Apollo, gql } from "apollo-angular";
 
 @Injectable({ providedIn: "root" })
 export class SocietyService {
-  private graphQLUrl = environment.backEndGraphQlUrl2;
   private societyStatusListenner = new Subject<boolean>();
   private membersUpdated = new Subject<Member[]>();
   private logsUpdated = new Subject<{ logs: Log[]; logs_count: number }>();
@@ -22,13 +21,13 @@ export class SocietyService {
   private logUpdated = new Subject<Log>();
   private societyUpdated = new Subject<Society>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private apollo: Apollo) {}
 
   getSociety() {
-    const graphqlQuery = {
-      query: `{
-        getSociety{
-   	      _id
+    const graphqlQuery = gql`
+      query {
+        getSociety {
+          _id
           name
           email
           imageUrl
@@ -37,20 +36,20 @@ export class SocietyService {
           expected_income
           current_income
           number_of_members
-          month_fee{
-             amount
-             description
-           }
+          month_fee {
+            amount
+            description
+          }
         }
-      }`,
-    };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      }
+    `;
+
+    this.apollo.query({ query: graphqlQuery }).subscribe(
       (res) => {
-        console.log(res);
         this.society = {
-          ...res["data"].getSociety,
+          ...res["data"]["getSociety"],
           isImageLoading: true,
-          imageUrl: this.backeEndBaseUrl + res["data"].getSociety.imageUrl,
+          imageUrl: this.backeEndBaseUrl + res["data"]["getSociety"].imageUrl,
         };
         this.societyStatusListenner.next(false);
         this.societyUpdated.next({ ...this.society, isImageLoading: false });
@@ -63,10 +62,10 @@ export class SocietyService {
   }
 
   getAllMembers() {
-    const graphqlQuery = {
-      query: `{
-        getAllMembers{
-   	      _id
+    const graphqlQuery = gql`
+      query {
+        getAllMembers {
+          _id
           name
           email
           imageUrl
@@ -74,12 +73,13 @@ export class SocietyService {
           arrears
           approved
         }
-      }`,
-    };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      }
+    `;
+
+    this.apollo.query({ query: graphqlQuery }).subscribe(
       (res) => {
-        console.log(res);
-        this.members = res["data"].getAllMembers.map((member) => {
+        console.log({ emitted: "getAllMembers", data: res });
+        this.members = res["data"]["getAllMembers"].map((member) => {
           return {
             ...member,
             imageUrl: this.backeEndBaseUrl + member.imageUrl,
@@ -117,17 +117,16 @@ export class SocietyService {
   }
 
   approveMember(memberId: string) {
-    const graphqlQuery = {
-      query: `
+    const graphqlQuery = gql`
       mutation{
         approveMember(memberId: "${memberId}"){
           message
         }
-      }`,
-    };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
-        console.log(res);
         let updatedMembers = this.members;
         updatedMembers = updatedMembers.map((member) => {
           if (member._id === memberId) {
@@ -147,17 +146,15 @@ export class SocietyService {
     );
   }
   disApproveMember(memberId: string) {
-    const graphqlQuery = {
-      query: `
+    const graphqlQuery = gql`
       mutation{
         disApproveMember(memberId: "${memberId}"){
           message
         }
-      }`,
-    };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      }
+    `;
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
-        console.log(res);
         let updatedMembers = this.members;
         updatedMembers = updatedMembers.map((member) => {
           if (member._id === memberId) {
@@ -178,9 +175,7 @@ export class SocietyService {
   }
 
   addMonthlyFeeToEveryone(monthlyFee, description) {
-    console.log(monthlyFee);
-    const graphqlQuery = {
-      query: `
+    const graphqlQuery = gql`
       mutation{
         addMonthlyFeeToEveryone(monthlyFee: ${monthlyFee}, description: "${description}"){
           _id
@@ -201,13 +196,13 @@ export class SocietyService {
                 }
           }
         }
-      }`,
-    };
+      }
+    `;
 
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
         console.log(res);
-        this.newLog = res["data"].addMonthlyFeeToEveryone;
+        this.newLog = res["data"]["addMonthlyFeeToEveryone"];
         this.logUpdated.next({ ...this.newLog });
         this.society.expected_income +=
           monthlyFee * this.society.number_of_members;
@@ -222,9 +217,7 @@ export class SocietyService {
   }
 
   addExtraFeeToEveryone(extraFee, description) {
-    console.log(extraFee);
-    const graphqlQuery = {
-      query: `
+    const graphqlQuery = gql`
       mutation{
         addExtraFeeToEveryone(extraFee: ${extraFee}, description: "${description}"){
           _id
@@ -245,13 +238,13 @@ export class SocietyService {
               }
           }
         }
-      }`,
-    };
+      }
+    `;
 
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
         console.log(res);
-        this.newLog = res["data"].addExtraFeeToEveryone;
+        this.newLog = res["data"]["addExtraFeeToEveryone"];
         this.logs.unshift(this.newLog);
         this.logUpdated.next({ ...this.newLog });
         this.society.expected_income +=
@@ -267,9 +260,8 @@ export class SocietyService {
   }
 
   getSocietyLogs(page_number, page_size) {
-    console.log(page_number);
-    const graphqlQuery = {
-      query: `{
+    const graphqlQuery = gql`
+      query{
         getSocietyLogs(page_number: ${page_number}, page_size: ${page_size}){
           logs{
               _id
@@ -292,14 +284,26 @@ export class SocietyService {
             }
           logs_count
           }
-      }`,
-    };
+      }
+    `;
 
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-      (res: Log[]) => {
-        console.log(res);
-        this.logs = res["data"].getSocietyLogs.logs;
-        const logs_count = res["data"].getSocietyLogs.logs_count;
+    this.apollo.query({ query: graphqlQuery }).subscribe(
+      (res) => {
+        this.logs = res["data"]["getSocietyLogs"].logs.map((log) => {
+          return {
+            ...log,
+            fee: {
+              ...log.fee,
+              tracks: [
+                ...log.fee.tracks.map((track) => {
+                  return { ...track, member: { ...track.member } };
+                }),
+              ],
+            },
+          };
+        });
+
+        const logs_count = res["data"]["getSocietyLogs"].logs_count;
         this.logsUpdated.next({ logs: [...this.logs], logs_count: logs_count });
         this.societyStatusListenner.next(false);
       },
@@ -325,25 +329,21 @@ export class SocietyService {
   }
 
   makeFeePaidForOneMember(track_id: string, log_id: string) {
+    console.log({ emitted: "makeFeePaidForOneMember" });
     if (!track_id) {
       return;
     }
 
-    const graphqlQuery = {
-      query: `
+    const graphqlQuery = gql`
       mutation{
         makeFeePaidForOneMember(track_id: "${track_id}", log_id: "${log_id}"){
           message
         }
-      }`,
-    };
+      }
+    `;
 
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
-        console.log({
-          oneMakeFeePaidForOneMember: res["data"].makeFeePaidForOneMember,
-        });
-
         this.logs.map((log) => {
           return {
             ...log,
@@ -378,25 +378,22 @@ export class SocietyService {
   }
 
   makeFeeUnPaidForOneMember(track_id: string, log_id: string) {
+    console.log({ emitted: "makeFeeUnPaidForOneMember" });
+
     if (!track_id) {
       return;
     }
 
-    const graphqlQuery = {
-      query: `
+    const graphqlQuery = gql`
       mutation{
         makeFeeUnPaidForOneMember(track_id: "${track_id}", log_id: "${log_id}"){
           message
         }
-      }`,
-    };
+      }
+    `;
 
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
-        console.log({
-          oneMakeFeePaidForOneMember: res["data"].makeFeePaidForOneMember,
-        });
-
         this.logs.map((log) => {
           return {
             ...log,
@@ -435,8 +432,7 @@ export class SocietyService {
       return;
     }
 
-    const graphqlQuery = {
-      query: `
+    const graphqlQuery = gql`
       mutation{
         editFeeForEveryone(log_id: "${log_id}", fee: ${fee}, description: "${description}"){
            _id
@@ -457,35 +453,34 @@ export class SocietyService {
               }
           }
         }
-      }`,
-    };
+      }
+    `;
 
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe((res) => {
-      console.log({ editFeeForEveryone: res });
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe((res) => {
       this.logs = this.logs.map((log) => {
-        if (log._id === res["data"].editFeeForEveryone._id) {
+        if (log._id === res["data"]["editFeeForEveryone"]._id) {
           for (
             let i = 0;
-            i < res["data"].editFeeForEveryone.fee.tracks.length;
+            i < res["data"]["editFeeForEveryone"].fee.tracks.length;
             i++
           ) {
-            let track = res["data"].editFeeForEveryone.fee.tracks[i];
+            let track = res["data"]["editFeeForEveryone"].fee.tracks[i];
 
             if (track.is_paid) {
               this.society.expected_income +=
-                res["data"].editFeeForEveryone.fee.amount;
+                res["data"]["editFeeForEveryone"].fee.amount;
               this.society.expected_income -= log.fee.amount;
               this.society.current_income -= log.fee.amount;
             } else {
               this.society.expected_income +=
-                res["data"].editFeeForEveryone.fee.amount;
+                res["data"]["editFeeForEveryone"].fee.amount;
               this.society.expected_income -= log.fee.amount;
             }
           }
 
           this.societyUpdated.next({ ...this.society, isImageLoading: false });
 
-          return res["data"].editFeeForEveryone;
+          return res["data"]["editFeeForEveryone"];
         }
         return log;
       });

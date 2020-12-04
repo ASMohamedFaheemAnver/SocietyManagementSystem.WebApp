@@ -7,13 +7,7 @@ import { Apollo, gql } from "apollo-angular";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private apollo: Apollo
-  ) {}
-  private graphQLUrl = environment.backEndGraphQlUrl2;
-  private restImageUploadUrl = environment.backEndPicUploadUrl2;
+  constructor(private router: Router, private apollo: Apollo) {}
 
   private authStatusListenner = new Subject<boolean>();
   private userId: string;
