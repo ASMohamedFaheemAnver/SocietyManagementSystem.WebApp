@@ -125,22 +125,25 @@
 .fa-edit:hover {
   cursor: pointer;
   /* box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); */
-  font-size: 18px;
-  font-weight: 900;
+  /* font-size: 18px;
+  font-weight: 900; */
+  transform: scale(2);
 }
 
 .fa-bars:hover {
   cursor: pointer;
   /* box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); */
-  font-weight: 900;
-  font-size: 18px;
+  /* font-weight: 900;
+  font-size: 18px; */
+  transform: scale(2);
 }
 
 .fa-trash-alt:hover {
   cursor: pointer;
   /* box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); */
-  font-weight: 900;
-  font-size: 18px;
+  /* font-weight: 900;
+  font-size: 18px; */
+  transform: scale(2);
 }
 
 /* .card:hover {

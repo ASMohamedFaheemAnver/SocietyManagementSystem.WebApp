@@ -18,7 +18,6 @@ export class SocietyService {
   private backeEndBaseUrl = environment.backeEndBaseUrl2;
   private society: Society;
   private newLog: Log;
-  private logUpdated = new Subject<Log>();
   private societyUpdated = new Subject<Society>();
 
   constructor(private apollo: Apollo) {}
@@ -52,7 +51,7 @@ export class SocietyService {
           imageUrl: this.backeEndBaseUrl + res["data"]["getSociety"].imageUrl,
         };
         this.societyStatusListenner.next(false);
-        this.societyUpdated.next({ ...this.society, isImageLoading: false });
+        this.societyUpdated.next({ ...this.society, isImageLoading: true });
       },
       (err) => {
         console.log(err);
@@ -102,10 +101,6 @@ export class SocietyService {
 
   getSocietyUpdatedListenner() {
     return this.societyUpdated;
-  }
-
-  getlogUpdatedLintenner() {
-    return this.logUpdated;
   }
 
   getSocietyStatusListenner() {
@@ -201,9 +196,12 @@ export class SocietyService {
 
     this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
-        console.log(res);
         this.newLog = res["data"]["addMonthlyFeeToEveryone"];
-        this.logUpdated.next({ ...this.newLog });
+        this.logs.unshift(this.newLog);
+        this.logsUpdated.next({
+          logs: this.logs,
+          logs_count: this.logs.length,
+        });
         this.society.expected_income +=
           monthlyFee * this.society.number_of_members;
         this.societyUpdated.next({ ...this.society, isImageLoading: false });
@@ -243,10 +241,12 @@ export class SocietyService {
 
     this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
-        console.log(res);
         this.newLog = res["data"]["addExtraFeeToEveryone"];
         this.logs.unshift(this.newLog);
-        this.logUpdated.next({ ...this.newLog });
+        this.logsUpdated.next({
+          logs: this.logs,
+          logs_count: this.logs.length,
+        });
         this.society.expected_income +=
           extraFee * this.society.number_of_members;
         this.societyUpdated.next({ ...this.society, isImageLoading: false });
@@ -322,8 +322,6 @@ export class SocietyService {
     this.offlineLog = this.logs.find((log) => {
       return log._id === log_id;
     });
-
-    console.log(this.offlineLog);
 
     return this.offlineLog;
   }
@@ -485,12 +483,53 @@ export class SocietyService {
         return log;
       });
 
-      console.log({ editFeeForEveryoneUpdatedLog: this.logs });
       this.logsUpdated.next({
         logs: [...this.logs],
         logs_count: this.logs.length,
       });
       this.societyStatusListenner.next(false);
     });
+  }
+
+  deleteFeeLog(log: Log) {
+    console.log({ emitted: "deleteFeeLog" });
+
+    const graphqlQuery = gql`
+      mutation {
+        deleteFeeLog(log_id: "${log._id}"){
+          message
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        this.societyStatusListenner.next(false);
+        this.logs = this.logs.filter((tLog) => {
+          if (tLog._id !== log._id) {
+            return true;
+          }
+          return false;
+        });
+
+        log.fee.tracks.forEach((track) => {
+          if (track.is_paid) {
+            this.society.current_income -= log.fee.amount;
+          }
+          this.society.expected_income -= log.fee.amount;
+        });
+
+        this.societyUpdated.next({ ...this.society, isImageLoading: false });
+
+        this.logsUpdated.next({
+          logs: this.logs,
+          logs_count: this.logs.length,
+        });
+      },
+      (err) => {
+        this.societyStatusListenner.next(false);
+        console.log(err);
+      }
+    );
   }
 }

@@ -11,6 +11,7 @@ import { PageEvent } from "@angular/material/paginator";
 import { Log } from "src/app/log.model";
 import { Society } from "src/app/society.model";
 import { EditMonthlyFeeLogDialogComponent } from "../edit-monthly-fee-log-dialog/edit-monthly-fee-log-dialog.component";
+import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "app-society-home",
@@ -19,25 +20,21 @@ import { EditMonthlyFeeLogDialogComponent } from "../edit-monthly-fee-log-dialog
 })
 export class SocietyHomeComponent implements OnInit, OnDestroy {
   private societyStatusSub: Subscription;
-  private societyLogSub: Subscription;
+  private societyLogsSub: Subscription;
   private societySub: Subscription;
 
-  private logSub: Subscription;
-
   constructor(
-    private route: ActivatedRoute,
     private societyService: SocietyService,
-    private authService: AuthService,
     private addMonthlyFeeDialog: MatDialog,
     private addExtraFeeDialog: MatDialog,
-    private editSocietyLogFeeDialog: MatDialog
+    private editSocietyLogFeeDialog: MatDialog,
+    private confirmDialog: MatDialog
   ) {}
 
   ngOnDestroy(): void {
     this.societyStatusSub.unsubscribe();
-    this.societyLogSub.unsubscribe();
+    this.societyLogsSub.unsubscribe();
     this.societySub.unsubscribe();
-    this.logSub.unsubscribe();
   }
 
   society: Society;
@@ -82,7 +79,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         this.isLoading = emitedBoolean;
       });
 
-    this.societyLogSub = this.societyService
+    this.societyLogsSub = this.societyService
       .getSocietyLogListenner()
       .subscribe((logsInfo) => {
         this.logs = logsInfo.logs;
@@ -91,13 +88,6 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
           emitted: "societyHomeComponent.ngOnInit",
           logsInfo: logsInfo,
         });
-      });
-
-    this.logSub = this.societyService
-      .getlogUpdatedLintenner()
-      .subscribe((newLog: Log) => {
-        this.logs.unshift(newLog);
-        this.logs_count++;
       });
   }
 
@@ -207,7 +197,6 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
           data.monthFee,
           data.description
         );
-        console.log({ editMonthlyFee: { ...data, id: log._id } });
       });
     } else {
       const editExtraFeeDialogRef = this.addExtraFeeDialog.open(
@@ -236,8 +225,23 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
           data.extraFee,
           data.description
         );
-        console.log({ editExtraFee: { ...data, id: log._id } });
       });
     }
+  }
+
+  onFeeLogDelete(log: Log) {
+    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+      data: {
+        msg:
+          "Deleting past activity will undo payments related to the activity, do you want to continue?",
+      },
+      disableClose: true,
+    });
+
+    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+      if (isConfirmed) {
+        this.societyService.deleteFeeLog(log);
+      }
+    });
   }
 }
