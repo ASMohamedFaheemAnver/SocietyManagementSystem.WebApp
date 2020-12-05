@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   backeEndBaseUrl2: "",
   backEndGraphQlUrl2: "http://localhost:3000",
+  backEndWSUrl: "ws://localhost:3000/",
   backEndPicUploadUrl2: "http://localhost:3000/upload-profile",
   backEndGraphQlUrl: "https://freedom-sms.herokuapp.com",
   backEndPicUploadUrl: "https://freedom-sms.herokuapp.com/upload-profile",

@@ -1,6 +1,4 @@
-import { Component, OnInit } from "@angular/core";
-import { AuthService } from "src/app/auth/auth.service";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MemberService } from "../member.service";
 import { environment } from "src/environments/environment";
 import { Log } from "src/app/log.model";
@@ -12,11 +10,13 @@ import { Subscription } from "rxjs";
   templateUrl: "./member-home.component.html",
   styleUrls: ["./member-home.component.css"],
 })
-export class MemberHomeComponent implements OnInit {
-  constructor(
-    private memberService: MemberService,
-    private authService: AuthService
-  ) {}
+export class MemberHomeComponent implements OnInit, OnDestroy {
+  constructor(private memberService: MemberService) {}
+
+  ngOnDestroy(): void {
+    this.memberLogsSub.unsubscribe();
+    this.memberStatusListenner.unsubscribe;
+  }
 
   email: string;
   name: string;
@@ -36,6 +36,7 @@ export class MemberHomeComponent implements OnInit {
 
   private memberLogsSub: Subscription;
   private memberStatusListenner: Subscription;
+  private memberLogSub: Subscription;
 
   ngOnInit(): void {
     this.isImageLoading = true;
@@ -66,6 +67,8 @@ export class MemberHomeComponent implements OnInit {
       .subscribe((isPassed) => {
         this.isLoading = false;
       });
+
+    this.memberService.listenMemberLog();
   }
 
   changeDefaultUrl() {

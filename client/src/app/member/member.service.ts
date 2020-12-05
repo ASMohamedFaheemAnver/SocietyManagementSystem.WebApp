@@ -4,10 +4,11 @@ import { Subject } from "rxjs";
 import { environment } from "src/environments/environment";
 import { Member } from "../member.model";
 import { Log } from "../log.model";
+import { Apollo, gql } from "apollo-angular";
 
 @Injectable({ providedIn: "root" })
 export class MemberService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private apollo: Apollo) {}
   private graphQLUrl = environment.backEndGraphQlUrl2;
   private membersUpdated = new Subject<Member[]>();
   private members: Member[] = [];
@@ -84,7 +85,6 @@ export class MemberService {
   }
 
   getMemberLogs(page_number, page_size) {
-    console.log(page_number);
     const graphqlQuery = {
       query: `{
         getMemberLogs(page_number: ${page_number}, page_size: ${page_size}){
@@ -119,5 +119,24 @@ export class MemberService {
         this.memberStatusListenner.next(false);
       }
     );
+  }
+
+  listenMemberLog() {
+    const graphqlQuery = gql`
+      subscription listenMemberLog {
+        listenMemberLog {
+          _id
+          kind
+          fee {
+            _id
+            amount
+          }
+        }
+      }
+    `;
+
+    this.apollo.subscribe({ query: graphqlQuery }).subscribe((res) => {
+      console.log(res);
+    });
   }
 }
