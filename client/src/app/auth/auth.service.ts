@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
-import { environment } from "src/environments/environment";
 import { Apollo, gql } from "apollo-angular";
 
 @Injectable({ providedIn: "root" })

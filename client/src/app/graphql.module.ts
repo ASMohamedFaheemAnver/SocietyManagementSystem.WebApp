@@ -14,6 +14,7 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { MatDialog } from "@angular/material/dialog";
 import { ErrorComponent } from "./error/error.component";
+import { SubscriptionClient } from "subscriptions-transport-ws";
 
 const uri = environment.backEndGraphQlUrl2; // <-- add the URL of the GraphQL server here
 const wsUri = environment.backEndWSUrl;
@@ -54,20 +55,23 @@ export function createApollo(
     }
   });
 
-  const ws = new WebSocketLink({
-    uri: wsUri,
-    options: {
-      reconnect: true,
-      connectionParams: () => {
-        const token = localStorage.getItem("token");
-        if (token) {
-          return {
-            Authorization: `Bearer ${token}`,
-          };
-        }
+  const client = new SubscriptionClient(wsUri, {
+    reconnect: true,
+  });
+
+  client.use([
+    {
+      applyMiddleware(operationOptions, next) {
+        operationOptions.variables["Authorization"] = localStorage.getItem(
+          "token"
+        );
+        // console.log({ emitted: "applyMiddleware", data: operationOptions });
+        next();
       },
     },
-  });
+  ]);
+
+  const ws = new WebSocketLink(client);
 
   const http = split(
     ({ query }) => {

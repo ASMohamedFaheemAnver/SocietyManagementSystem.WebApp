@@ -3,3 +3,10 @@
 
 # Angular2 HTTP - How to understand that the backend server is down
 #https://stackoverflow.com/questions/35601795/angular2-http-how-to-understand-that-the-backend-server-is-down
+
+
+#Stale token in Apollo Client subscriptions
+#https://stackoverflow.com/questions/60222270/stale-token-in-apollo-client-subscriptions
+#https://github.com/nemanjam/audio-twitter/blob/master/client/src/index.js
+#https://github.com/nemanjam/audio-twitter/blob/master/server/src/index.js
+#https://github.com/apollographql/subscriptions-transport-ws/issues/171
