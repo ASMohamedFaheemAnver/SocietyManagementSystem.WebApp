@@ -5,6 +5,10 @@ img {
   border-radius: 50%;
 }
 
+.mat-dialog-title p {
+  text-align: center;
+}
+
 p {
   margin-right: 20px;
 }
@@ -33,6 +37,19 @@ p {
   align-items: center;
   padding: 5px;
   height: 80px;
+  padding: 20px;
+}
+
+.card p {
+  margin-bottom: 0;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card i:hover {
+  transform: scale(1.2);
 }
 
 .card-heading {
@@ -43,4 +60,21 @@ p {
 
 .card-heading p {
   font-weight: 800;
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+@media (max-width: 500px) {
+  .card-heading p:nth-child(1) {
+    display: none;
+  }
+
+  .card img {
+    display: none;
+  }
 }

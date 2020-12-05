@@ -155,7 +155,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     this.societyService.getSocietyLogs(event.pageIndex, this.page_size);
   }
 
-  onMonthFeeLogEdit(log_id: string) {
+  onMonthOrExtraFeeLogEdit(log_id: string) {
     const editSocietyFeeLogDialogRef = this.editSocietyLogFeeDialog.open(
       EditMonthlyFeeLogDialogComponent,
       {
