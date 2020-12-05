@@ -9,9 +9,14 @@ import { HttpLink } from "apollo-angular/http";
 import { environment } from "src/environments/environment";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
+import { MatDialog } from "@angular/material/dialog";
+import { ErrorComponent } from "./error/error.component";
 
 const uri = environment.backEndGraphQlUrl2; // <-- add the URL of the GraphQL server here
-export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
+export function createApollo(
+  httpLink: HttpLink,
+  errorDialog: MatDialog
+): ApolloClientOptions<any> {
   const basic = setContext((operation, context) => ({
     headers: {
       Accept: "charset=utf-8",
@@ -27,6 +32,11 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
           )}, Path: ${path}`
         )
       );
+
+      errorDialog.open(ErrorComponent, {
+        data: graphQLErrors,
+        disableClose: true,
+      });
     }
     if (networkError) console.log(`[Network error]: ${networkError}`);
   });
@@ -63,7 +73,7 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
-      deps: [HttpLink],
+      deps: [HttpLink, MatDialog],
     },
   ],
 })

@@ -43,21 +43,23 @@ export class SocietyService {
       }
     `;
 
-    this.apollo.query({ query: graphqlQuery }).subscribe(
-      (res) => {
-        this.society = {
-          ...res["data"]["getSociety"],
-          isImageLoading: true,
-          imageUrl: this.backeEndBaseUrl + res["data"]["getSociety"].imageUrl,
-        };
-        this.societyStatusListenner.next(false);
-        this.societyUpdated.next({ ...this.society, isImageLoading: true });
-      },
-      (err) => {
-        console.log(err);
-        this.societyStatusListenner.next(false);
-      }
-    );
+    this.apollo
+      .query({ query: graphqlQuery, fetchPolicy: "network-only" })
+      .subscribe(
+        (res) => {
+          this.society = {
+            ...res["data"]["getSociety"],
+            isImageLoading: true,
+            imageUrl: this.backeEndBaseUrl + res["data"]["getSociety"].imageUrl,
+          };
+          this.societyStatusListenner.next(false);
+          this.societyUpdated.next({ ...this.society, isImageLoading: true });
+        },
+        (err) => {
+          console.log(err);
+          this.societyStatusListenner.next(false);
+        }
+      );
   }
 
   getAllMembers() {
@@ -75,24 +77,26 @@ export class SocietyService {
       }
     `;
 
-    this.apollo.query({ query: graphqlQuery }).subscribe(
-      (res) => {
-        console.log({ emitted: "getAllMembers", data: res });
-        this.members = res["data"]["getAllMembers"].map((member) => {
-          return {
-            ...member,
-            imageUrl: this.backeEndBaseUrl + member.imageUrl,
-            isImageLoading: true,
-          };
-        });
-        this.membersUpdated.next([...this.members]);
-        this.societyStatusListenner.next(false);
-      },
-      (err) => {
-        console.log(err);
-        this.societyStatusListenner.next(false);
-      }
-    );
+    this.apollo
+      .query({ query: graphqlQuery, fetchPolicy: "network-only" })
+      .subscribe(
+        (res) => {
+          console.log({ emitted: "getAllMembers", data: res });
+          this.members = res["data"]["getAllMembers"].map((member) => {
+            return {
+              ...member,
+              imageUrl: this.backeEndBaseUrl + member.imageUrl,
+              isImageLoading: true,
+            };
+          });
+          this.membersUpdated.next([...this.members]);
+          this.societyStatusListenner.next(false);
+        },
+        (err) => {
+          console.log(err);
+          this.societyStatusListenner.next(false);
+        }
+      );
   }
 
   getMembersUpdateListenner() {
@@ -287,31 +291,36 @@ export class SocietyService {
       }
     `;
 
-    this.apollo.query({ query: graphqlQuery }).subscribe(
-      (res) => {
-        this.logs = res["data"]["getSocietyLogs"].logs.map((log) => {
-          return {
-            ...log,
-            fee: {
-              ...log.fee,
-              tracks: [
-                ...log.fee.tracks.map((track) => {
-                  return { ...track, member: { ...track.member } };
-                }),
-              ],
-            },
-          };
-        });
+    this.apollo
+      .query({ query: graphqlQuery, fetchPolicy: "network-only" })
+      .subscribe(
+        (res) => {
+          this.logs = res["data"]["getSocietyLogs"].logs.map((log) => {
+            return {
+              ...log,
+              fee: {
+                ...log.fee,
+                tracks: [
+                  ...log.fee.tracks.map((track) => {
+                    return { ...track, member: { ...track.member } };
+                  }),
+                ],
+              },
+            };
+          });
 
-        const logs_count = res["data"]["getSocietyLogs"].logs_count;
-        this.logsUpdated.next({ logs: [...this.logs], logs_count: logs_count });
-        this.societyStatusListenner.next(false);
-      },
-      (err) => {
-        console.log(err);
-        this.societyStatusListenner.next(false);
-      }
-    );
+          const logs_count = res["data"]["getSocietyLogs"].logs_count;
+          this.logsUpdated.next({
+            logs: [...this.logs],
+            logs_count: logs_count,
+          });
+          this.societyStatusListenner.next(false);
+        },
+        (err) => {
+          console.log(err);
+          this.societyStatusListenner.next(false);
+        }
+      );
   }
 
   getOneSocietyOfflineLog(log_id: string) {
@@ -454,41 +463,50 @@ export class SocietyService {
       }
     `;
 
-    this.apollo.mutate({ mutation: graphqlQuery }).subscribe((res) => {
-      this.logs = this.logs.map((log) => {
-        if (log._id === res["data"]["editFeeForEveryone"]._id) {
-          for (
-            let i = 0;
-            i < res["data"]["editFeeForEveryone"].fee.tracks.length;
-            i++
-          ) {
-            let track = res["data"]["editFeeForEveryone"].fee.tracks[i];
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        this.logs = this.logs.map((log) => {
+          if (log._id === res["data"]["editFeeForEveryone"]._id) {
+            for (
+              let i = 0;
+              i < res["data"]["editFeeForEveryone"].fee.tracks.length;
+              i++
+            ) {
+              let track = res["data"]["editFeeForEveryone"].fee.tracks[i];
 
-            if (track.is_paid) {
-              this.society.expected_income +=
-                res["data"]["editFeeForEveryone"].fee.amount;
-              this.society.expected_income -= log.fee.amount;
-              this.society.current_income -= log.fee.amount;
-            } else {
-              this.society.expected_income +=
-                res["data"]["editFeeForEveryone"].fee.amount;
-              this.society.expected_income -= log.fee.amount;
+              if (track.is_paid) {
+                this.society.expected_income +=
+                  res["data"]["editFeeForEveryone"].fee.amount;
+                this.society.expected_income -= log.fee.amount;
+                this.society.current_income -= log.fee.amount;
+              } else {
+                this.society.expected_income +=
+                  res["data"]["editFeeForEveryone"].fee.amount;
+                this.society.expected_income -= log.fee.amount;
+              }
             }
+
+            this.societyUpdated.next({
+              ...this.society,
+              isImageLoading: false,
+            });
+
+            return res["data"]["editFeeForEveryone"];
           }
+          return log;
+        });
 
-          this.societyUpdated.next({ ...this.society, isImageLoading: false });
-
-          return res["data"]["editFeeForEveryone"];
-        }
-        return log;
-      });
-
-      this.logsUpdated.next({
-        logs: [...this.logs],
-        logs_count: this.logs.length,
-      });
-      this.societyStatusListenner.next(false);
-    });
+        this.logsUpdated.next({
+          logs: [...this.logs],
+          logs_count: this.logs.length,
+        });
+        this.societyStatusListenner.next(false);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
   }
 
   deleteFeeLog(log: Log) {
