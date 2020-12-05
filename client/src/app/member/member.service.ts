@@ -22,21 +22,19 @@ export class MemberService {
   private backeEndBaseUrl = environment.backeEndBaseUrl2;
 
   getMember() {
-    const graphqlQuery = {
-      query: `
-        {
-          getMember{
-  	        email
-            name
-            imageUrl
-            address
-            arrears
-          }
+    const graphqlQuery = gql`
+      query {
+        getMember {
+          email
+          name
+          imageUrl
+          address
+          arrears
         }
-      `,
-    };
+      }
+    `;
 
-    return this.http.post(this.graphQLUrl, graphqlQuery);
+    return this.apollo.query({ query: graphqlQuery });
   }
 
   getMemberUpdateListener() {
@@ -52,10 +50,10 @@ export class MemberService {
   }
 
   getAllSocietyMembers() {
-    const graphqlQuery = {
-      query: `{
-        getAllSocietyMembers{
-   	      _id
+    const graphqlQuery = gql`
+      query {
+        getAllSocietyMembers {
+          _id
           name
           email
           imageUrl
@@ -63,15 +61,16 @@ export class MemberService {
           arrears
           approved
         }
-      }`,
-    };
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
+      }
+    `;
+
+    this.apollo.query({ query: graphqlQuery }).subscribe(
       (res) => {
-        this.members = res["data"].getAllSocietyMembers.map((member) => {
+        this.members = res["data"]["getAllSocietyMembers"].map((member) => {
           return {
             ...member,
             isImageLoading: true,
-            imageUrl: this.backeEndBaseUrl + member["imageUrl"],
+            imageUrl: member["imageUrl"],
           };
         });
         this.membersUpdated.next([...this.members]);
@@ -85,8 +84,8 @@ export class MemberService {
   }
 
   getMemberLogs(page_number, page_size) {
-    const graphqlQuery = {
-      query: `{
+    const graphqlQuery = gql`
+      query{
         getMemberLogs(page_number: ${page_number}, page_size: ${page_size}){
           logs{
               _id
@@ -100,14 +99,14 @@ export class MemberService {
             }
           logs_count
           }
-      }`,
-    };
+      }
+    `;
 
-    this.http.post(this.graphQLUrl, graphqlQuery).subscribe(
-      (res: Log[]) => {
+    this.apollo.query({ query: graphqlQuery }).subscribe(
+      (res) => {
         console.log(res);
-        this.logs = res["data"].getMemberLogs.logs;
-        const logs_count = res["data"].getMemberLogs.logs_count;
+        this.logs = res["data"]["getMemberLogs"].logs;
+        const logs_count = res["data"]["getMemberLogs"].logs_count;
         this.logsUpdatedListener.next({
           logs: [...this.logs],
           logs_count: logs_count,
@@ -135,8 +134,19 @@ export class MemberService {
       }
     `;
 
-    this.apollo.subscribe({ query: graphqlQuery }).subscribe((res) => {
-      console.log(res);
-    });
+    const token = localStorage.getItem("token");
+
+    this.apollo
+      .subscribe({
+        query: graphqlQuery,
+        context: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      })
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 }

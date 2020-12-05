@@ -12,10 +12,15 @@ import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { MatDialog } from "@angular/material/dialog";
+import { ErrorComponent } from "./error/error.component";
 
 const uri = environment.backEndGraphQlUrl2; // <-- add the URL of the GraphQL server here
 const wsUri = environment.backEndWSUrl;
-export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
+export function createApollo(
+  httpLink: HttpLink,
+  errorDialog: MatDialog
+): ApolloClientOptions<any> {
   const basic = setContext((operation, context) => ({
     headers: {
       Accept: "charset=utf-8",
@@ -31,13 +36,13 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
           )}, Path: ${path}`
         )
       );
+      errorDialog.open(ErrorComponent, { data: graphQLErrors });
     }
     if (networkError) console.log(`[Network error]: ${networkError}`);
   });
 
-  const token = localStorage.getItem("token");
-
   const auth = setContext((operation, context) => {
+    const token = localStorage.getItem("token");
     if (token === null) {
       return {};
     } else {
@@ -54,6 +59,7 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
     options: {
       reconnect: true,
       connectionParams: () => {
+        const token = localStorage.getItem("token");
         if (token) {
           return {
             Authorization: `Bearer ${token}`,
@@ -93,7 +99,7 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
-      deps: [HttpLink],
+      deps: [HttpLink, MatDialog],
     },
   ],
 })

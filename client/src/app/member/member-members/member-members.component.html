@@ -1,9 +1,9 @@
 <div class="parent">
-  <div class="warn pdt-1" *ngIf="members.length < 1">
+  <div class="warn pdt-1" *ngIf="!members">
     <p>No members to show now!</p>
   </div>
 
-  <div class="card big-heading" *ngIf="members.length > 0">
+  <div class="card big-heading" *ngIf="members">
     <div>
       <strong>PROFILE</strong>
     </div>

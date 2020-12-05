@@ -15,7 +15,7 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.memberLogsSub.unsubscribe();
-    this.memberStatusListenner.unsubscribe;
+    this.memberStatusListennerSub.unsubscribe();
   }
 
   email: string;
@@ -24,7 +24,6 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
   imageUrl = "";
   address: string;
   arrears: number;
-  backeEndBaseUrl = environment.backeEndBaseUrl2;
   isLoading: boolean;
   isImageLoading: boolean;
   currentPage = 0;
@@ -35,21 +34,20 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
   page_size_options = [5, 10, 15, 20];
 
   private memberLogsSub: Subscription;
-  private memberStatusListenner: Subscription;
+  private memberStatusListennerSub: Subscription;
   private memberLogSub: Subscription;
 
   ngOnInit(): void {
     this.isImageLoading = true;
     this.isLoading = true;
-    // this.memberId = this.authService.getUserId();
     this.memberService.getMember().subscribe((member) => {
       console.log(member);
-      this.email = member["data"].getMember.email;
-      this.name = member["data"].getMember.name;
-      this.memberId = member["data"].getMember._id;
-      this.imageUrl = this.backeEndBaseUrl + member["data"].getMember.imageUrl;
-      this.address = member["data"].getMember.address;
-      this.arrears = member["data"].getMember.arrears;
+      this.email = member["data"]["getMember"].email;
+      this.name = member["data"]["getMember"].name;
+      this.memberId = member["data"]["getMember"]._id;
+      this.imageUrl = member["data"]["getMember"].imageUrl;
+      this.address = member["data"]["getMember"].address;
+      this.arrears = member["data"]["getMember"].arrears;
       this.isLoading = false;
     });
 
@@ -62,7 +60,7 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
         this.logs_count = logs_count;
       });
 
-    this.memberStatusListenner = this.memberService
+    this.memberStatusListennerSub = this.memberService
       .getMemberStatusListenner()
       .subscribe((isPassed) => {
         this.isLoading = false;
