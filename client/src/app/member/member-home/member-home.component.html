@@ -2,7 +2,7 @@
   <div class="left">
     <div class="profile" *ngIf="!isLoading">
       <div>
-        <h1>PROFILE</h1>
+        <h1>Profile</h1>
         <mat-spinner *ngIf="isImageLoading"></mat-spinner>
         <img
           [style.display]="isImageLoading ? 'none' : 'block'"
@@ -50,6 +50,10 @@
           <div>
             <strong>Description</strong>
           </div>
+        </div>
+
+        <div class="warn pdt-1" *ngIf="logs_count < 1">
+          <p>No recent activities to view!</p>
         </div>
 
         <div class="card" *ngFor="let log of logs">

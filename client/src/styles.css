@@ -30,6 +30,7 @@ mat-label {
 
 .warn {
   color: red;
+  text-align: center;
 }
 
 .green {
@@ -38,4 +39,8 @@ mat-label {
 
 .red {
   color: red;
+}
+
+.pdt-1 {
+  padding-top: 10px;
 }
