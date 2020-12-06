@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
   templateUrl: "add-extra-fee-dialog.component.html",
+  styleUrls: ["add-extra-fee-dialog.component.css"],
 })
 export class AddExtraFeeDialogComponent {
   public extraFee: number = this.data ? this.data["extraFee"] : 20;

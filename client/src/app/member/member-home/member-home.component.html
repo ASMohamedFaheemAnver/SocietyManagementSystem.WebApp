@@ -36,7 +36,7 @@
     <div class="activity">
       <h1>Recent activity</h1>
       <div class="parent2">
-        <div class="card big-heading">
+        <div class="card big-heading" *ngIf="logs_count >= 1">
           <!-- <div>
             <strong>Type</strong>
           </div> -->
@@ -74,6 +74,7 @@
         </div>
       </div>
       <mat-paginator
+        *ngIf="logs_count >= 1"
         [length]="logs_count"
         [pageSize]="page_size"
         [pageSizeOptions]="page_size_options"

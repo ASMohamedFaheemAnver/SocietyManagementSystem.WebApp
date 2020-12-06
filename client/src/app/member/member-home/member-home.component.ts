@@ -41,7 +41,6 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
     this.isImageLoading = true;
     this.isLoading = true;
     this.memberService.getMember().subscribe((member) => {
-      console.log(member);
       this.email = member["data"]["getMember"].email;
       this.name = member["data"]["getMember"].name;
       this.memberId = member["data"]["getMember"]._id;

@@ -1,6 +1,7 @@
 <form>
-  <p>Enter monthly fees.</p>
-  <mat-form-field>
+  <h1>Create or edit monthly fees</h1>
+  <p>Edit monthly fees.</p>
+  <mat-form-field appearance="outline">
     <input
       #ngMonthlyFee="ngModel"
       matInput
@@ -11,10 +12,11 @@
       [(ngModel)]="monthFee"
     />
   </mat-form-field>
-  <p *ngIf="!ngMonthlyFee.valid" class="warn">Invalid amount!</p>
-  <br />
-  <p>Enter descripton.</p>
-  <mat-form-field>
+  <div>
+    <p *ngIf="!ngMonthlyFee.valid" class="warn">Invalid amount!</p>
+  </div>
+  <p>Edit descripton.</p>
+  <mat-form-field appearance="outline">
     <textarea
       #ngDescription="ngModel"
       matInput
@@ -24,14 +26,14 @@
       [(ngModel)]="description"
     ></textarea>
   </mat-form-field>
-  <p
-    *ngIf="ngDescription.value ? ngDescription.value.length > 100 : false"
-    class="warn"
-  >
-    Invalid description!
-  </p>
-  <br />
-  <p>You can edit your default monthly fees and description if you want.</p>
+  <div>
+    <p
+      *ngIf="ngDescription.value ? ngDescription.value.length > 100 : true"
+      class="warn"
+    >
+      Invalid description!
+    </p>
+  </div>
 
   <div mat-dialog-actions>
     <button

@@ -1,15 +1,12 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
-import { environment } from "src/environments/environment";
 import { Member } from "../member.model";
 import { Log } from "../log.model";
 import { Apollo, gql } from "apollo-angular";
 
 @Injectable({ providedIn: "root" })
 export class MemberService {
-  constructor(private http: HttpClient, private apollo: Apollo) {}
-  private graphQLUrl = environment.backEndGraphQlUrl2;
+  constructor(private apollo: Apollo) {}
   private membersUpdated = new Subject<Member[]>();
   private members: Member[] = [];
   private logs: Log[] = [];
@@ -18,8 +15,6 @@ export class MemberService {
     logs: Log[];
     logs_count: number;
   }>();
-
-  private backeEndBaseUrl = environment.backeEndBaseUrl2;
 
   getMember() {
     const graphqlQuery = gql`
@@ -104,7 +99,6 @@ export class MemberService {
 
     this.apollo.query({ query: graphqlQuery }).subscribe(
       (res) => {
-        console.log(res);
         this.logs = res["data"]["getMemberLogs"].logs;
         const logs_count = res["data"]["getMemberLogs"].logs_count;
         this.logsUpdatedListener.next({
@@ -124,12 +118,15 @@ export class MemberService {
     const graphqlQuery = gql`
       subscription listenMemberLog {
         listenMemberLog {
-          _id
-          kind
-          fee {
+          log {
             _id
-            amount
+            kind
+            fee {
+              _id
+              amount
+            }
           }
+          type
         }
       }
     `;
@@ -146,7 +143,10 @@ export class MemberService {
         },
       })
       .subscribe((res) => {
-        console.log(res);
+        console.log({
+          emitted: "memberService.listenMemberLog.subscribe",
+          data: res,
+        });
       });
   }
 }

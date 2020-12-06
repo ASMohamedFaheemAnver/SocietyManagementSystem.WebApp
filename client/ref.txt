@@ -10,3 +10,7 @@
 #https://github.com/nemanjam/audio-twitter/blob/master/client/src/index.js
 #https://github.com/nemanjam/audio-twitter/blob/master/server/src/index.js
 #https://github.com/apollographql/subscriptions-transport-ws/issues/171
+
+
+#Angular 2 - with ngFor, is it possible to update values without rebuilding the dom?
+#https://stackoverflow.com/questions/39979831/angular-2-with-ngfor-is-it-possible-to-update-values-without-rebuilding-the-d

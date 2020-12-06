@@ -81,7 +81,7 @@
     <div class="activity">
       <h1>Recent society activity</h1>
       <div class="parent2">
-        <div class="card big-heading">
+        <div class="card big-heading" *ngIf="logs_count">
           <!-- <div>
             <strong>Type</strong>
           </div> -->
@@ -138,6 +138,7 @@
         </div>
       </div>
       <mat-paginator
+        *ngIf="logs_count"
         [length]="logs_count"
         [pageSize]="page_size"
         [pageSizeOptions]="page_size_options"

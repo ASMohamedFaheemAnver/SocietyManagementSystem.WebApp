@@ -22,7 +22,7 @@ export class TopNavComponent implements OnInit, OnDestroy {
   membersUrl: string;
 
   ngOnInit(): void {
-    console.log("Triggerring top-nav!");
+    console.log({ emitted: "topNavComponent.ngOnInit" });
     this.isAuth = this.authService.isUserAuth();
     this.userCategory = this.authService.getUserCategory();
 

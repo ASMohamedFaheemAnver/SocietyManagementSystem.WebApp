@@ -37,7 +37,10 @@ export function createApollo(
           )}, Path: ${path}`
         )
       );
-      errorDialog.open(ErrorComponent, { data: graphQLErrors });
+      errorDialog.open(ErrorComponent, {
+        data: graphQLErrors,
+        disableClose: true,
+      });
     }
     if (networkError) console.log(`[Network error]: ${networkError}`);
   });

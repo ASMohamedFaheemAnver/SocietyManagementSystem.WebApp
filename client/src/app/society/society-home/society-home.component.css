@@ -79,6 +79,10 @@
   min-height: 50px;
 }
 
+.big-heading > div {
+  min-height: auto;
+}
+
 .card > div p {
   margin: 0;
 }

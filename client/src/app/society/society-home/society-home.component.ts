@@ -1,6 +1,4 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { AuthService } from "src/app/auth/auth.service";
-import { ActivatedRoute, ParamMap } from "@angular/router";
 import { SocietyService } from "../society.service";
 import { environment } from "src/environments/environment";
 import { MatDialog } from "@angular/material/dialog";
@@ -54,8 +52,8 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
 
   logs: Log[];
   logs_count: number;
-  page_size = 5;
-  page_size_options = [5, 10, 15, 20];
+  page_size = 10;
+  page_size_options = [10, 15, 20];
 
   backeEndBaseUrl = environment.backeEndBaseUrl2;
   ngOnInit(): void {

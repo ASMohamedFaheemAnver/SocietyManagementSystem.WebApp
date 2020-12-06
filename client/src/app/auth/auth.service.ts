@@ -65,7 +65,6 @@ export class AuthService {
       })
       .subscribe(
         (res) => {
-          console.log(res);
           this.router.navigateByUrl("/");
           this.authStatusListenner.next(false);
         },
@@ -108,7 +107,6 @@ export class AuthService {
       })
       .subscribe(
         (res) => {
-          console.log(res);
           this.router.navigateByUrl("/");
           this.authStatusListenner.next(false);
         },
@@ -162,7 +160,6 @@ export class AuthService {
 
     this.apollo.query({ query: graphqlQuery }).subscribe(
       (res) => {
-        console.log(res);
         let token;
 
         if (userCategory === "member") {

@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
   templateUrl: "add-monthly-fee-dialog.component.html",
+  styleUrls: ["add-monthly-fee-dialog.component.css"],
 })
 export class AddMonthlyFeeDialogComponent implements OnInit {
   public monthFee: number = 20;
