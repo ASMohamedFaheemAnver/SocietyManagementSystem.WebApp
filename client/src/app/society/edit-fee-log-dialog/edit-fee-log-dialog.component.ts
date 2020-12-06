@@ -4,10 +4,10 @@ import { SocietyService } from "../society.service";
 import { Log } from "src/app/log.model";
 
 @Component({
-  templateUrl: "edit-monthly-fee-log-dialog.component.html",
-  styleUrls: ["edit-monthly-fee-log-dialog.component.css"],
+  templateUrl: "edit-fee-log-dialog.component.html",
+  styleUrls: ["edit-fee-log-dialog.component.css"],
 })
-export class EditMonthlyFeeLogDialogComponent implements OnInit {
+export class EditFeeLogDialogComponent implements OnInit {
   offlineLog: Log;
   constructor(
     private societyService: SocietyService,

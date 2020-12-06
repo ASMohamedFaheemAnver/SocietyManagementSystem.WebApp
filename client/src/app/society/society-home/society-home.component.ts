@@ -8,7 +8,7 @@ import { Subscription } from "rxjs";
 import { PageEvent } from "@angular/material/paginator";
 import { Log } from "src/app/log.model";
 import { Society } from "src/app/society.model";
-import { EditMonthlyFeeLogDialogComponent } from "../edit-monthly-fee-log-dialog/edit-monthly-fee-log-dialog.component";
+import { EditFeeLogDialogComponent } from "../edit-fee-log-dialog/edit-fee-log-dialog.component";
 import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
 
 @Component({
@@ -155,7 +155,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
 
   onMonthOrExtraFeeLogEdit(log_id: string) {
     const editSocietyFeeLogDialogRef = this.editSocietyLogFeeDialog.open(
-      EditMonthlyFeeLogDialogComponent,
+      EditFeeLogDialogComponent,
       {
         data: {
           log_id: log_id,
