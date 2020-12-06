@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div class="right" *ngIf="!isLoading">
+  <div class="right">
     <div class="activity">
       <h1>Recent activity</h1>
       <div class="parent2">
@@ -74,7 +74,7 @@
         </div>
       </div>
       <mat-paginator
-        *ngIf="logs_count >= 1"
+        *ngIf="logs_count"
         [length]="logs_count"
         [pageSize]="page_size"
         [pageSizeOptions]="page_size_options"

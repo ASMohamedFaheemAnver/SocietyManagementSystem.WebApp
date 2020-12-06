@@ -10,6 +10,7 @@ export class MemberService {
   private membersUpdated = new Subject<Member[]>();
   private members: Member[] = [];
   private logs: Log[] = [];
+  private logs_count: number;
   private memberStatusListenner = new Subject<boolean>();
   private logsUpdatedListener = new Subject<{
     logs: Log[];
@@ -97,21 +98,31 @@ export class MemberService {
       }
     `;
 
-    this.apollo.query({ query: graphqlQuery }).subscribe(
-      (res) => {
-        this.logs = res["data"]["getMemberLogs"].logs;
-        const logs_count = res["data"]["getMemberLogs"].logs_count;
-        this.logsUpdatedListener.next({
-          logs: [...this.logs],
-          logs_count: logs_count,
-        });
-        this.memberStatusListenner.next(false);
-      },
-      (err) => {
-        console.log(err);
-        this.memberStatusListenner.next(false);
-      }
-    );
+    this.apollo
+      .query({ query: graphqlQuery, fetchPolicy: "network-only" })
+      .subscribe(
+        (res) => {
+          console.log({
+            emitted: "memberService.getMemberLogs",
+            data: res,
+          });
+
+          this.logs = res["data"]["getMemberLogs"].logs.map((log) => {
+            return { ...log, fee: { ...log.fee } };
+          });
+
+          this.logs_count = res["data"]["getMemberLogs"].logs_count;
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: this.logs_count,
+          });
+          this.memberStatusListenner.next(false);
+        },
+        (err) => {
+          console.log(err);
+          this.memberStatusListenner.next(false);
+        }
+      );
   }
 
   listenMemberLog() {
@@ -123,7 +134,9 @@ export class MemberService {
             kind
             fee {
               _id
+              date
               amount
+              description
             }
           }
           type
@@ -147,6 +160,14 @@ export class MemberService {
           emitted: "memberService.listenMemberLog.subscribe",
           data: res,
         });
+
+        if (res.data["listenMemberLog"].type === "POST") {
+          this.logs.unshift(res.data["listenMemberLog"].log);
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: this.logs_count++,
+          });
+        }
       });
   }
 }

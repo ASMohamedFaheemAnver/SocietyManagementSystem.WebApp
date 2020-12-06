@@ -14,3 +14,6 @@
 
 #Angular 2 - with ngFor, is it possible to update values without rebuilding the dom?
 #https://stackoverflow.com/questions/39979831/angular-2-with-ngfor-is-it-possible-to-update-values-without-rebuilding-the-d
+
+#Angular MatPaginator not working
+#https://stackoverflow.com/questions/48785965/angular-matpaginator-not-working

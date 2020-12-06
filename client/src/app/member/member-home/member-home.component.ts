@@ -30,8 +30,8 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
 
   logs: Log[];
   logs_count: number;
-  page_size = 5;
-  page_size_options = [5, 10, 15, 20];
+  page_size = 10;
+  page_size_options = [10, 15, 20];
 
   private memberLogsSub: Subscription;
   private memberStatusListennerSub: Subscription;
@@ -50,13 +50,13 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
       this.isLoading = false;
     });
 
-    this.memberService.getMemberLogs(0, 5);
+    this.memberService.getMemberLogs(this.currentPage, this.page_size);
 
     this.memberLogsSub = this.memberService
       .getMemberLogsListenner()
-      .subscribe(({ logs, logs_count }) => {
-        this.logs = logs;
-        this.logs_count = logs_count;
+      .subscribe((logsInfo) => {
+        this.logs = logsInfo.logs;
+        this.logs_count = logsInfo.logs_count;
       });
 
     this.memberStatusListennerSub = this.memberService
@@ -77,11 +77,13 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
   }
 
   onPageChange(event: PageEvent) {
+    console.log({ emitted: "onPageChange" });
     this.isLoading = true;
     if (
       this.page_size === event.pageSize &&
       this.currentPage === event.pageIndex
     ) {
+      this.isLoading = false;
       return;
     }
     this.currentPage = event.pageIndex;
