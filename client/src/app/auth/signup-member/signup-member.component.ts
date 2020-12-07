@@ -36,14 +36,10 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
     this.authService.getBasicSocietyDetailes().subscribe(
       (res) => {
         this.societies = res["data"]["getBasicSocietyDetailes"];
-        console.log(this.societies);
         this.isLoading = false;
       },
       (err) => {
         console.log(err);
-        this.dialog.open(ErrorComponent, {
-          data: { message: "SERVER DOWN, TRY AGAIN LATER!" },
-        });
         this.isLoading = false;
       }
     );

@@ -65,7 +65,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
       .getSocietyUpdatedListenner()
       .subscribe((society) => {
         console.log({
-          emitted: "societyHomeComponent.ngOnInit",
+          emitted: "societyHomeComponent.ngOnInit.getSocietyUpdatedListenner",
           society: society,
         });
         this.society = society;
@@ -83,7 +83,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         this.logs = logsInfo.logs;
         this.logs_count = logsInfo.logs_count;
         console.log({
-          emitted: "societyHomeComponent.ngOnInit",
+          emitted: "societyHomeComponent.ngOnInit.getSocietyLogListenner",
           logsInfo: logsInfo,
         });
       });

@@ -30,7 +30,10 @@ export class MemberService {
       }
     `;
 
-    return this.apollo.query({ query: graphqlQuery });
+    return this.apollo.query({
+      query: graphqlQuery,
+      fetchPolicy: "network-only",
+    });
   }
 
   getMemberUpdateListener() {
@@ -161,11 +164,38 @@ export class MemberService {
           data: res,
         });
 
-        if (res.data["listenMemberLog"].type === "POST") {
-          this.logs.unshift(res.data["listenMemberLog"].log);
+        const rLog = res.data["listenMemberLog"];
+
+        if (rLog.type === "POST") {
+          this.logs.unshift(rLog.log);
           this.logsUpdatedListener.next({
             logs: [...this.logs],
-            logs_count: this.logs_count++,
+            logs_count: ++this.logs_count,
+          });
+        } else if (rLog.type === "DELETE") {
+          this.logs = this.logs.filter((log) => {
+            return log._id !== rLog.log._id;
+          });
+
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: --this.logs_count,
+          });
+        } else if (rLog.type === "PUT") {
+          this.logs = this.logs.map((log) => {
+            if (log._id === rLog.log._id) {
+              console.log("i am in");
+              return {
+                ...rLog.log,
+                fee: { ...rLog.log.fee },
+              };
+            }
+            return log;
+          });
+
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: this.logs_count,
           });
         }
       });

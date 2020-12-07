@@ -13,7 +13,9 @@
     />
   </mat-form-field>
   <div>
-    <p *ngIf="!ngExtraFee.valid" class="warn">Invalid amount!</p>
+    <p *ngIf="!ngExtraFee.valid || ngExtraFee.value < 20" class="warn">
+      Invalid amount!
+    </p>
   </div>
   <p>Edit descripton.</p>
   <mat-form-field appearance="outline">
@@ -28,7 +30,11 @@
   </mat-form-field>
   <div>
     <p
-      *ngIf="ngDescription.value ? ngDescription.value.length > 100 : true"
+      *ngIf="
+        ngDescription.value
+          ? ngDescription.value.length > 100 || ngDescription.value.length < 10
+          : true
+      "
       class="warn"
     >
       Invalid description!
@@ -41,7 +47,8 @@
         !ngExtraFee.valid ||
         !ngDescription.valid ||
         ngExtraFee.value < 20 ||
-        ngDescription.value.length > 100
+        ngDescription.value.length > 100 ||
+        ngDescription.value.length < 10
       "
       mat-raised-button
       color="primary"

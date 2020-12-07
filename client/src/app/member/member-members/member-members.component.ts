@@ -34,7 +34,6 @@ export class MemberMembersComponent implements OnInit, OnDestroy {
       .getMemberUpdateListener()
       .subscribe((members) => {
         this.members = members;
-        console.log(this.members);
       });
   }
 

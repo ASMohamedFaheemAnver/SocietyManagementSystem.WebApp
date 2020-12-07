@@ -55,6 +55,10 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
     this.memberLogsSub = this.memberService
       .getMemberLogsListenner()
       .subscribe((logsInfo) => {
+        console.log({
+          emitted: "memberHomeComponent.ngOnInit.getMemberLogsListenner",
+          logsInfo: logsInfo,
+        });
         this.logs = logsInfo.logs;
         this.logs_count = logsInfo.logs_count;
       });

@@ -14,6 +14,7 @@ export class SocietyService {
   private logsUpdated = new Subject<{ logs: Log[]; logs_count: number }>();
   private members: Member[] = [];
   private logs: Log[] = [];
+  private logs_count: number;
   private offlineLog: Log;
   private backeEndBaseUrl = environment.backeEndBaseUrl2;
   private society: Society;
@@ -204,7 +205,7 @@ export class SocietyService {
         this.logs.unshift(this.newLog);
         this.logsUpdated.next({
           logs: this.logs,
-          logs_count: this.logs.length,
+          logs_count: ++this.logs_count,
         });
         this.society.expected_income +=
           monthlyFee * this.society.number_of_members;
@@ -249,7 +250,7 @@ export class SocietyService {
         this.logs.unshift(this.newLog);
         this.logsUpdated.next({
           logs: this.logs,
-          logs_count: this.logs.length,
+          logs_count: ++this.logs_count,
         });
         this.society.expected_income +=
           extraFee * this.society.number_of_members;
@@ -309,10 +310,10 @@ export class SocietyService {
             };
           });
 
-          const logs_count = res["data"]["getSocietyLogs"].logs_count;
+          this.logs_count = res["data"]["getSocietyLogs"].logs_count;
           this.logsUpdated.next({
             logs: [...this.logs],
-            logs_count: logs_count,
+            logs_count: this.logs_count,
           });
           this.societyStatusListenner.next(false);
         },
@@ -374,7 +375,7 @@ export class SocietyService {
 
         this.logsUpdated.next({
           logs: [...this.logs],
-          logs_count: this.logs.length,
+          logs_count: this.logs_count,
         });
       },
       (err) => {
@@ -424,7 +425,7 @@ export class SocietyService {
 
         this.logsUpdated.next({
           logs: [...this.logs],
-          logs_count: this.logs.length,
+          logs_count: this.logs_count,
         });
       },
       (err) => {
@@ -498,7 +499,7 @@ export class SocietyService {
 
         this.logsUpdated.next({
           logs: [...this.logs],
-          logs_count: this.logs.length,
+          logs_count: this.logs_count,
         });
         this.societyStatusListenner.next(false);
       },
@@ -541,7 +542,7 @@ export class SocietyService {
 
         this.logsUpdated.next({
           logs: this.logs,
-          logs_count: this.logs.length,
+          logs_count: --this.logs_count,
         });
       },
       (err) => {
