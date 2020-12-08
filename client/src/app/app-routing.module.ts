@@ -53,6 +53,10 @@ const routes: Routes = [
     component: MemberMembersComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: "**",
+    component: LoginComponent,
+  },
 ];
 
 @NgModule({

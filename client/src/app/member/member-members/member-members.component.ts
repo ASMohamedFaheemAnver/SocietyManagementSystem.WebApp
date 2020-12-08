@@ -31,7 +31,7 @@ export class MemberMembersComponent implements OnInit, OnDestroy {
         this.isLoading = emmitedBoolean;
       });
     this.membersSub = this.memberService
-      .getMemberUpdateListener()
+      .getMembersUpdateListener()
       .subscribe((members) => {
         this.members = members;
       });

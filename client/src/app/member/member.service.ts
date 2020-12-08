@@ -8,7 +8,9 @@ import { Apollo, gql } from "apollo-angular";
 export class MemberService {
   constructor(private apollo: Apollo) {}
   private membersUpdated = new Subject<Member[]>();
+  private memberUpdated = new Subject<Member>();
   private members: Member[] = [];
+  private member: Member;
   private logs: Log[] = [];
   private logs_count: number;
   private memberStatusListenner = new Subject<boolean>();
@@ -30,14 +32,31 @@ export class MemberService {
       }
     `;
 
-    return this.apollo.query({
-      query: graphqlQuery,
-      fetchPolicy: "network-only",
-    });
+    return this.apollo
+      .query({
+        query: graphqlQuery,
+        fetchPolicy: "network-only",
+      })
+      .subscribe(
+        (res) => {
+          console.log({ emitted: "memberService.getMember", data: res });
+          this.member = { ...res.data["getMember"] };
+          this.memberUpdated.next({ ...this.member });
+          this.memberStatusListenner.next(true);
+        },
+        (err) => {
+          console.log(err);
+          this.memberStatusListenner.next(false);
+        }
+      );
+  }
+
+  getMembersUpdateListener() {
+    return this.membersUpdated.asObservable();
   }
 
   getMemberUpdateListener() {
-    return this.membersUpdated.asObservable();
+    return this.memberUpdated.asObservable();
   }
 
   getMemberLogsListenner() {
@@ -172,9 +191,24 @@ export class MemberService {
             logs: [...this.logs],
             logs_count: ++this.logs_count,
           });
+
+          this.member = {
+            ...this.member,
+            arrears: this.member.arrears + rLog.log.fee.amount,
+          };
+
+          this.memberUpdated.next({ ...this.member });
         } else if (rLog.type === "DELETE") {
           this.logs = this.logs.filter((log) => {
-            return log._id !== rLog.log._id;
+            if (log._id === rLog.log._id) {
+              this.member = {
+                ...this.member,
+                arrears: this.member.arrears - log.fee.amount,
+              };
+              this.memberUpdated.next({ ...this.member });
+              return false;
+            }
+            return true;
           });
 
           this.logsUpdatedListener.next({
@@ -184,7 +218,13 @@ export class MemberService {
         } else if (rLog.type === "PUT") {
           this.logs = this.logs.map((log) => {
             if (log._id === rLog.log._id) {
-              console.log("i am in");
+              this.member = {
+                ...this.member,
+                arrears:
+                  this.member.arrears - log.fee.amount + rLog.log.fee.amount,
+              };
+              this.memberUpdated.next({ ...this.member });
+
               return {
                 ...rLog.log,
                 fee: { ...rLog.log.fee },

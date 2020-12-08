@@ -3,31 +3,31 @@
     <div class="profile" *ngIf="!isLoading">
       <div>
         <h1>Profile</h1>
-        <mat-spinner *ngIf="isImageLoading"></mat-spinner>
+        <mat-spinner *ngIf="member.isImageLoading"></mat-spinner>
         <img
-          [style.display]="isImageLoading ? 'none' : 'block'"
+          [style.display]="member.isImageLoading ? 'none' : 'block'"
           (error)="changeDefaultUrl()"
-          *ngIf="imageUrl"
-          src="{{ imageUrl }}"
+          *ngIf="member.imageUrl"
+          src="{{ member.imageUrl }}"
           (load)="onImageLoaded()"
           alt="Profile picture!"
         />
       </div>
       <div>
         <strong>Name</strong>
-        <h3>{{ name }}</h3>
+        <h3>{{ member.name }}</h3>
       </div>
       <div>
         <strong>Email</strong>
-        <p>{{ email }}</p>
+        <p>{{ member.email }}</p>
       </div>
       <div>
         <strong>Address</strong>
-        <p>{{ address }}</p>
+        <p>{{ member.address }}</p>
       </div>
       <div>
         <strong>Arrears</strong>
-        <p>{{ arrears }}</p>
+        <p>{{ member.arrears }}</p>
       </div>
     </div>
   </div>

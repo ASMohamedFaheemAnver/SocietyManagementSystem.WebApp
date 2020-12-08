@@ -4,6 +4,7 @@ import { environment } from "src/environments/environment";
 import { Log } from "src/app/log.model";
 import { PageEvent } from "@angular/material/paginator";
 import { Subscription } from "rxjs";
+import { Member } from "src/app/member.model";
 
 @Component({
   selector: "app-member-home",
@@ -18,14 +19,7 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
     this.memberStatusListennerSub.unsubscribe();
   }
 
-  email: string;
-  name: string;
-  memberId: string;
-  imageUrl = "";
-  address: string;
-  arrears: number;
   isLoading: boolean;
-  isImageLoading: boolean;
   currentPage = 0;
 
   logs: Log[];
@@ -35,20 +29,12 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
 
   private memberLogsSub: Subscription;
   private memberStatusListennerSub: Subscription;
-  private memberLogSub: Subscription;
+  private memberSub: Subscription;
+  member: Member;
 
   ngOnInit(): void {
-    this.isImageLoading = true;
     this.isLoading = true;
-    this.memberService.getMember().subscribe((member) => {
-      this.email = member["data"]["getMember"].email;
-      this.name = member["data"]["getMember"].name;
-      this.memberId = member["data"]["getMember"]._id;
-      this.imageUrl = member["data"]["getMember"].imageUrl;
-      this.address = member["data"]["getMember"].address;
-      this.arrears = member["data"]["getMember"].arrears;
-      this.isLoading = false;
-    });
+    this.memberService.getMember();
 
     this.memberService.getMemberLogs(this.currentPage, this.page_size);
 
@@ -63,6 +49,15 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
         this.logs_count = logsInfo.logs_count;
       });
 
+    this.memberSub = this.memberService
+      .getMemberUpdateListener()
+      .subscribe((member) => {
+        this.member = {
+          ...member,
+          isImageLoading: this.member ? this.member.isImageLoading : true,
+        };
+      });
+
     this.memberStatusListennerSub = this.memberService
       .getMemberStatusListenner()
       .subscribe((isPassed) => {
@@ -73,11 +68,11 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
   }
 
   changeDefaultUrl() {
-    this.imageUrl = "./assets/img/invalid-img.jpg";
+    this.member.imageUrl = "./assets/img/invalid-img.jpg";
   }
 
   onImageLoaded() {
-    this.isImageLoading = false;
+    this.member.isImageLoading = false;
   }
 
   onPageChange(event: PageEvent) {
