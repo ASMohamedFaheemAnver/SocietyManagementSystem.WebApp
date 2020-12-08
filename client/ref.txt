@@ -17,3 +17,6 @@
 
 #Angular MatPaginator not working
 #https://stackoverflow.com/questions/48785965/angular-matpaginator-not-working
+
+#Socket not waiting
+#https://github.com/apollographql/subscriptions-transport-ws/pull/675

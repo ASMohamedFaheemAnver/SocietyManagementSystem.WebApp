@@ -14,8 +14,6 @@ import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-di
   styleUrls: ["./society-members.component.css"],
 })
 export class SocietyMembersComponent implements OnInit, OnDestroy {
-  backeEndBaseUrl = environment.backeEndBaseUrl2;
-
   members: Member[] = [];
   isLoading: boolean;
   private membersSub: Subscription;

@@ -55,7 +55,6 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   page_size = 10;
   page_size_options = [10, 15, 20];
 
-  backeEndBaseUrl = environment.backeEndBaseUrl2;
   ngOnInit(): void {
     this.isLoading = true;
     this.societyService.getSocietyLogs(this.currentPage, this.page_size);

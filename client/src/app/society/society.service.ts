@@ -16,7 +16,6 @@ export class SocietyService {
   private logs: Log[] = [];
   private logs_count: number;
   private offlineLog: Log;
-  private backeEndBaseUrl = environment.backeEndBaseUrl2;
   private society: Society;
   private newLog: Log;
   private societyUpdated = new Subject<Society>();
@@ -51,7 +50,7 @@ export class SocietyService {
           this.society = {
             ...res["data"]["getSociety"],
             isImageLoading: true,
-            imageUrl: this.backeEndBaseUrl + res["data"]["getSociety"].imageUrl,
+            imageUrl: res["data"]["getSociety"].imageUrl,
           };
           this.societyStatusListenner.next(false);
           this.societyUpdated.next({ ...this.society, isImageLoading: true });
@@ -86,7 +85,7 @@ export class SocietyService {
           this.members = res["data"]["getAllMembers"].map((member) => {
             return {
               ...member,
-              imageUrl: this.backeEndBaseUrl + member.imageUrl,
+              imageUrl: member.imageUrl,
               isImageLoading: true,
             };
           });
