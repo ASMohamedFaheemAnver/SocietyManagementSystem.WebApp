@@ -3,9 +3,11 @@
     <div class="profile" *ngIf="!isLoading">
       <div>
         <h1>Profile</h1>
-        <mat-spinner *ngIf="member.isImageLoading"></mat-spinner>
+        <mat-spinner
+          *ngIf="member ? member.isImageLoading : true"
+        ></mat-spinner>
         <img
-          [style.display]="member.isImageLoading ? 'none' : 'block'"
+          [style.display]="member && member.isImageLoading ? 'none' : 'block'"
           (error)="changeDefaultUrl()"
           *ngIf="member.imageUrl"
           src="{{ member.imageUrl }}"
