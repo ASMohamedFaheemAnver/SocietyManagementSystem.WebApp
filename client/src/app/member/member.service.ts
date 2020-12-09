@@ -23,6 +23,7 @@ export class MemberService {
     const graphqlQuery = gql`
       query {
         getMember {
+          _id
           email
           name
           imageUrl
@@ -166,16 +167,9 @@ export class MemberService {
       }
     `;
 
-    const token = localStorage.getItem("token");
-
     this.apollo
       .subscribe({
         query: graphqlQuery,
-        context: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
       })
       .subscribe((res) => {
         console.log({
@@ -239,5 +233,52 @@ export class MemberService {
           });
         }
       });
+  }
+
+  listenMemberLogTrack() {
+    const graphqlQuery = gql`
+      subscription listenMemberLogTrack {
+        listenMemberLogTrack {
+          log {
+            _id
+            fee {
+              _id
+              amount
+              tracks {
+                is_paid
+                _id
+              }
+            }
+          }
+          type
+        }
+      }
+    `;
+
+    this.apollo
+      .subscribe({
+        query: graphqlQuery,
+      })
+      .subscribe(
+        (res) => {
+          console.log({
+            emitted: "memberService.listenMemberLogTrack.subscribe",
+            data: res,
+          });
+
+          const rLog = res.data["listenMemberLogTrack"]["log"];
+
+          if (rLog.fee.tracks[0].is_paid) {
+            this.member.arrears -= rLog.fee.amount;
+          } else {
+            this.member.arrears += rLog.fee.amount;
+          }
+
+          this.memberUpdated.next({ ...this.member });
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 }
