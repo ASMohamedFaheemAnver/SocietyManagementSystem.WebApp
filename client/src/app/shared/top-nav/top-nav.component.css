@@ -115,7 +115,7 @@ nav > .right > ul > li > button:hover {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 420px) {
   nav div ul {
     width: 100%;
     display: flex;

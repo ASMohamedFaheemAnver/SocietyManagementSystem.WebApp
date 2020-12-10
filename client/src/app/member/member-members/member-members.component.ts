@@ -33,8 +33,14 @@ export class MemberMembersComponent implements OnInit, OnDestroy {
     this.membersSub = this.memberService
       .getMembersUpdateListener()
       .subscribe((members) => {
+        console.log({
+          emitted: "memberService.ngOnInit.getMembersUpdateListener.subscribe",
+          members: members,
+        });
         this.members = members;
       });
+
+    this.memberService.listenSocietyMembers();
   }
 
   changeDefaultUrl(member: Member) {

@@ -19,7 +19,7 @@
 }
 
 .input-wrapper {
-  width: 400px;
+  width: 500px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -51,7 +51,7 @@
   justify-content: center;
 }
 
-@media (max-width: 420px) {
+@media (max-width: 520px) {
   .input-wrapper {
     flex-direction: column;
     width: 100%;

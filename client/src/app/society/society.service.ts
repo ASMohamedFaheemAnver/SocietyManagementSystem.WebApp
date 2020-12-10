@@ -465,16 +465,19 @@ export class SocietyService {
 
     this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
+        console.log({
+          emitted: "societyService.editFeeForEveryone",
+          data: res,
+        });
+
         this.logs = this.logs.map((log) => {
           if (log._id === res["data"]["editFeeForEveryone"]._id) {
-            for (
-              let i = 0;
-              i < res["data"]["editFeeForEveryone"].fee.tracks.length;
-              i++
-            ) {
-              let track = res["data"]["editFeeForEveryone"].fee.tracks[i];
+            for (let i = 0; i < log.fee.tracks.length; i++) {
+              let track = log.fee.tracks[i];
+              let modifiedTrack =
+                res["data"]["editFeeForEveryone"].fee.tracks[i];
 
-              if (track.is_paid) {
+              if (track.is_paid && !modifiedTrack.is_paid) {
                 this.society.expected_income +=
                   res["data"]["editFeeForEveryone"].fee.amount;
                 this.society.expected_income -= log.fee.amount;
@@ -486,14 +489,14 @@ export class SocietyService {
               }
             }
 
-            this.societyUpdated.next({
-              ...this.society,
-              isImageLoading: false,
-            });
-
             return res["data"]["editFeeForEveryone"];
           }
           return log;
+        });
+
+        this.societyUpdated.next({
+          ...this.society,
+          isImageLoading: false,
         });
 
         this.logsUpdated.next({

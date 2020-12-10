@@ -20,6 +20,7 @@ export class MemberService {
   }>();
 
   getMember() {
+    console.log({ emitted: "memberService.getMember" });
     const graphqlQuery = gql`
       query {
         getMember {
@@ -69,6 +70,7 @@ export class MemberService {
   }
 
   getAllSocietyMembers() {
+    console.log({ emitted: "memberService.getAllSocietyMembers" });
     const graphqlQuery = gql`
       query {
         getAllSocietyMembers {
@@ -103,6 +105,7 @@ export class MemberService {
   }
 
   getMemberLogs(page_number, page_size) {
+    console.log({ emitted: "memberService.getMemberLogs" });
     const graphqlQuery = gql`
       query{
         getMemberLogs(page_number: ${page_number}, page_size: ${page_size}){
@@ -114,6 +117,10 @@ export class MemberService {
                 date
                 amount
                 description
+                tracks {
+                  _id
+                  is_paid
+                }
               }
             }
           logs_count
@@ -149,6 +156,7 @@ export class MemberService {
   }
 
   listenMemberLog() {
+    console.log({ emitted: "memberService.listenMemberLog" });
     const graphqlQuery = gql`
       subscription listenMemberLog {
         listenMemberLog {
@@ -163,6 +171,7 @@ export class MemberService {
             }
           }
           type
+          is_fee_mutated
         }
       }
     `;
@@ -212,20 +221,49 @@ export class MemberService {
         } else if (rLog.type === "PUT") {
           this.logs = this.logs.map((log) => {
             if (log._id === rLog.log._id) {
-              this.member = {
-                ...this.member,
-                arrears:
-                  this.member.arrears - log.fee.amount + rLog.log.fee.amount,
-              };
-              this.memberUpdated.next({ ...this.member });
+              if (!log.fee.tracks[0].is_paid) {
+                this.member = {
+                  ...this.member,
+                  arrears:
+                    this.member.arrears - log.fee.amount + rLog.log.fee.amount,
+                };
 
-              return {
-                ...rLog.log,
-                fee: { ...rLog.log.fee },
-              };
+                return {
+                  ...rLog.log,
+                  fee: {
+                    ...rLog.log.fee,
+                    tracks: [{ ...log.fee.tracks[0] }],
+                  },
+                };
+              } else {
+                if (rLog.is_fee_mutated) {
+                  this.member = {
+                    ...this.member,
+                    arrears: this.member.arrears + rLog.log.fee.amount,
+                  };
+
+                  return {
+                    ...rLog.log,
+                    fee: {
+                      ...rLog.log.fee,
+                      tracks: [{ ...log.fee.tracks[0], is_paid: false }],
+                    },
+                  };
+                }
+
+                return {
+                  ...rLog.log,
+                  fee: {
+                    ...rLog.log.fee,
+                    tracks: [{ ...log.fee.tracks[0] }],
+                  },
+                };
+              }
             }
             return log;
           });
+
+          this.memberUpdated.next({ ...this.member });
 
           this.logsUpdatedListener.next({
             logs: [...this.logs],
@@ -236,6 +274,8 @@ export class MemberService {
   }
 
   listenMemberLogTrack() {
+    console.log({ emitted: "memberService.listenMemberLogTrack" });
+
     const graphqlQuery = gql`
       subscription listenMemberLogTrack {
         listenMemberLogTrack {
@@ -268,11 +308,21 @@ export class MemberService {
 
           const rLog = res.data["listenMemberLogTrack"]["log"];
 
-          if (rLog.fee.tracks[0].is_paid) {
-            this.member.arrears -= rLog.fee.amount;
-          } else {
-            this.member.arrears += rLog.fee.amount;
-          }
+          this.logs = this.logs.map((log) => {
+            if (log._id === rLog._id) {
+              if (!log.fee.tracks[0].is_paid && rLog.fee.tracks[0].is_paid) {
+                this.member.arrears -= rLog.fee.amount;
+              } else {
+                this.member.arrears += rLog.fee.amount;
+              }
+
+              return {
+                ...log,
+                fee: { ...log.fee, tracks: [...rLog.fee.tracks] },
+              };
+            }
+            return log;
+          });
 
           this.memberUpdated.next({ ...this.member });
         },
@@ -280,5 +330,46 @@ export class MemberService {
           console.log(err);
         }
       );
+  }
+
+  listenSocietyMembers() {
+    console.log({ emitted: "memberService.listenSocietyMembers" });
+
+    const graphqlQuery = gql`
+      subscription listenSocietyMembers {
+        listenSocietyMembers {
+          member {
+            _id
+            name
+            email
+            imageUrl
+            address
+            arrears
+            approved
+          }
+          type
+        }
+      }
+    `;
+
+    this.apollo
+      .subscribe({
+        query: graphqlQuery,
+      })
+      .subscribe((res) => {
+        console.log({
+          emitted: "memberService.listenSocietyMembers",
+          data: res,
+        });
+
+        this.members = this.members.map((member) => {
+          if (member._id === res.data["listenSocietyMembers"].member._id) {
+            return { ...res.data["listenSocietyMembers"].member };
+          }
+          return member;
+        });
+
+        this.membersUpdated.next([...this.members]);
+      });
   }
 }
