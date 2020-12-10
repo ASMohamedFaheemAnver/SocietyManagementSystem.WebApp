@@ -4,11 +4,11 @@ import { Member } from "src/app/member.model";
 
 @Component({
   templateUrl: "fine-member-dialog.component.html",
+  styleUrls: ["./fine-member-dialog.component.css"],
 })
 export class FineMemberDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Member) {}
+  public fine: number = 20;
+  public description: string = "Fine.";
 
-  onDate(event) {
-    console.log(event.value);
-  }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Member) {}
 }

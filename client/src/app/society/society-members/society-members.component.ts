@@ -83,8 +83,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
     });
   }
 
-  onEditClick(member: Member) {
-    console.log(member);
+  onFineClick(member: Member) {
     const fineDialogRef = this.editMemberDialog.open(
       FineMemberDialogComponent,
       {
@@ -92,6 +91,14 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
         disableClose: true,
       }
     );
+
+    fineDialogRef.afterClosed().subscribe((data) => {
+      this.societyServie.addFineForOneMember(
+        data.fine,
+        data.description,
+        member._id
+      );
+    });
   }
 
   changeDefaultUrl(member: Member) {

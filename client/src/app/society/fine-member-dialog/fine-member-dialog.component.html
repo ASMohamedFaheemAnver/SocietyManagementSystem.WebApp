@@ -1,64 +1,58 @@
-<!-- <mat-tab-group> -->
-<!-- <mat-tab label="Fine"> -->
 <form>
-  <p>Enter the fine amount.</p>
-  <mat-form-field>
+  <h1>Create or edit fine</h1>
+  <p>Edit fine.</p>
+  <mat-form-field appearance="outline">
     <input
       #ngFine="ngModel"
       matInput
       required
-      name="fine"
+      name="extra_fee"
       type="number"
-      ngModel
+      [(ngModel)]="fine"
+      pattern="[0-9]{1,5}"
     />
   </mat-form-field>
-  <p
-    *ngIf="
-      (!ngFine.valid && ngFine.dirty) || (ngFine.dirty && ngFine.value < 20)
-    "
-    class="warn"
-  >
-    Invalid amount!
-  </p>
-  <br />
-  <p>Enter descripton.</p>
-  <mat-form-field>
+  <div>
+    <p *ngIf="!ngFine.valid || ngFine.value < 20" class="warn">
+      Invalid amount!
+    </p>
+  </div>
+  <p>Edit descripton.</p>
+  <mat-form-field appearance="outline">
     <textarea
-      #ngFineDescription="ngModel"
+      #ngDescription="ngModel"
+      name="description"
       matInput
       required
       type="text"
-      name="description"
-      ngModel
+      [(ngModel)]="description"
     ></textarea>
   </mat-form-field>
-  <p
-    *ngIf="
-      (ngFineDescription.value
-        ? ngFineDescription.value.length > 100 ||
-          ngFineDescription.value.length < 10
-        : false) ||
-      (ngFineDescription.invalid && ngFineDescription.dirty)
-    "
-    class="warn"
-  >
-    Invalid description!
-  </p>
-  <br />
-  <!-- </mat-tab> -->
-  <!-- </mat-tab-group> -->
+  <div>
+    <p
+      *ngIf="
+        ngDescription.value
+          ? ngDescription.value.length > 100 || ngDescription.value.length < 5
+          : true
+      "
+      class="warn"
+    >
+      Invalid description!
+    </p>
+  </div>
+
   <div mat-dialog-actions>
     <button
       [disabled]="
-        ngFine.invalid ||
-        ngFineDescription.invalid ||
-        ngFineDescription.value.length > 100 ||
-          ngFineDescription.value.length < 10
+        !ngFine.valid ||
+        !ngDescription.valid ||
+        ngFine.value < 20 ||
+        ngDescription.value.length > 100 ||
+        ngDescription.value.length < 5
       "
-      type="submit"
       mat-raised-button
       color="primary"
-      [mat-dialog-close]="true"
+      [mat-dialog-close]="{ fine: fine, description: description }"
     >
       Done
     </button>

@@ -32,7 +32,7 @@
     <p
       *ngIf="
         ngDescription.value
-          ? ngDescription.value.length > 100 || ngDescription.value.length < 10
+          ? ngDescription.value.length > 100 || ngDescription.value.length < 5
           : true
       "
       class="warn"
@@ -49,7 +49,7 @@
         ngMonthlyFee.value < 20 ||
         !ngDescription.valid ||
         ngDescription.value.length > 100 ||
-        ngDescription.value.length < 10
+        ngDescription.value.length < 5
       "
       mat-raised-button
       color="primary"

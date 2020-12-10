@@ -553,4 +553,18 @@ export class SocietyService {
       }
     );
   }
+
+  addFineForOneMember(fine: number, description: string, member_id: string) {
+    const graphqlQuery = gql`
+      mutation {
+        addFineForOneMember(fineInput: {fine: ${fine}, description: "${description}", member_id: "${member_id}"}) {
+          message
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe((res) => {
+      console.log(res);
+    });
+  }
 }
