@@ -1,5 +1,8 @@
 <div class="parent">
-  <div class="warn pdt-1" *ngIf="!members || !members.length">
+  <div
+    class="warn pdt-1"
+    *ngIf="!isLoading ? !members || !members.length : false"
+  >
     <p>No members to show now!</p>
   </div>
 
