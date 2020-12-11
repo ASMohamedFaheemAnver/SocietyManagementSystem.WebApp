@@ -187,9 +187,14 @@ export class MemberService {
         });
 
         const rLog = res.data["listenMemberLog"];
-
         if (rLog.type === "POST") {
-          this.logs.unshift(rLog.log);
+          this.logs.unshift({
+            ...rLog.log,
+            fee: {
+              ...rLog.log.fee,
+              tracks: [{ is_paid: false, _id: "undefined" }],
+            },
+          });
           this.logsUpdatedListener.next({
             logs: [...this.logs],
             logs_count: ++this.logs_count,
@@ -330,6 +335,58 @@ export class MemberService {
           console.log(err);
         }
       );
+  }
+
+  listenMemberFineLog() {
+    const graphqlQuery = gql`
+      subscription listenMemberFineLog {
+        listenMemberFineLog {
+          log {
+            _id
+            kind
+            fee {
+              _id
+              date
+              amount
+              description
+            }
+          }
+          type
+          is_fine_mutated
+        }
+      }
+    `;
+
+    this.apollo.subscribe({ query: graphqlQuery }).subscribe((res) => {
+      console.log({
+        emitted: "memberService.listenMemberFineLog.subscribe",
+        data: res,
+      });
+
+      const rLog = res.data["listenMemberFineLog"];
+
+      if (rLog.type === "POST") {
+        this.logs.unshift({
+          ...rLog.log,
+          fee: {
+            ...rLog.log.fee,
+            tracks: [{ is_paid: false, _id: "undefined" }],
+          },
+        });
+
+        this.logsUpdatedListener.next({
+          logs: [...this.logs],
+          logs_count: ++this.logs_count,
+        });
+
+        this.member = {
+          ...this.member,
+          arrears: this.member.arrears + rLog.log.fee.amount,
+        };
+
+        this.memberUpdated.next({ ...this.member });
+      }
+    });
   }
 
   listenSocietyMembers() {

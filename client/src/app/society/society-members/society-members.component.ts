@@ -93,6 +93,12 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
     );
 
     fineDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+
+      member.isActionLoading = true;
+
       this.societyServie.addFineForOneMember(
         data.fine,
         data.description,

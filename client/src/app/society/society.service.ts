@@ -513,7 +513,9 @@ export class SocietyService {
   }
 
   deleteFeeLog(log: Log) {
-    console.log({ emitted: "deleteFeeLog" });
+    console.log({
+      emitted: "societyService.deleteFeeLog",
+    });
 
     const graphqlQuery = gql`
       mutation {
@@ -564,7 +566,23 @@ export class SocietyService {
     `;
 
     this.apollo.mutate({ mutation: graphqlQuery }).subscribe((res) => {
-      console.log(res);
+      console.log({
+        emitted: "societyService.addFineForOneMember",
+        res: res,
+      });
+
+      this.members = this.members.map((member) => {
+        if (member._id === member_id) {
+          return {
+            ...member,
+            isActionLoading: false,
+            arrears: member.arrears + fine,
+          };
+        }
+        return member;
+      });
+
+      this.membersUpdated.next([...this.members]);
     });
   }
 }
