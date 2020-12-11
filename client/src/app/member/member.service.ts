@@ -155,11 +155,11 @@ export class MemberService {
       );
   }
 
-  listenMemberLog() {
-    console.log({ emitted: "memberService.listenMemberLog" });
+  listenCommonMemberLog() {
+    console.log({ emitted: "memberService.listenCommonMemberLog" });
     const graphqlQuery = gql`
-      subscription listenMemberLog {
-        listenMemberLog {
+      subscription listenCommonMemberLog {
+        listenCommonMemberLog {
           log {
             _id
             kind
@@ -182,11 +182,11 @@ export class MemberService {
       })
       .subscribe((res) => {
         console.log({
-          emitted: "memberService.listenMemberLog.subscribe",
+          emitted: "memberService.listenCommonMemberLog.subscribe",
           data: res,
         });
 
-        const rLog = res.data["listenMemberLog"];
+        const rLog = res.data["listenCommonMemberLog"];
         if (rLog.type === "POST") {
           this.logs.unshift({
             ...rLog.log,
@@ -352,7 +352,7 @@ export class MemberService {
             }
           }
           type
-          is_fine_mutated
+          is_fee_mutated
         }
       }
     `;
@@ -373,7 +373,6 @@ export class MemberService {
             tracks: [{ is_paid: false, _id: "undefined" }],
           },
         });
-
         this.logsUpdatedListener.next({
           logs: [...this.logs],
           logs_count: ++this.logs_count,
@@ -385,6 +384,74 @@ export class MemberService {
         };
 
         this.memberUpdated.next({ ...this.member });
+      } else if (rLog.type === "DELETE") {
+        this.logs = this.logs.filter((log) => {
+          if (log._id === rLog.log._id) {
+            this.member = {
+              ...this.member,
+              arrears: this.member.arrears - log.fee.amount,
+            };
+            this.memberUpdated.next({ ...this.member });
+            return false;
+          }
+          return true;
+        });
+
+        this.logsUpdatedListener.next({
+          logs: [...this.logs],
+          logs_count: --this.logs_count,
+        });
+      } else if (rLog.type === "PUT") {
+        this.logs = this.logs.map((log) => {
+          if (log._id === rLog.log._id) {
+            if (!log.fee.tracks[0].is_paid) {
+              this.member = {
+                ...this.member,
+                arrears:
+                  this.member.arrears - log.fee.amount + rLog.log.fee.amount,
+              };
+
+              return {
+                ...rLog.log,
+                fee: {
+                  ...rLog.log.fee,
+                  tracks: [{ ...log.fee.tracks[0] }],
+                },
+              };
+            } else {
+              if (rLog.is_fee_mutated) {
+                this.member = {
+                  ...this.member,
+                  arrears: this.member.arrears + rLog.log.fee.amount,
+                };
+
+                return {
+                  ...rLog.log,
+                  fee: {
+                    ...rLog.log.fee,
+                    tracks: [{ ...log.fee.tracks[0], is_paid: false }],
+                  },
+                };
+              }
+
+              return {
+                ...rLog.log,
+                fee: {
+                  ...rLog.log.fee,
+                  tracks: [{ ...log.fee.tracks[0] }],
+                },
+              };
+            }
+          }
+          return log;
+        });
+
+        this.memberUpdated.next({ ...this.member });
+
+        this.logsUpdatedListener.next({
+          logs: [...this.logs],
+          logs_count: this.logs_count,
+        });
       }
     });
   }

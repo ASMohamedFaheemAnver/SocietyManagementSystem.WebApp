@@ -64,7 +64,7 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       });
 
-    this.memberService.listenMemberLog();
+    this.memberService.listenCommonMemberLog();
     this.memberService.listenMemberLogTrack();
     this.memberService.listenMemberFineLog();
   }
