@@ -188,6 +188,14 @@ export class MemberService {
 
         const rLog = res.data["listenCommonMemberLog"];
         if (rLog.type === "POST") {
+          const isExist = this.logs.some((log) => {
+            return log._id === rLog.log._id;
+          });
+
+          if (isExist) {
+            return;
+          }
+
           this.logs.unshift({
             ...rLog.log,
             fee: {
@@ -366,6 +374,14 @@ export class MemberService {
       const rLog = res.data["listenMemberFineLog"];
 
       if (rLog.type === "POST") {
+        const isExist = this.logs.some((log) => {
+          return log._id === rLog.log._id;
+        });
+
+        if (isExist) {
+          return;
+        }
+
         this.logs.unshift({
           ...rLog.log,
           fee: {
