@@ -585,4 +585,51 @@ export class SocietyService {
       this.membersUpdated.next([...this.members]);
     });
   }
+
+  listenNewSocietyMembers() {
+    console.log({ emitted: "societyService.listenNewSocietyMembers" });
+
+    const graphqlQuery = gql`
+      subscription listenNewSocietyMembers {
+        listenNewSocietyMembers {
+          member {
+            _id
+            name
+            email
+            imageUrl
+            address
+            arrears
+            approved
+          }
+          type
+        }
+      }
+    `;
+
+    this.apollo
+      .subscribe({
+        query: graphqlQuery,
+      })
+      .subscribe((res) => {
+        console.log({
+          emitted: "societyService.listenNewSocietyMembers",
+          data: res,
+        });
+
+        if (res.data["listenNewSocietyMembers"].type === "POST") {
+          const isMemberExist = this.members.some((member) => {
+            return (
+              res.data["listenNewSocietyMembers"].member._id === member._id
+            );
+          });
+
+          if (isMemberExist) {
+            return;
+          }
+
+          this.members.push({ ...res.data["listenNewSocietyMembers"].member });
+          this.membersUpdated.next([...this.members]);
+        }
+      });
+  }
 }

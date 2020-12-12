@@ -47,6 +47,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
         this.isLoading = emitedBoolean;
       });
     this.societyServie.getAllMembers();
+    this.societyServie.listenNewSocietyMembers();
   }
 
   onApproveMember(member: Member) {
