@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { AuthService } from "src/app/auth/auth.service";
 import { SocietyService } from "../society.service";
 import { Member } from "../../member.model";
 import { Subscription } from "rxjs";
-import { environment } from "src/environments/environment";
 import { MatDialog } from "@angular/material/dialog";
 import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
 import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
@@ -20,7 +18,6 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   private societyStatusSub: Subscription;
 
   constructor(
-    private authService: AuthService,
     private societyServie: SocietyService,
     private editMemberDialog: MatDialog,
     private confirmDialog: MatDialog
@@ -28,6 +25,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.membersSub.unsubscribe();
     this.societyStatusSub.unsubscribe();
+    this.societyServie.unSubscribeListenNewSocietyMembers();
   }
 
   ngOnInit(): void {

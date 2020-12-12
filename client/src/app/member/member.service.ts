@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { Member } from "../member.model";
 import { Log } from "../log.model";
 import { Apollo, gql } from "apollo-angular";
@@ -18,6 +18,10 @@ export class MemberService {
     logs: Log[];
     logs_count: number;
   }>();
+  private listenCommonMemberLogSub: Subscription;
+  private listenMemberLogTrackSub: Subscription;
+  private listenMemberFineLogSub: Subscription;
+  private listenSocietyMembersSub: Subscription;
 
   getMember() {
     console.log({ emitted: "memberService.getMember" });
@@ -176,7 +180,7 @@ export class MemberService {
       }
     `;
 
-    this.apollo
+    this.listenCommonMemberLogSub = this.apollo
       .subscribe({
         query: graphqlQuery,
       })
@@ -308,7 +312,7 @@ export class MemberService {
       }
     `;
 
-    this.apollo
+    this.listenMemberLogTrackSub = this.apollo
       .subscribe({
         query: graphqlQuery,
       })
@@ -365,111 +369,113 @@ export class MemberService {
       }
     `;
 
-    this.apollo.subscribe({ query: graphqlQuery }).subscribe((res) => {
-      console.log({
-        emitted: "memberService.listenMemberFineLog.subscribe",
-        data: res,
-      });
-
-      const rLog = res.data["listenMemberFineLog"];
-
-      if (rLog.type === "POST") {
-        const isExist = this.logs.some((log) => {
-          return log._id === rLog.log._id;
+    this.listenMemberFineLogSub = this.apollo
+      .subscribe({ query: graphqlQuery })
+      .subscribe((res) => {
+        console.log({
+          emitted: "memberService.listenMemberFineLog.subscribe",
+          data: res,
         });
 
-        if (isExist) {
-          return;
-        }
+        const rLog = res.data["listenMemberFineLog"];
 
-        this.logs.unshift({
-          ...rLog.log,
-          fee: {
-            ...rLog.log.fee,
-            tracks: [{ is_paid: false, _id: "undefined" }],
-          },
-        });
-        this.logsUpdatedListener.next({
-          logs: [...this.logs],
-          logs_count: ++this.logs_count,
-        });
+        if (rLog.type === "POST") {
+          const isExist = this.logs.some((log) => {
+            return log._id === rLog.log._id;
+          });
 
-        this.member = {
-          ...this.member,
-          arrears: this.member.arrears + rLog.log.fee.amount,
-        };
-
-        this.memberUpdated.next({ ...this.member });
-      } else if (rLog.type === "DELETE") {
-        this.logs = this.logs.filter((log) => {
-          if (log._id === rLog.log._id) {
-            this.member = {
-              ...this.member,
-              arrears: this.member.arrears - log.fee.amount,
-            };
-            this.memberUpdated.next({ ...this.member });
-            return false;
+          if (isExist) {
+            return;
           }
-          return true;
-        });
 
-        this.logsUpdatedListener.next({
-          logs: [...this.logs],
-          logs_count: --this.logs_count,
-        });
-      } else if (rLog.type === "PUT") {
-        this.logs = this.logs.map((log) => {
-          if (log._id === rLog.log._id) {
-            if (!log.fee.tracks[0].is_paid) {
+          this.logs.unshift({
+            ...rLog.log,
+            fee: {
+              ...rLog.log.fee,
+              tracks: [{ is_paid: false, _id: "undefined" }],
+            },
+          });
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: ++this.logs_count,
+          });
+
+          this.member = {
+            ...this.member,
+            arrears: this.member.arrears + rLog.log.fee.amount,
+          };
+
+          this.memberUpdated.next({ ...this.member });
+        } else if (rLog.type === "DELETE") {
+          this.logs = this.logs.filter((log) => {
+            if (log._id === rLog.log._id) {
               this.member = {
                 ...this.member,
-                arrears:
-                  this.member.arrears - log.fee.amount + rLog.log.fee.amount,
+                arrears: this.member.arrears - log.fee.amount,
               };
+              this.memberUpdated.next({ ...this.member });
+              return false;
+            }
+            return true;
+          });
 
-              return {
-                ...rLog.log,
-                fee: {
-                  ...rLog.log.fee,
-                  tracks: [{ ...log.fee.tracks[0] }],
-                },
-              };
-            } else {
-              if (rLog.is_fee_mutated) {
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: --this.logs_count,
+          });
+        } else if (rLog.type === "PUT") {
+          this.logs = this.logs.map((log) => {
+            if (log._id === rLog.log._id) {
+              if (!log.fee.tracks[0].is_paid) {
                 this.member = {
                   ...this.member,
-                  arrears: this.member.arrears + rLog.log.fee.amount,
+                  arrears:
+                    this.member.arrears - log.fee.amount + rLog.log.fee.amount,
                 };
 
                 return {
                   ...rLog.log,
                   fee: {
                     ...rLog.log.fee,
-                    tracks: [{ ...log.fee.tracks[0], is_paid: false }],
+                    tracks: [{ ...log.fee.tracks[0] }],
+                  },
+                };
+              } else {
+                if (rLog.is_fee_mutated) {
+                  this.member = {
+                    ...this.member,
+                    arrears: this.member.arrears + rLog.log.fee.amount,
+                  };
+
+                  return {
+                    ...rLog.log,
+                    fee: {
+                      ...rLog.log.fee,
+                      tracks: [{ ...log.fee.tracks[0], is_paid: false }],
+                    },
+                  };
+                }
+
+                return {
+                  ...rLog.log,
+                  fee: {
+                    ...rLog.log.fee,
+                    tracks: [{ ...log.fee.tracks[0] }],
                   },
                 };
               }
-
-              return {
-                ...rLog.log,
-                fee: {
-                  ...rLog.log.fee,
-                  tracks: [{ ...log.fee.tracks[0] }],
-                },
-              };
             }
-          }
-          return log;
-        });
+            return log;
+          });
 
-        this.memberUpdated.next({ ...this.member });
+          this.memberUpdated.next({ ...this.member });
 
-        this.logsUpdatedListener.next({
-          logs: [...this.logs],
-          logs_count: this.logs_count,
-        });
-      }
-    });
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: this.logs_count,
+          });
+        }
+      });
   }
 
   listenSocietyMembers() {
@@ -492,7 +498,7 @@ export class MemberService {
       }
     `;
 
-    this.apollo
+    this.listenSocietyMembersSub = this.apollo
       .subscribe({
         query: graphqlQuery,
       })
@@ -511,5 +517,38 @@ export class MemberService {
 
         this.membersUpdated.next([...this.members]);
       });
+  }
+
+  unSubscribeListenCommonMemberLog() {
+    if (this.listenCommonMemberLogSub) {
+      console.log({
+        emitted: "societyService.unSubscribeListenCommonMemberLog",
+      });
+      this.listenCommonMemberLogSub.unsubscribe();
+    }
+  }
+  unSubscribeListenMemberLogTrack() {
+    if (this.listenMemberLogTrackSub) {
+      console.log({
+        emitted: "societyService.unSubscribeListenMemberLogTrack",
+      });
+      this.listenMemberLogTrackSub.unsubscribe();
+    }
+  }
+  unSubscribelistenMemberFineLog() {
+    if (this.listenMemberFineLogSub) {
+      console.log({
+        emitted: "societyService.unSubscribelistenMemberFineLog",
+      });
+      this.listenMemberFineLogSub.unsubscribe();
+    }
+  }
+  unSubscribelistenSocietyMembers() {
+    if (this.listenSocietyMembersSub) {
+      console.log({
+        emitted: "societyService.unSubscribelistenSocietyMembers",
+      });
+      this.listenSocietyMembersSub.unsubscribe();
+    }
   }
 }

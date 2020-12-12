@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "src/environments/environment";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { Member } from "../member.model";
 import { Log } from "../log.model";
 import { Society } from "../society.model";
@@ -19,6 +17,7 @@ export class SocietyService {
   private society: Society;
   private newLog: Log;
   private societyUpdated = new Subject<Society>();
+  private listenNewSocietyMembersSub: Subscription;
 
   constructor(private apollo: Apollo) {}
 
@@ -606,7 +605,7 @@ export class SocietyService {
       }
     `;
 
-    this.apollo
+    this.listenNewSocietyMembersSub = this.apollo
       .subscribe({
         query: graphqlQuery,
       })
@@ -631,5 +630,14 @@ export class SocietyService {
           this.membersUpdated.next([...this.members]);
         }
       });
+  }
+
+  unSubscribeListenNewSocietyMembers() {
+    if (this.listenNewSocietyMembersSub) {
+      console.log({
+        emitted: "societyService.unSubscribeListenNewSocietyMembers",
+      });
+      this.listenNewSocietyMembersSub.unsubscribe();
+    }
   }
 }

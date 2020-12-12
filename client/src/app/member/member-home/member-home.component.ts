@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MemberService } from "../member.service";
-import { environment } from "src/environments/environment";
 import { Log } from "src/app/log.model";
 import { PageEvent } from "@angular/material/paginator";
 import { Subscription } from "rxjs";
@@ -17,6 +16,11 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.memberLogsSub.unsubscribe();
     this.memberStatusListennerSub.unsubscribe();
+    this.memberSub.unsubscribe();
+
+    this.memberService.unSubscribeListenCommonMemberLog();
+    this.memberService.unSubscribeListenMemberLogTrack();
+    this.memberService.unSubscribelistenMemberFineLog();
   }
 
   isLoading: boolean;

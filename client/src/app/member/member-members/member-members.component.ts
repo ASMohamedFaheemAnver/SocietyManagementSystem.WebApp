@@ -20,6 +20,7 @@ export class MemberMembersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.memberStatusSub.unsubscribe();
     this.membersSub.unsubscribe();
+    this.memberService.unSubscribelistenSocietyMembers();
   }
 
   ngOnInit(): void {
