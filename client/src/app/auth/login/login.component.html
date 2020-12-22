@@ -1,5 +1,4 @@
-<form *ngIf="!isLoading" [formGroup]="form" class="form" (submit)="onLogin()">
-  <h1>User login</h1>
+<!-- <h1>User login</h1>
 
   <div class="input-wrapper">
     <p>Enter your email</p>
@@ -26,16 +25,90 @@
     </mat-form-field>
   </div>
 
-  <!-- <div>
-    <p>Forgot your password? click <a href="#">here</a></p>
-  </div> -->
+  <button type="submit" mat-raised-button color="primary">Login</button> -->
 
-  <button type="submit" mat-raised-button color="primary">Login</button>
+<div id="login">
+  <div class="wrapper">
+    <form
+      class="form"
+      *ngIf="!isLoading"
+      [formGroup]="form"
+      class="form"
+      (submit)="onLogin()"
+    >
+      <h1>Welcome Back</h1>
+      <h2>Who you are?</h2>
+      <div class="icons">
+        <div class="category">
+          <div
+            class="decorator"
+            (click)="onChangeCategory('member')"
+            [class]="form.value.category === 'member' ? 'active' : ''"
+          >
+            <i class="fas fa-user-alt"></i>
+          </div>
+          <p>User</p>
+        </div>
+        <div class="category">
+          <div
+            class="decorator"
+            (click)="onChangeCategory('society')"
+            [class]="form.value.category === 'society' ? 'active' : ''"
+          >
+            <i class="fas fa-user-cog"></i>
+          </div>
+          <p>Society</p>
+        </div>
+        <div class="category">
+          <div
+            class="decorator"
+            (click)="onChangeCategory('developer')"
+            [class]="form.value.category === 'developer' ? 'active' : ''"
+          >
+            <i class="fas fa-laptop-code"></i>
+          </div>
+          <p>Developer</p>
+        </div>
+      </div>
+      <input formControlName="email" matInput type="text" placeholder="Email" />
+      <div class="password-input">
+        <input
+          formControlName="password"
+          type="password"
+          matInput
+          placeholder="Password"
+          [type]="hide ? 'password' : 'text'"
+        />
 
-  <!-- <div class="extra">
-    <p>Don't have an account? click <a href="">here</a></p>
-  </div> -->
-</form>
+        <div class="eye">
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hide = !hide"
+            [attr.aria-label]="'hide'"
+            [attr.aria-pressed]="hide"
+          ></button>
+
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </div>
+      </div>
+
+      <button
+        mat-raised-button
+        [disabled]="form.invalid"
+        color="primary"
+        type="submit"
+      >
+        Sign In
+      </button>
+      <div class="extra">
+        <p>New here? Create account</p>
+        <p>Forgot your password?</p>
+      </div>
+    </form>
+  </div>
+</div>
 <div *ngIf="isLoading" class="page-wrapper">
   <mat-spinner class="spinner"></mat-spinner>
 </div>

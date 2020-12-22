@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   isLoading = false;
+  hide = true;
 
   private authStatusSub: Subscription;
 
@@ -37,16 +38,24 @@ export class LoginComponent implements OnInit, OnDestroy {
         validators: [Validators.required, Validators.minLength(8)],
       }),
     });
+
+    this.form.patchValue({ category: "member" });
   }
 
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();
   }
 
+  onChangeCategory(category: string) {
+    this.form.patchValue({ category: category });
+  }
+
   onLogin() {
     if (this.form.invalid) {
       return;
     }
+    console.log({ emitted: "loginComponent.onLogin", data: this.form.value });
+
     this.isLoading = true;
 
     this.authService.loginUser(

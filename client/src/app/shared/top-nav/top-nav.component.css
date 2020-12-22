@@ -8,7 +8,7 @@
 nav {
   display: flex;
   justify-content: space-between;
-  background-color: blue;
+  background-color: #546e7a;
   align-items: center;
   text-align: center;
 }
