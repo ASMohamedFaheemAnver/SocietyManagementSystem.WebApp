@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authStatusSub = this.authService
       .getAuthStatusListener()
       .subscribe((emittedBoolean) => {
-        this.isLoading = emittedBoolean;
+        this.isLoading = false;
       });
 
     this.form = new FormGroup({

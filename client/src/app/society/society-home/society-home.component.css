@@ -18,6 +18,11 @@
   border-radius: 50%;
 }
 
+button {
+  background-color: #546e7a;
+  color: #fff;
+}
+
 @media (max-width: 500px) {
   .profile img {
     width: 150px;
@@ -159,7 +164,7 @@ mat-form-field {
 }
 
 button:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  color: #dadada;
 }
 
 .page-wrapper {

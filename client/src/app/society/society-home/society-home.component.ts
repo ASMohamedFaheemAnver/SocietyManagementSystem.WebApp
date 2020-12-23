@@ -51,8 +51,8 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
 
   logs: Log[];
   logs_count: number;
-  page_size = 10;
-  page_size_options = [10, 15, 20];
+  page_size = 5;
+  page_size_options = [5, 10, 15, 20];
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -84,6 +84,10 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
           emitted: "societyHomeComponent.ngOnInit.getSocietyLogListenner",
           logsInfo: logsInfo,
         });
+
+        if (this.logs_count > 0 && this.logs.length == 0) {
+          this.societyService.getSocietyLogs(this.currentPage, this.page_size);
+        }
       });
   }
 
