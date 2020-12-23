@@ -1,77 +1,81 @@
-<form *ngIf="!isLoading" [formGroup]="form" class="form" (submit)="onSignUp()">
-  <h1>Member signup</h1>
-
-  <div class="profile-pic">
-    <img src="{{ imageUrl }}" alt="Profile picture!" />
-    <input
-      style="display: none"
-      #inputImage
-      type="file"
-      (change)="onImageUpload($event)"
-    />
-    <br />
-    <button type="button" mat-stroked-button (click)="inputImage.click()">
-      Upload picture
-    </button>
-    <br />
-  </div>
-
-  <div class="input-wrapper">
-    <p>Select society</p>
-    <mat-form-field appearance="fill">
-      <mat-select formControlName="societyId">
-        <mat-option
-          *ngFor="let society of societies"
-          value="{{ society._id }}"
-          >{{ society.name }}</mat-option
+<div id="signup">
+  <div class="wrapper">
+    <form
+      class="form"
+      *ngIf="!isLoading"
+      [formGroup]="form"
+      class="form"
+      (submit)="onSignUp()"
+    >
+      <h1>Member signup</h1>
+      <div class="profile-pic">
+        <img src="{{ imageUrl }}" alt="Profile picture!" />
+        <input
+          style="display: none"
+          #inputImage
+          type="file"
+          (change)="onImageUpload($event)"
+        />
+        <button
+          class="upload"
+          type="button"
+          mat-stroked-button
+          (click)="inputImage.click()"
         >
-        <mat-option *ngIf="societies.length == 0">
-          <mat-error>No society had been registered!</mat-error>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div class="input-wrapper">
-    <p>Enter your email</p>
-    <mat-form-field appearance="outline">
-      <input formControlName="email" matInput />
-    </mat-form-field>
-  </div>
-  <div class="input-wrapper">
-    <p>Enter your name</p>
-    <mat-form-field appearance="outline">
-      <input formControlName="name" matInput />
-    </mat-form-field>
-  </div>
-  <div class="input-wrapper">
-    <p>Enter your address</p>
-    <mat-form-field appearance="outline">
-      <textarea formControlName="address" rows="4" matInput></textarea>
-    </mat-form-field>
-  </div>
-  <div class="input-wrapper">
-    <p>Enter your phone number</p>
-    <mat-form-field appearance="outline">
-      <input formControlName="phoneNumber" matInput />
-    </mat-form-field>
-  </div>
-  <div class="input-wrapper">
-    <p>Enter your password</p>
-    <mat-form-field appearance="outline">
-      <input formControlName="password" type="password" matInput />
-    </mat-form-field>
-  </div>
+          Upload picture
+        </button>
+      </div>
+      <div class="form-control">
+        <p>Select society</p>
+        <mat-select [ngModel]="societies[0]._id" formControlName="societyId">
+          <mat-option
+            *ngFor="let society of societies"
+            value="{{ society._id }}"
+            >{{ society.name }}</mat-option
+          >
+          <mat-option *ngIf="societies.length == 0">
+            <mat-error>No society had been registered!</mat-error>
+          </mat-option>
+        </mat-select>
+      </div>
 
-  <button
-    [disabled]="!this.form.valid"
-    type="submit"
-    mat-raised-button
-    color="primary"
-  >
-    Signup
-  </button>
-</form>
-<!-- <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner> -->
+      <div class="form-control">
+        <p>Enter your email</p>
+        <input type="text" formControlName="email" />
+      </div>
+
+      <div class="form-control">
+        <p>Enter your name</p>
+        <input type="text" formControlName="name" />
+      </div>
+
+      <div class="form-control">
+        <p>Enter your address</p>
+        <textarea formControlName="address"></textarea>
+      </div>
+
+      <div class="form-control">
+        <p>Enter your phone number</p>
+        <input type="text" formControlName="phoneNumber" />
+      </div>
+
+      <div class="form-control">
+        <p>Enter your password</p>
+        <input type="password" formControlName="password" type="password" />
+      </div>
+
+      <button
+        class="button"
+        [disabled]="!this.form.valid"
+        type="submit"
+        mat-raised-button
+      >
+        Signup
+      </button>
+    </form>
+  </div>
+</div>
+
 <div *ngIf="isLoading" class="page-wrapper">
   <mat-spinner class="spinner"></mat-spinner>
 </div>

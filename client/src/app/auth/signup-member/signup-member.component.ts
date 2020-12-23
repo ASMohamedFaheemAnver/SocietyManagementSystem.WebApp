@@ -78,6 +78,10 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
   }
 
   onSignUp() {
+    console.log({
+      emitted: "signupMemberComponent.onSignUp",
+      data: this.form.value,
+    });
     if (this.form.invalid) {
       return;
     }

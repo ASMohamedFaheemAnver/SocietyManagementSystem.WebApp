@@ -7,7 +7,7 @@ input:focus {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  color: #546e7a;
+  color: var(--primary-color);
 }
 
 #login .wrapper .form {
@@ -15,7 +15,7 @@ input:focus {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #e6eef8;
+  background-color: var(--default-form-backgroud);
   padding: 40px;
   border-radius: 30px;
 }
@@ -28,7 +28,7 @@ input:focus {
 #login .wrapper .form h2 {
   font-size: 1.5rem;
   margin-bottom: 20px;
-  color: #8c9ea7;
+  color: var(--light-form-font-color);
 }
 
 #login .wrapper .form input {
@@ -36,12 +36,12 @@ input:focus {
   padding: 15px;
   margin-bottom: 20px;
   border: none;
-  background-color: #e6eef8;
+  background-color: var(--default-form-backgroud);
   border-radius: 10px;
   font-size: 0.9rem;
   font-weight: 400;
   color: black;
-  box-shadow: 0px 1px 6px #546e7a inset;
+  box-shadow: 0px 1px 6px var(--primary-color) inset;
 }
 
 #login .wrapper .form p {
@@ -56,7 +56,7 @@ input:focus {
 }
 
 .button {
-  background-color: #546e7a;
+  background-color: var(--primary-color);
 }
 
 #login .wrapper .form .icons {
@@ -82,7 +82,7 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #e6eef8;
+  background-color: var(--default-form-backgroud);
   width: 70px;
   height: 70px;
   border-radius: 50%;

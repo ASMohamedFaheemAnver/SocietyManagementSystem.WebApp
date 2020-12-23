@@ -1,21 +1,19 @@
-.form {
-  margin-top: 50px;
+#signup .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1rem;
+}
+
+#signup .wrapper .form {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.form mat-form-field {
-  width: 60%;
-  max-width: 600px;
-}
-
-.form mat-form-field input {
-  font-size: 16px;
-}
-
-.extra {
-  padding: 1rem;
+  background-color: rgb(232, 242, 253);
+  width: 600px;
+  padding: 20px 0;
+  border-radius: 30px;
 }
 
 .profile-pic {
@@ -24,29 +22,66 @@
   align-items: center;
 }
 
-.profile-pic img {
-  width: 250px;
-  height: 250px;
+#signup .wrapper .form img {
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
+  margin-bottom: 20px;
+  box-shadow: 0px 1px 2px #546e7a inset;
+  padding: 5px;
 }
 
-.input-wrapper {
-  width: 400px;
+#signup .wrapper .form .upload {
+  border: none;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+#signup .wrapper .form-control {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  min-width: 450px;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.input-wrapper mat-form-field {
-  flex: 2;
-}
-
-.input-wrapper mat-form-field input {
-  height: 15px;
-}
-
-.input-wrapper p {
+#signup .wrapper .form-control p {
   flex: 1;
+  margin: 0;
+}
+
+#signup .wrapper .form-control input,
+#signup .wrapper .form-control mat-select,
+#signup .wrapper .form-control textarea {
+  flex: 1;
+  padding: 15px;
+  margin: 0;
+  border: none;
+  background-color: #e8f2fd;
+  border-radius: 10px;
+  box-shadow: 0px 1px 6px #546e7a inset;
+  outline: none;
+  color: black;
+}
+
+mat-option {
+  background-color: #f1f5fa !important;
+}
+
+#signup .wrapper .form-control textarea {
+  flex: 1;
+  width: 100%;
+  padding: 15px;
+  height: 80px;
+}
+
+.button {
+  margin-bottom: 20px;
+  border: none;
+  background-color: #9575cd;
+  color: #fff !important;
+  border-radius: 10px;
 }
 
 .page-wrapper {
@@ -63,21 +98,26 @@
   justify-content: center;
 }
 
-@media (max-width: 420px) {
-  .input-wrapper {
-    flex-direction: column;
+@media (max-width: 600px) {
+  #signup .wrapper .form {
+    padding-top: 20px;
     width: 100%;
+    border-radius: 0;
   }
 
-  h1 {
-    padding-bottom: 50px;
+  #signup .wrapper .form-control {
+    flex-direction: column;
+    min-width: 250px;
+    align-items: flex-start;
   }
 
-  .form {
-    margin-top: 20px;
+  #signup .wrapper .form-control mat-select,
+  #signup .wrapper .form-control textarea,
+  #signup .wrapper .form-control input {
+    width: 280px;
   }
-  .profile-pic img {
-    width: 150px;
-    height: 150px;
+
+  #signup .wrapper .form-control p {
+    margin-bottom: 5px;
   }
 }
