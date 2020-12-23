@@ -61,8 +61,8 @@
   background-color: #e8f2fd;
   border-radius: 10px;
   box-shadow: 0px 1px 6px #546e7a inset;
-  outline: none;
   color: black;
+  font-size: 0.9rem;
 }
 
 mat-option {
@@ -98,6 +98,40 @@ mat-option {
   justify-content: center;
 }
 
+.conflic .password-input {
+  width: 240px;
+}
+
+.password-input {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.password-input > input {
+  margin: 0 !important;
+}
+
+.password-input .eye {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+}
+
+.password-input .eye > button,
+.password-input .eye > mat-icon {
+  position: absolute;
+}
+
+.password-input .eye > button {
+  z-index: 2;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 @media (max-width: 600px) {
   #signup .wrapper .form {
     padding-top: 20px;
@@ -119,5 +153,9 @@ mat-option {
 
   #signup .wrapper .form-control p {
     margin-bottom: 5px;
+  }
+
+  .conflic .password-input {
+    width: auto;
   }
 }

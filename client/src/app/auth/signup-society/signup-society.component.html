@@ -1,74 +1,93 @@
-<form *ngIf="!isLoading" [formGroup]="form" class="form" (submit)="onSignUp()">
-  <h1>Society signup</h1>
+<div id="signup">
+  <div class="wrapper">
+    <form
+      class="form"
+      *ngIf="!isLoading"
+      [formGroup]="form"
+      class="form"
+      (submit)="onSignUp()"
+    >
+      <h1>Society signup</h1>
+      <div class="profile-pic">
+        <img src="{{ imageUrl }}" alt="Profile picture!" />
+        <input
+          style="display: none"
+          #inputImage
+          type="file"
+          (change)="onImageUpload($event)"
+        />
+        <br />
+        <button
+          class="upload"
+          type="button"
+          mat-stroked-button
+          (click)="inputImage.click()"
+        >
+          Upload picture
+        </button>
+        <br />
+      </div>
+      <div class="form-control">
+        <p>Enter society's email</p>
+        <input type="email" formControlName="email" />
+      </div>
 
-  <div class="profile-pic">
-    <img src="{{ imageUrl }}" alt="Profile picture!" />
-    <input
-      style="display: none"
-      #inputImage
-      type="file"
-      (change)="onImageUpload($event)"
-    />
-    <br />
-    <button type="button" mat-stroked-button (click)="inputImage.click()">
-      Upload picture
-    </button>
-    <br />
+      <div class="form-control">
+        <p>Enter scoiety's registration number</p>
+        <input type="text" formControlName="regNo" />
+      </div>
+
+      <div class="form-control">
+        <p>Enter society's name</p>
+        <input type="text" formControlName="name" />
+      </div>
+
+      <div class="form-control">
+        <p>Enter society's address</p>
+        <textarea formControlName="address"></textarea>
+      </div>
+
+      <div class="form-control">
+        <p>Enter society's phone number</p>
+        <input type="text" formControlName="phoneNumber" />
+      </div>
+
+      <div class="form-control conflic">
+        <p>Enter society's password</p>
+        <div class="password-input">
+          <input
+            formControlName="password"
+            type="password"
+            [type]="hide ? 'password' : 'text'"
+          />
+
+          <div class="eye">
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="hide = !hide"
+              [attr.aria-label]="'hide'"
+              [attr.aria-pressed]="hide"
+            ></button>
+
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </div>
+        </div>
+      </div>
+      <button
+        class="button"
+        type="submit"
+        [disabled]="!this.form.valid"
+        mat-raised-button
+        color="primary"
+      >
+        Signup
+      </button>
+    </form>
   </div>
-  <div class="input-wrapper">
-    <p>Enter society's email</p>
-    <mat-form-field appearance="outline">
-      <input formControlName="email" matInput />
-    </mat-form-field>
-  </div>
+</div>
 
-  <div class="input-wrapper">
-    <p>Enter scoiety's registration number</p>
-
-    <mat-form-field appearance="outline">
-      <input formControlName="regNo" matInput />
-    </mat-form-field>
-  </div>
-
-  <div class="input-wrapper">
-    <p>Enter society's name</p>
-
-    <mat-form-field appearance="outline">
-      <input formControlName="name" matInput />
-    </mat-form-field>
-  </div>
-  <div class="input-wrapper">
-    <p>Enter society's address</p>
-
-    <mat-form-field appearance="outline">
-      <textarea formControlName="address" rows="4" matInput></textarea>
-    </mat-form-field>
-  </div>
-  <div class="input-wrapper">
-    <p>Enter society's phone number</p>
-
-    <mat-form-field appearance="outline">
-      <input formControlName="phoneNumber" matInput />
-    </mat-form-field>
-  </div>
-  <div class="input-wrapper">
-    <p>Enter society's password!</p>
-
-    <mat-form-field appearance="outline">
-      <input formControlName="password" type="password" matInput />
-    </mat-form-field>
-  </div>
-
-  <button
-    type="submit"
-    [disabled]="!this.form.valid"
-    mat-raised-button
-    color="primary"
-  >
-    Signup
-  </button>
-</form>
-<!-- <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner> -->
 <div *ngIf="isLoading" class="page-wrapper">
   <mat-spinner class="spinner"></mat-spinner>
 </div>

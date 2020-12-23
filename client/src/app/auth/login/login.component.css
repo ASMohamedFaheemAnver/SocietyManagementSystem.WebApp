@@ -1,13 +1,9 @@
-input:focus {
-  outline: none;
-}
-
 #login .wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  color: var(--primary-color);
+  color: black;
 }
 
 #login .wrapper .form {
@@ -90,13 +86,13 @@ input:focus {
 
 #login .wrapper .form .icons .active {
   transform: scale(1.1);
-  background-color: #fff;
+  background-color: var(--primary-color);
 }
 
 #login .wrapper .form .icons .decorator:hover {
   transform: scale(1.1);
   cursor: pointer;
-  background-color: #f2f6fa;
+  background-color: #8bb3c3;
 }
 
 #login .wrapper .form .icons i {

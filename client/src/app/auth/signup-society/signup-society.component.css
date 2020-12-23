@@ -1,21 +1,19 @@
-.form {
-  margin-top: 50px;
+#signup .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1rem;
+}
+
+#signup .wrapper .form {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.form mat-form-field {
-  width: 60%;
-  max-width: 600px;
-}
-
-.form mat-form-field input {
-  font-size: 16px;
-}
-
-.extra {
-  padding: 1rem;
+  background-color: rgb(232, 242, 253);
+  width: 600px;
+  padding: 20px 0;
+  border-radius: 30px;
 }
 
 .profile-pic {
@@ -24,29 +22,93 @@
   align-items: center;
 }
 
-.profile-pic img {
-  width: 250px;
-  height: 250px;
+#signup .wrapper .form img {
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
+  box-shadow: 0px 1px 2px #546e7a inset;
+  padding: 5px;
 }
 
-.input-wrapper {
-  width: 400px;
+#signup .wrapper .form .upload {
+  border: none;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+#signup .wrapper .form-control {
   display: flex;
+  align-items: center;
+  min-width: 500px;
   justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+#signup .wrapper .form-control p {
+  flex: 1;
+  margin: 0;
+}
+
+#signup .wrapper .form-control input,
+#signup .wrapper .form-control textarea {
+  flex: 1;
+  padding: 15px;
+  margin: 0;
+  border: none;
+  background-color: #e8f2fd;
+  border-radius: 10px;
+  box-shadow: 0px 1px 6px #546e7a inset;
+  color: black;
+  font-size: 0.9rem;
+}
+
+#signup .wrapper .form-control textarea {
+  flex: 1;
+  width: 100%;
+  padding: 15px;
+  height: 80px;
+}
+
+.button {
+  margin-bottom: 20px;
+  border: none;
+  background-color: #9575cd;
+  color: #fff !important;
+  border-radius: 10px;
+}
+
+.conflic .password-input {
+  width: 265px;
+}
+
+.password-input {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
 }
 
-.input-wrapper mat-form-field {
-  flex: 2;
+.password-input > input {
+  margin: 0 !important;
 }
 
-.input-wrapper mat-form-field input {
-  height: 15px;
+.password-input .eye {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
 }
 
-.input-wrapper p {
-  flex: 1;
+.password-input .eye > button,
+.password-input .eye > mat-icon {
+  position: absolute;
+}
+
+.password-input .eye > button {
+  z-index: 2;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .page-wrapper {
@@ -63,25 +125,29 @@
   justify-content: center;
 }
 
-@media (max-width: 420px) {
-  .input-wrapper {
-    flex-direction: column;
+@media (max-width: 600px) {
+  #signup .wrapper .form {
+    padding-top: 20px;
     width: 100%;
+    border-radius: 0;
   }
 
-  h1 {
-    padding-bottom: 50px;
+  #signup .wrapper .form-control {
+    flex-direction: column;
+    min-width: 250px;
+    align-items: flex-start;
   }
 
-  .form {
-    margin-top: 20px;
-  }
-  .profile-pic img {
-    width: 150px;
-    height: 150px;
+  #signup .wrapper .form-control textarea,
+  #signup .wrapper .form-control input {
+    width: 280px;
   }
 
-  /* .input-wrapper mat-form-field {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  } */
+  #signup .wrapper .form-control p {
+    margin-bottom: 5px;
+  }
+
+  .conflic .password-input {
+    width: auto;
+  }
 }

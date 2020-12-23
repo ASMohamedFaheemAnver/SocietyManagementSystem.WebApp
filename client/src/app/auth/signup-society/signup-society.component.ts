@@ -14,6 +14,7 @@ export class SignupSocietyComponent implements OnInit {
   form: FormGroup;
 
   isLoading = false;
+  hide = true;
 
   imageUrl: any = "./assets/img/add-img.png";
 

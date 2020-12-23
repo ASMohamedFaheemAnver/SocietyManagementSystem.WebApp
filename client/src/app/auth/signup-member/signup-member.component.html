@@ -27,7 +27,7 @@
       </div>
       <div class="form-control">
         <p>Select society</p>
-        <mat-select [ngModel]="societies[0]._id" formControlName="societyId">
+        <mat-select formControlName="societyId">
           <mat-option
             *ngFor="let society of societies"
             value="{{ society._id }}"
@@ -59,9 +59,28 @@
         <input type="text" formControlName="phoneNumber" />
       </div>
 
-      <div class="form-control">
-        <p>Enter your password</p>
-        <input type="password" formControlName="password" type="password" />
+      <div class="form-control conflic">
+        <p>Enter society's password</p>
+        <div class="password-input">
+          <input
+            formControlName="password"
+            type="password"
+            [type]="hide ? 'password' : 'text'"
+          />
+
+          <div class="eye">
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="hide = !hide"
+              [attr.aria-label]="'hide'"
+              [attr.aria-pressed]="hide"
+            ></button>
+
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </div>
+        </div>
       </div>
 
       <button

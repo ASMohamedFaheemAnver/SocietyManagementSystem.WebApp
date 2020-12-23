@@ -15,6 +15,7 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   isLoading = false;
+  hide = true;
 
   imageUrl: any = "./assets/img/add-img.png";
 
@@ -36,6 +37,7 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
     this.authService.getBasicSocietyDetailes().subscribe(
       (res) => {
         this.societies = res["data"]["getBasicSocietyDetailes"];
+        this.form.patchValue({ societyId: this.societies[0]._id });
         this.isLoading = false;
       },
       (err) => {
