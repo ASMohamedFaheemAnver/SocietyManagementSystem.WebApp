@@ -9,6 +9,8 @@ import { Log } from "src/app/log.model";
 import { Society } from "src/app/society.model";
 import { EditFeeLogDialogComponent } from "../edit-fee-log-dialog/edit-fee-log-dialog.component";
 import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
+import { MemberDonationDialogComponent } from "../member-donation-dialog/member-donation-dialog.component";
+import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
 
 @Component({
   selector: "app-society-home",
@@ -22,10 +24,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private societyService: SocietyService,
-    private addMonthlyFeeDialog: MatDialog,
-    private addExtraFeeDialog: MatDialog,
-    private editSocietyLogFeeDialog: MatDialog,
-    private confirmDialog: MatDialog
+    private matDialog: MatDialog
   ) {}
 
   ngOnDestroy(): void {
@@ -92,7 +91,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   }
 
   addMonthlyFee() {
-    const addMonthlyFeeDialogRef = this.addMonthlyFeeDialog.open(
+    const addMonthlyFeeDialogRef = this.matDialog.open(
       AddMonthlyFeeDialogComponent,
       {
         data: {
@@ -116,7 +115,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   }
 
   addExtraFee() {
-    const addExtraFeeDialogRef = this.addExtraFeeDialog.open(
+    const addExtraFeeDialogRef = this.matDialog.open(
       AddExtraFeeDialogComponent,
       {
         disableClose: true,
@@ -157,7 +156,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
   }
 
   onFeeLogMemberEdit(log_id: string) {
-    const editSocietyFeeLogDialogRef = this.editSocietyLogFeeDialog.open(
+    const editSocietyFeeLogDialogRef = this.matDialog.open(
       EditFeeLogDialogComponent,
       {
         data: {
@@ -170,7 +169,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
 
   onFeeLogEdit(log: Log) {
     if (log.kind === "MonthFee") {
-      const editMonthlyFeeDialogRef = this.addMonthlyFeeDialog.open(
+      const editMonthlyFeeDialogRef = this.matDialog.open(
         AddMonthlyFeeDialogComponent,
         {
           data: {
@@ -199,8 +198,8 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
           data.description
         );
       });
-    } else {
-      const editExtraFeeDialogRef = this.addExtraFeeDialog.open(
+    } else if (log.kind === "ExtraFee") {
+      const editExtraFeeDialogRef = this.matDialog.open(
         AddExtraFeeDialogComponent,
         {
           data: {
@@ -227,11 +226,64 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
           data.description
         );
       });
+    } else if (log.kind === "Donation") {
+      const editDonationDialogRef = this.matDialog.open(
+        MemberDonationDialogComponent,
+        {
+          data: {
+            donation: log.fee.amount,
+            description: log.fee.description,
+          },
+          disableClose: true,
+        }
+      );
+      editDonationDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.donation === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.donation,
+          data.description
+        );
+      });
+    } else if (log.kind === "Fine") {
+      const editFineDialogRef = this.matDialog.open(FineMemberDialogComponent, {
+        data: {
+          fine: log.fee.amount,
+          description: log.fee.description,
+        },
+        disableClose: true,
+      });
+      editFineDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.fine === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.fine,
+          data.description
+        );
+      });
     }
   }
 
   onFeeLogDelete(log: Log) {
-    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+    const confirmDialogRef = this.matDialog.open(ConfirmDialogComponent, {
       data: {
         msg:
           "Deleting past activity will undo payments related to the activity, do you want to continue?",

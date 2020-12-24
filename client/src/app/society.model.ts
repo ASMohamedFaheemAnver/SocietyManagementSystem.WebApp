@@ -16,4 +16,5 @@ export interface Society {
   current_income: number;
   expected_income: number;
   number_of_members: number;
+  donations: number;
 }

@@ -5,6 +5,7 @@ import { Subscription } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
 import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
+import { MemberDonationDialogComponent } from "../member-donation-dialog/member-donation-dialog.component";
 
 @Component({
   selector: "app-society-members",
@@ -86,7 +87,6 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
     const fineDialogRef = this.editMemberDialog.open(
       FineMemberDialogComponent,
       {
-        data: member,
         disableClose: true,
       }
     );
@@ -100,6 +100,29 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
 
       this.societyServie.addFineForOneMember(
         data.fine,
+        data.description,
+        member._id
+      );
+    });
+  }
+
+  onDonationClick(member: Member) {
+    const fineDialogRef = this.editMemberDialog.open(
+      MemberDonationDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+
+    fineDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+
+      member.isActionLoading = true;
+
+      this.societyServie.addDonationForOneMember(
+        data.donation,
         data.description,
         member._id
       );

@@ -535,10 +535,14 @@ export class SocietyService {
         });
 
         log.fee.tracks.forEach((track) => {
-          if (track.is_paid) {
-            this.society.current_income -= log.fee.amount;
+          if (log.kind !== "Donation") {
+            if (track.is_paid) {
+              this.society.current_income -= log.fee.amount;
+            }
+            this.society.expected_income -= log.fee.amount;
+          } else {
+            this.society.donations -= log.fee.amount;
           }
-          this.society.expected_income -= log.fee.amount;
         });
 
         this.societyUpdated.next({ ...this.society, isImageLoading: false });
@@ -576,6 +580,39 @@ export class SocietyService {
             ...member,
             isActionLoading: false,
             arrears: member.arrears + fine,
+          };
+        }
+        return member;
+      });
+
+      this.membersUpdated.next([...this.members]);
+    });
+  }
+
+  addDonationForOneMember(
+    donation: number,
+    description: string,
+    member_id: string
+  ) {
+    const graphqlQuery = gql`
+      mutation {
+        addDonationForOneMember(donationInput: {donation: ${donation}, description: "${description}", member_id: "${member_id}"}) {
+          message
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe((res) => {
+      console.log({
+        emitted: "societyService.addDonationForOneMember",
+        res: res,
+      });
+
+      this.members = this.members.map((member) => {
+        if (member._id === member_id) {
+          return {
+            ...member,
+            isActionLoading: false,
           };
         }
         return member;

@@ -1,6 +1,5 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Member } from "src/app/member.model";
 
 @Component({
   templateUrl: "fine-member-dialog.component.html",
@@ -10,5 +9,12 @@ export class FineMemberDialogComponent {
   public fine: number = 20;
   public description: string = "Fine.";
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Member) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { fine: number; description: string }
+  ) {
+    if (this.data) {
+      this.fine = this.data.fine;
+      this.description = this.data.description;
+    }
+  }
 }

@@ -28,8 +28,8 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
 
   logs: Log[];
   logs_count: number;
-  page_size = 10;
-  page_size_options = [10, 15, 20];
+  page_size = 5;
+  page_size_options = [5, 10, 15, 20];
 
   private memberLogsSub: Subscription;
   private memberStatusListennerSub: Subscription;

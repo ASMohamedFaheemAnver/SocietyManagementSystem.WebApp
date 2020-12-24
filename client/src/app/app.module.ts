@@ -23,6 +23,7 @@ import { FineMemberDialogComponent } from "./society/fine-member-dialog/fine-mem
 import { ConfirmDialogComponent } from "./common/confirm-dialog/confirm-dialog.component";
 import { EditFeeLogDialogComponent } from "./society/edit-fee-log-dialog/edit-fee-log-dialog.component";
 import { GraphQLModule } from "./graphql.module";
+import { MemberDonationDialogComponent } from "./society/member-donation-dialog/member-donation-dialog.component";
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { GraphQLModule } from "./graphql.module";
     AddExtraFeeDialogComponent,
     ConfirmDialogComponent,
     EditFeeLogDialogComponent,
+    MemberDonationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +69,7 @@ import { GraphQLModule } from "./graphql.module";
     AddExtraFeeDialogComponent,
     ConfirmDialogComponent,
     EditFeeLogDialogComponent,
+    MemberDonationDialogComponent,
   ],
 })
 export class AppModule {}

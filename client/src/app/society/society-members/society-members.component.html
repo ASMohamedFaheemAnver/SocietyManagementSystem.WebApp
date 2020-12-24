@@ -65,6 +65,9 @@
     <mat-spinner *ngIf="member.isActionLoading"></mat-spinner>
     <div class="actions" *ngIf="!member.isActionLoading">
       <!-- <button mat-button color="primary">Log</button> -->
+      <button mat-button color="primary" (click)="onDonationClick(member)">
+        Donation
+      </button>
       <button mat-button class="warn" (click)="onFineClick(member)">
         Fine
       </button>
