@@ -28,7 +28,7 @@ export function createApollo(
     },
   }));
 
-  const error = onError(({ graphQLErrors, networkError }) => {
+  const error = onError(({ graphQLErrors, networkError, response }) => {
     if (graphQLErrors) {
       graphQLErrors.map(({ message, locations, path }) =>
         console.log(
@@ -42,7 +42,12 @@ export function createApollo(
         disableClose: true,
       });
     }
-    if (networkError) console.log(`[Network error]: ${networkError}`);
+    if (networkError) {
+      errorDialog.open(ErrorComponent, {
+        data: [{ networkError, message: "server may be down" }],
+        disableClose: true,
+      });
+    }
   });
 
   const auth = setContext((operation, context) => {

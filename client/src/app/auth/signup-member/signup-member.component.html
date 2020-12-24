@@ -31,7 +31,9 @@
           <mat-option
             *ngFor="let society of societies"
             value="{{ society._id }}"
-            >{{ society.name }}</mat-option
+            >
+              <p>{{ society.name }}</p>
+            </mat-option
           >
           <mat-option *ngIf="societies.length == 0">
             <mat-error>No society had been registered!</mat-error>

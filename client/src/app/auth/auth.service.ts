@@ -121,7 +121,7 @@ export class AuthService {
     let graphqlQuery;
     this.userCategory = userCategory;
     if (userCategory === "member") {
-      console.log({ emitted: "loginUser", in: "if (member)" });
+      console.log({ emitted: "authService.loginUser", in: "if (member)" });
 
       graphqlQuery = gql`
         query {
