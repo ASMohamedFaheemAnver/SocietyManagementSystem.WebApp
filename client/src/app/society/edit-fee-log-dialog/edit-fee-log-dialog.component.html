@@ -4,12 +4,12 @@
 <div class="card-heading">
   <p>Profile</p>
   <p>Name</p>
-  <p>Action</p>
+  <p *ngIf="offlineLog.kind !== 'Donation'">Action</p>
 </div>
 <div class="card" *ngFor="let track of offlineLog.fee.tracks">
   <img src="{{ track.member.imageUrl }}" alt="Image" />
   <p>{{ track.member.name }}</p>
-  <div>
+  <div *ngIf="offlineLog.kind !== 'Donation'">
     <i
       (click)="oneMakeFeePaidForOneMember(track._id, offlineLog._id)"
       *ngIf="!track.is_paid"

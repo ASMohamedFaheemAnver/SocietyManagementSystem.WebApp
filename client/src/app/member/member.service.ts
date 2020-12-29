@@ -579,6 +579,47 @@ export class MemberService {
           };
 
           this.memberUpdated.next({ ...this.member });
+        } else if (rLog.type === "DELETE") {
+          this.logs = this.logs.filter((log) => {
+            if (log._id === rLog.log._id) {
+              this.member = {
+                ...this.member,
+                donations: this.member.donations - log.fee.amount,
+              };
+              this.memberUpdated.next({ ...this.member });
+              return false;
+            }
+            return true;
+          });
+
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: --this.logs_count,
+          });
+        } else if (rLog.type === "PUT") {
+          this.logs = this.logs.map((log) => {
+            if (log._id === rLog.log._id) {
+              if (rLog.is_fee_mutated) {
+                this.member = {
+                  ...this.member,
+                  donations:
+                    this.member.donations +
+                    rLog.log.fee.amount -
+                    log.fee.amount,
+                };
+              }
+
+              return { ...rLog.log };
+            }
+            return log;
+          });
+
+          this.memberUpdated.next({ ...this.member });
+
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: this.logs_count,
+          });
         }
       });
   }
@@ -610,7 +651,7 @@ export class MemberService {
   unSubscribelistenMemberDonationLog() {
     if (this.listenMemberDonationLogSub) {
       console.log({
-        emitted: "societyService.unSubscribelistenMemberFineLog",
+        emitted: "societyService.unSubscribelistenMemberDonationLog",
       });
       this.listenMemberDonationLogSub.unsubscribe();
     }
