@@ -44,7 +44,7 @@ export function createApollo(
     }
     if (networkError) {
       errorDialog.open(ErrorComponent, {
-        data: [{ networkError, message: "server may be down" }],
+        data: networkError,
         disableClose: true,
       });
     }

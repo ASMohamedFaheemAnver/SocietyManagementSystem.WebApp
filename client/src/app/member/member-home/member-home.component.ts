@@ -21,6 +21,7 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
     this.memberService.unSubscribeListenCommonMemberLog();
     this.memberService.unSubscribeListenMemberLogTrack();
     this.memberService.unSubscribelistenMemberFineLog();
+    this.memberService.unSubscribelistenMemberDonationLog();
   }
 
   isLoading: boolean;
@@ -56,6 +57,11 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
     this.memberSub = this.memberService
       .getMemberUpdateListener()
       .subscribe((member) => {
+        console.log({
+          emitted: "memberHomeComponent.ngOnInit.getMemberUpdateListener",
+          member: member,
+        });
+
         this.member = {
           ...member,
           isImageLoading: this.member ? this.member.isImageLoading : true,
@@ -71,6 +77,7 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
     this.memberService.listenCommonMemberLog();
     this.memberService.listenMemberLogTrack();
     this.memberService.listenMemberFineLog();
+    this.memberService.listenMemberDonationLog();
   }
 
   changeDefaultUrl() {

@@ -21,6 +21,7 @@ export class MemberService {
   private listenCommonMemberLogSub: Subscription;
   private listenMemberLogTrackSub: Subscription;
   private listenMemberFineLogSub: Subscription;
+  private listenMemberDonationLogSub: Subscription;
   private listenSocietyMembersSub: Subscription;
 
   getMember() {
@@ -34,6 +35,7 @@ export class MemberService {
           imageUrl
           address
           arrears
+          donations
         }
       }
     `;
@@ -519,6 +521,68 @@ export class MemberService {
       });
   }
 
+  listenMemberDonationLog() {
+    console.log({ emitted: "memberService.listenMemberDonationLog" });
+
+    const graphqlQuery = gql`
+      subscription listenMemberDonationLog {
+        listenMemberDonationLog {
+          log {
+            _id
+            kind
+            fee {
+              _id
+              date
+              amount
+              description
+            }
+          }
+          type
+          is_fee_mutated
+        }
+      }
+    `;
+
+    this.listenMemberDonationLogSub = this.apollo
+      .subscribe({ query: graphqlQuery })
+      .subscribe((res) => {
+        console.log({
+          emitted: "memberService.listenMemberDonationLog.subscribe",
+          data: res,
+        });
+
+        const rLog = res.data["listenMemberDonationLog"];
+
+        if (rLog.type === "POST") {
+          const isExist = this.logs.some((log) => {
+            return log._id === rLog.log._id;
+          });
+
+          if (isExist) {
+            return;
+          }
+
+          this.logs.unshift({
+            ...rLog.log,
+            fee: {
+              ...rLog.log.fee,
+            },
+          });
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: ++this.logs_count,
+          });
+
+          this.member = {
+            ...this.member,
+            donations: this.member.donations + rLog.log.fee.amount,
+          };
+
+          this.memberUpdated.next({ ...this.member });
+        }
+      });
+  }
+
   unSubscribeListenCommonMemberLog() {
     if (this.listenCommonMemberLogSub) {
       console.log({
@@ -541,6 +605,14 @@ export class MemberService {
         emitted: "societyService.unSubscribelistenMemberFineLog",
       });
       this.listenMemberFineLogSub.unsubscribe();
+    }
+  }
+  unSubscribelistenMemberDonationLog() {
+    if (this.listenMemberDonationLogSub) {
+      console.log({
+        emitted: "societyService.unSubscribelistenMemberFineLog",
+      });
+      this.listenMemberDonationLogSub.unsubscribe();
     }
   }
   unSubscribelistenSocietyMembers() {

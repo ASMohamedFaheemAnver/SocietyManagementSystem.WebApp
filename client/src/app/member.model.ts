@@ -8,4 +8,5 @@ export interface Member {
   approved: boolean;
   isImageLoading: boolean;
   isActionLoading: boolean;
+  donations: number;
 }

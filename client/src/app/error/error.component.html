@@ -1,6 +1,10 @@
 <h1 mat-dialog-title>AN ERROR OCCURRED!</h1>
 <div mat-dialog-content>
-  <p>{{ data[0].message.toUpperCase() }}</p>
+  <p>
+    {{
+      data[0] ? data[0].message.toUpperCase() : data["message"].toUpperCase()
+    }}
+  </p>
 </div>
 <div mat-dialog-actions>
   <button mat-button color="primary" [mat-dialog-close]="true">OK</button>
