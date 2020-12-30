@@ -24,6 +24,8 @@ import { ConfirmDialogComponent } from "./common/confirm-dialog/confirm-dialog.c
 import { EditFeeLogDialogComponent } from "./society/edit-fee-log-dialog/edit-fee-log-dialog.component";
 import { GraphQLModule } from "./graphql.module";
 import { MemberDonationDialogComponent } from "./society/member-donation-dialog/member-donation-dialog.component";
+import { SocietyMemberComponent } from './society/society-member/society-member.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import { MemberDonationDialogComponent } from "./society/member-donation-dialog/
     ConfirmDialogComponent,
     EditFeeLogDialogComponent,
     MemberDonationDialogComponent,
+    SocietyMemberComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

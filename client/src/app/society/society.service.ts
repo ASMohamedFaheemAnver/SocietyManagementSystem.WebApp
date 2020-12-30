@@ -568,25 +568,40 @@ export class SocietyService {
       }
     `;
 
-    this.apollo.mutate({ mutation: graphqlQuery }).subscribe((res) => {
-      console.log({
-        emitted: "societyService.addFineForOneMember",
-        res: res,
-      });
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        console.log({
+          emitted: "societyService.addFineForOneMember",
+          res: res,
+        });
 
-      this.members = this.members.map((member) => {
-        if (member._id === member_id) {
-          return {
-            ...member,
-            isActionLoading: false,
-            arrears: member.arrears + fine,
-          };
-        }
-        return member;
-      });
+        this.members = this.members.map((member) => {
+          if (member._id === member_id) {
+            return {
+              ...member,
+              isActionLoading: false,
+              arrears: member.arrears + fine,
+            };
+          }
+          return member;
+        });
 
-      this.membersUpdated.next([...this.members]);
-    });
+        this.membersUpdated.next([...this.members]);
+      },
+      (err) => {
+        this.societyStatusListenner.next(false);
+        this.members = this.members.map((member) => {
+          if (member._id === member_id) {
+            return {
+              ...member,
+              isActionLoading: false,
+            };
+          }
+          return member;
+        });
+        this.membersUpdated.next([...this.members]);
+      }
+    );
   }
 
   addDonationForOneMember(
@@ -602,24 +617,39 @@ export class SocietyService {
       }
     `;
 
-    this.apollo.mutate({ mutation: graphqlQuery }).subscribe((res) => {
-      console.log({
-        emitted: "societyService.addDonationForOneMember",
-        res: res,
-      });
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        console.log({
+          emitted: "societyService.addDonationForOneMember",
+          res: res,
+        });
 
-      this.members = this.members.map((member) => {
-        if (member._id === member_id) {
-          return {
-            ...member,
-            isActionLoading: false,
-          };
-        }
-        return member;
-      });
+        this.members = this.members.map((member) => {
+          if (member._id === member_id) {
+            return {
+              ...member,
+              isActionLoading: false,
+            };
+          }
+          return member;
+        });
 
-      this.membersUpdated.next([...this.members]);
-    });
+        this.membersUpdated.next([...this.members]);
+      },
+      (err) => {
+        this.societyStatusListenner.next(false);
+        this.members = this.members.map((member) => {
+          if (member._id === member_id) {
+            return {
+              ...member,
+              isActionLoading: false,
+            };
+          }
+          return member;
+        });
+        this.membersUpdated.next([...this.members]);
+      }
+    );
   }
 
   listenNewSocietyMembers() {
