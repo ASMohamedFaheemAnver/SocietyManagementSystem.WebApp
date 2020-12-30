@@ -19,6 +19,14 @@ export class SocietyService {
   private societyUpdated = new Subject<Society>();
   private listenNewSocietyMembersSub: Subscription;
 
+  private logsUpdatedListener = new Subject<{
+    logs: Log[];
+    logs_count: number;
+  }>();
+
+  private member: Member;
+  private memberUpdated = new Subject<Member>();
+
   constructor(private apollo: Apollo) {}
 
   getSociety() {
@@ -112,6 +120,14 @@ export class SocietyService {
 
   getSocietyLogListenner() {
     return this.logsUpdated;
+  }
+
+  getMemberUpdateListener() {
+    return this.memberUpdated.asObservable();
+  }
+
+  getMemberLogsListenner() {
+    return this.logsUpdatedListener;
   }
 
   approveMember(memberId: string) {
@@ -697,6 +713,92 @@ export class SocietyService {
           this.membersUpdated.next([...this.members]);
         }
       });
+  }
+
+  getMemberById(member_id: string) {
+    console.log({ emitted: "societyService.getMemberById" });
+    const graphqlQuery = gql`
+      query {
+        getMemberById(member_id: "${member_id}") {
+          _id
+          email
+          name
+          imageUrl
+          address
+          arrears
+          donations
+        }
+      }
+    `;
+
+    return this.apollo
+      .query({
+        query: graphqlQuery,
+        fetchPolicy: "network-only",
+      })
+      .subscribe(
+        (res) => {
+          console.log({ emitted: "societyService.getMemberById", data: res });
+          this.member = { ...res.data["getMemberById"] };
+          this.memberUpdated.next({ ...this.member });
+          this.societyStatusListenner.next(true);
+        },
+        (err) => {
+          console.log(err);
+          this.societyStatusListenner.next(false);
+        }
+      );
+  }
+
+  getMemberLogsById(member_id, page_number, page_size) {
+    console.log({ emitted: "societyService.getMemberLogsById" });
+    const graphqlQuery = gql`
+      query{
+        getMemberLogsById(member_id: "${member_id}",page_number: ${page_number}, page_size: ${page_size}){
+          logs{
+              _id
+              kind
+              fee{
+                _id
+                date
+                amount
+                description
+                tracks {
+                  _id
+                  is_paid
+                }
+              }
+            }
+          logs_count
+          }
+      }
+    `;
+
+    this.apollo
+      .query({ query: graphqlQuery, fetchPolicy: "network-only" })
+      .subscribe(
+        (res) => {
+          console.log({
+            emitted: "societyService.getMemberLogsById",
+            data: res,
+          });
+
+          this.logs = res["data"]["getMemberLogsById"].logs.map((log) => {
+            return { ...log, fee: { ...log.fee } };
+          });
+
+          this.logs_count = res["data"]["getMemberLogsById"].logs_count;
+          this.logsUpdatedListener.next({
+            logs: [...this.logs],
+            logs_count: this.logs_count,
+          });
+          this.societyStatusListenner.next(false);
+        },
+        (err) => {
+          console.log(err);
+          this.societyStatusListenner.next(false);
+        }
+      );
   }
 
   unSubscribeListenNewSocietyMembers() {
