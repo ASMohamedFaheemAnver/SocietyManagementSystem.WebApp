@@ -6,6 +6,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
 import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
 import { MemberDonationDialogComponent } from "../member-donation-dialog/member-donation-dialog.component";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-society-members",
@@ -21,7 +22,8 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   constructor(
     private societyServie: SocietyService,
     private editMemberDialog: MatDialog,
-    private confirmDialog: MatDialog
+    private confirmDialog: MatDialog,
+    private router: Router
   ) {}
   ngOnDestroy(): void {
     this.membersSub.unsubscribe();
@@ -127,6 +129,10 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
         member._id
       );
     });
+  }
+
+  onAdvanceClick(memberId) {
+    this.router.navigateByUrl(`/society/members/${memberId}`);
   }
 
   changeDefaultUrl(member: Member) {

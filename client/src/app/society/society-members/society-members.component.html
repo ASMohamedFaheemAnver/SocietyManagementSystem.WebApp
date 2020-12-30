@@ -64,11 +64,20 @@
     </div>
     <mat-spinner *ngIf="member.isActionLoading"></mat-spinner>
     <div class="actions" *ngIf="!member.isActionLoading">
-      <!-- <button mat-button color="primary">Log</button> -->
-      <button mat-button color="primary" (click)="onDonationClick(member)">
+      <button
+        *ngIf="member.approved"
+        mat-button
+        color="primary"
+        (click)="onDonationClick(member)"
+      >
         Donation
       </button>
-      <button mat-button class="warn" (click)="onFineClick(member)">
+      <button
+        *ngIf="member.approved"
+        mat-button
+        class="warn"
+        (click)="onFineClick(member)"
+      >
         Fine
       </button>
       <button
@@ -79,22 +88,26 @@
       >
         Approve
       </button>
-      <button
+      <!-- <button
         *ngIf="member.approved"
         mat-button
         color="warn"
         (click)="onDisApproveMember(member)"
       >
         Disapprove
+      </button> -->
+      <button
+        *ngIf="member.approved"
+        mat-button
+        color="primary"
+        (click)="onAdvanceClick(member._id)"
+      >
+        Advance
       </button>
     </div>
   </div>
 </div>
-<!-- <mat-spinner
-  [ngStyle]="loadingCSS"
-  *ngIf="isLoading"
-  class="spinner"
-></mat-spinner> -->
+
 <div *ngIf="isLoading" class="page-wrapper">
   <mat-spinner></mat-spinner>
 </div>
