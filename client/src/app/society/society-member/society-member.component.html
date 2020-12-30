@@ -1,0 +1,92 @@
+<div class="parent">
+  <div class="left">
+    <div class="profile" *ngIf="!isLoading && member">
+      <div>
+        <h1>Profile</h1>
+        <div class="center">
+          <mat-spinner *ngIf="member.isImageLoading"></mat-spinner>
+        </div>
+        <img
+          [style.display]="member.isImageLoading ? 'none' : 'block'"
+          (error)="changeDefaultUrl()"
+          *ngIf="member.imageUrl"
+          src="{{ member.imageUrl }}"
+          (load)="onImageLoaded()"
+          alt="Profile picture!"
+        />
+      </div>
+      <div>
+        <strong>Name</strong>
+        <h3>{{ member.name }}</h3>
+      </div>
+      <div>
+        <strong>Email</strong>
+        <p>{{ member.email }}</p>
+      </div>
+      <div>
+        <strong>Address</strong>
+        <p>{{ member.address }}</p>
+      </div>
+      <div>
+        <strong>Arrears</strong>
+        <p>{{ member.arrears }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="activity">
+      <h1>Recent activity</h1>
+      <div class="parent2">
+        <div class="card big-heading" *ngIf="logs_count >= 1">
+          <!-- <div>
+            <strong>Type</strong>
+          </div> -->
+
+          <div>
+            <strong>Date</strong>
+          </div>
+          <div>
+            <strong>Amount</strong>
+          </div>
+          <div>
+            <strong>Description</strong>
+          </div>
+        </div>
+
+        <div class="warn pdt-1" *ngIf="logs_count < 1">
+          <p>No recent activities to view!</p>
+        </div>
+
+        <div class="card" *ngFor="let log of logs">
+          <!-- <div>
+            <p>{{ log.kind }}</p>
+          </div> -->
+          <div>
+            <p>{{ log.fee.date.slice(4, 15) }}</p>
+          </div>
+
+          <div>
+            <p>{{ log.fee.amount }}</p>
+          </div>
+
+          <div class="description-wrapper">
+            <p>{{ log.fee.description }}</p>
+          </div>
+        </div>
+      </div>
+      <mat-paginator
+        *ngIf="logs_count"
+        [length]="logs_count"
+        [pageSize]="page_size"
+        [pageSizeOptions]="page_size_options"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+<!-- <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner> -->
+<div *ngIf="isLoading" class="page-wrapper">
+  <mat-spinner class="spinner"></mat-spinner>
+</div>
