@@ -70,7 +70,7 @@
         color="primary"
         (click)="onDonationClick(member)"
       >
-        Donation
+        Add donation
       </button>
       <button
         *ngIf="member.approved"
@@ -78,7 +78,7 @@
         class="warn"
         (click)="onFineClick(member)"
       >
-        Fine
+        Add fine
       </button>
       <button
         *ngIf="!member.approved"

@@ -72,6 +72,19 @@
   flex: 1;
 }
 
+.right .actions-wrapper .actions button {
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.right .actions-wrapper .actions {
+  display: flex;
+}
+
+.right .actions-wrapper .actions {
+  flex-wrap: wrap;
+}
+
 @media (max-width: 768px) {
   .parent {
     flex-direction: column;

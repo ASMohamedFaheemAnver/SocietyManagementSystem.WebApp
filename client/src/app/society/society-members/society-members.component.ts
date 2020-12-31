@@ -132,7 +132,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   }
 
   onAdvanceClick(memberId) {
-    this.router.navigateByUrl(`/society/members/${memberId}`);
+    this.router.navigateByUrl(`/society/member/${memberId}`);
   }
 
   changeDefaultUrl(member: Member) {

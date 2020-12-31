@@ -51,7 +51,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: "society/members/:memberId",
+    path: "society/member/:memberId",
     component: SocietyMemberComponent,
     canActivate: [AuthGuard],
   },

@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { MemberService } from "../member.service";
 import { Subscription } from "rxjs";
 import { Member } from "src/app/member.model";
-import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-member-members",
