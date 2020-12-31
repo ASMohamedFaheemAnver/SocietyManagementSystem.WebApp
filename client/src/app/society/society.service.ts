@@ -19,10 +19,13 @@ export class SocietyService {
   private societyUpdated = new Subject<Society>();
   private listenNewSocietyMembersSub: Subscription;
 
-  private logsUpdatedListener = new Subject<{
+  private memberLogsUpdated = new Subject<{
     logs: Log[];
     logs_count: number;
   }>();
+
+  private member_logs: Log[] = [];
+  private member_logs_count: number;
 
   private member: Member;
   private memberUpdated = new Subject<Member>();
@@ -126,8 +129,8 @@ export class SocietyService {
     return this.memberUpdated.asObservable();
   }
 
-  getMemberLogsListenner() {
-    return this.logsUpdatedListener;
+  getMemberLogsUpdateListenner() {
+    return this.memberLogsUpdated;
   }
 
   approveMember(memberId: string) {
@@ -602,7 +605,116 @@ export class SocietyService {
           return member;
         });
 
+        this.member_logs.unshift({
+          _id: undefined,
+          kind: "Fine",
+          fee: {
+            _id: undefined,
+            tracks: [
+              {
+                _id: undefined,
+                is_paid: true,
+                member: {
+                  _id: member_id,
+                  name: undefined,
+                  imageUrl: undefined,
+                },
+              },
+            ],
+            date: new Date().toString(),
+            amount: fine,
+            description: description,
+          },
+        });
+
+        this.memberLogsUpdated.next({
+          logs: [...this.member_logs],
+          logs_count: ++this.member_logs_count,
+        });
+
+        this.member = {
+          ...this.member,
+          isActionLoading: false,
+          arrears: this.member.arrears + fine,
+        };
+
+        this.memberUpdated.next({ ...this.member });
+
+        this.societyStatusListenner.next(true);
+
         this.membersUpdated.next([...this.members]);
+      },
+      (err) => {
+        this.societyStatusListenner.next(false);
+        this.members = this.members.map((member) => {
+          if (member._id === member_id) {
+            return {
+              ...member,
+              isActionLoading: false,
+            };
+          }
+          return member;
+        });
+        this.membersUpdated.next([...this.members]);
+      }
+    );
+  }
+
+  addRefinementFeeForOneMember(
+    refinementFee: number,
+    description: string,
+    member_id: string
+  ) {
+    const graphqlQuery = gql`
+      mutation {
+        addRefinementFeeForOneMember(refinementFee: ${refinementFee}, description: "${description}", member_id: "${member_id}") {
+          message
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        console.log({
+          emitted: "societyService.addRefinementFeeForOneMember",
+          res: res,
+        });
+
+        this.member_logs.unshift({
+          _id: undefined,
+          kind: "RefinementFee",
+          fee: {
+            _id: undefined,
+            amount: refinementFee,
+            date: new Date().toString(),
+            description: description,
+            tracks: [
+              {
+                _id: undefined,
+                is_paid: false,
+                member: {
+                  _id: member_id,
+                  imageUrl: undefined,
+                  name: undefined,
+                },
+              },
+            ],
+          },
+        });
+
+        this.memberLogsUpdated.next({
+          logs: this.member_logs,
+          logs_count: ++this.member_logs_count,
+        });
+
+        this.member = {
+          ...this.member,
+          isActionLoading: false,
+          arrears: this.member.arrears + refinementFee,
+        };
+
+        this.societyStatusListenner.next(true);
+        this.memberUpdated.next({ ...this.member });
       },
       (err) => {
         this.societyStatusListenner.next(false);
@@ -649,6 +761,35 @@ export class SocietyService {
           }
           return member;
         });
+
+        this.member_logs.unshift({
+          _id: undefined,
+          kind: "Donation",
+          fee: {
+            _id: undefined,
+            tracks: [
+              {
+                _id: undefined,
+                is_paid: true,
+                member: {
+                  _id: member_id,
+                  name: undefined,
+                  imageUrl: undefined,
+                },
+              },
+            ],
+            date: new Date().toString(),
+            amount: donation,
+            description: description,
+          },
+        });
+
+        this.memberLogsUpdated.next({
+          logs: [...this.member_logs],
+          logs_count: ++this.member_logs_count,
+        });
+
+        this.societyStatusListenner.next(true);
 
         this.membersUpdated.next([...this.members]);
       },
@@ -727,6 +868,7 @@ export class SocietyService {
           address
           arrears
           donations
+          approved
         }
       }
     `;
@@ -783,14 +925,16 @@ export class SocietyService {
             data: res,
           });
 
-          this.logs = res["data"]["getMemberLogsById"].logs.map((log) => {
-            return { ...log, fee: { ...log.fee } };
-          });
+          this.member_logs = res["data"]["getMemberLogsById"].logs.map(
+            (log) => {
+              return { ...log, fee: { ...log.fee } };
+            }
+          );
 
-          this.logs_count = res["data"]["getMemberLogsById"].logs_count;
-          this.logsUpdatedListener.next({
-            logs: [...this.logs],
-            logs_count: this.logs_count,
+          this.member_logs_count = res["data"]["getMemberLogsById"].logs_count;
+          this.memberLogsUpdated.next({
+            logs: [...this.member_logs],
+            logs_count: this.member_logs_count,
           });
           this.societyStatusListenner.next(false);
         },

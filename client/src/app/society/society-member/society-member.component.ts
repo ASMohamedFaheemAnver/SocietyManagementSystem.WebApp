@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { PageEvent } from "@angular/material/paginator";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { Log } from "src/app/log.model";
 import { Member } from "src/app/member.model";
-import { MemberService } from "src/app/member/member.service";
+import { AddRefinementFeeDialogComponent } from "../add-refinement-fee-dialog/add-refinement-fee-dialog.component";
+import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
+import { MemberDonationDialogComponent } from "../member-donation-dialog/member-donation-dialog.component";
 import { SocietyService } from "../society.service";
 
 @Component({
@@ -13,17 +16,6 @@ import { SocietyService } from "../society.service";
   styleUrls: ["./society-member.component.css"],
 })
 export class SocietyMemberComponent implements OnInit, OnDestroy {
-  constructor(
-    private memberService: MemberService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private societyService: SocietyService
-  ) {}
-
-  ngOnDestroy(): void {
-    this.memberSub.unsubscribe();
-  }
-
   isLoading: boolean;
   currentPage = 0;
 
@@ -36,10 +28,18 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
   private memberLogsSub: Subscription;
   private societyStatusListennerSub: Subscription;
   private memberSub: Subscription;
+
   member: Member;
 
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private societyService: SocietyService,
+    private matDialog: MatDialog
+  ) {}
+
   ngOnInit(): void {
-    // this.isLoading = true;
+    this.isLoading = true;
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("memberId")) {
@@ -67,7 +67,7 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
           });
 
         this.memberLogsSub = this.societyService
-          .getMemberLogsListenner()
+          .getMemberLogsUpdateListenner()
           .subscribe((logsInfo) => {
             console.log({
               emitted: "societyMemberComponent.ngOnInit.getMemberLogsListenner",
@@ -87,6 +87,12 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl(`/society/members`);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.memberSub.unsubscribe();
+    this.memberLogsSub.unsubscribe();
+    this.societyStatusListennerSub.unsubscribe();
   }
 
   changeDefaultUrl() {
@@ -109,6 +115,73 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
     }
     this.currentPage = event.pageIndex;
     this.page_size = event.pageSize;
-    this.memberService.getMemberLogs(event.pageIndex, this.page_size);
+    this.societyService.getMemberLogsById(
+      this.memberId,
+      event.pageIndex,
+      this.page_size
+    );
+  }
+
+  onRefinementClick() {
+    const refinementDialogRef = this.matDialog.open(
+      AddRefinementFeeDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+
+    refinementDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+
+      this.isLoading = true;
+
+      this.societyService.addRefinementFeeForOneMember(
+        data.refinementFee,
+        data.description,
+        this.member._id
+      );
+    });
+  }
+
+  onDonationClick() {
+    const fineDialogRef = this.matDialog.open(MemberDonationDialogComponent, {
+      disableClose: true,
+    });
+
+    fineDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+
+      this.isLoading = true;
+
+      this.societyService.addDonationForOneMember(
+        data.donation,
+        data.description,
+        this.member._id
+      );
+    });
+  }
+
+  onFineClick() {
+    const fineDialogRef = this.matDialog.open(FineMemberDialogComponent, {
+      disableClose: true,
+    });
+
+    fineDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+
+      this.isLoading = true;
+
+      this.societyService.addFineForOneMember(
+        data.fine,
+        data.description,
+        this.member._id
+      );
+    });
   }
 }

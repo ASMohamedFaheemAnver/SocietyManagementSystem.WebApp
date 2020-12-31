@@ -36,6 +36,36 @@
 
   <div class="right">
     <div class="activity">
+      <div class="actions-wrapper">
+        <h1>Member actions</h1>
+        <div class="actions">
+          <button
+            (click)="onRefinementClick()"
+            *ngIf="member?.approved"
+            mat-raised-button
+            color="primary"
+          >
+            Add refinement
+          </button>
+          <button
+            (click)="onDonationClick()"
+            *ngIf="member?.approved"
+            mat-raised-button
+            color="primary"
+          >
+            Add donation
+          </button>
+          <button
+            (click)="onFineClick()"
+            *ngIf="member?.approved"
+            mat-raised-button
+            class="warn"
+          >
+            Add fine
+          </button>
+        </div>
+      </div>
+
       <h1>Recent activity</h1>
       <div class="parent2">
         <div class="card big-heading" *ngIf="logs_count >= 1">
