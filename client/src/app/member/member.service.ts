@@ -20,7 +20,7 @@ export class MemberService {
   }>();
   private listenCommonMemberLogSub: Subscription;
   private listenMemberLogTrackSub: Subscription;
-  private listenMemberFineLogSub: Subscription;
+  private listenMemberFineOrRefinementLogSub: Subscription;
   private listenMemberDonationLogSub: Subscription;
   private listenSocietyMembersSub: Subscription;
 
@@ -351,10 +351,10 @@ export class MemberService {
       );
   }
 
-  listenMemberFineLog() {
+  listenMemberFineOrRefinementLog() {
     const graphqlQuery = gql`
-      subscription listenMemberFineLog {
-        listenMemberFineLog {
+      subscription listenMemberFineOrRefinementLog {
+        listenMemberFineOrRefinementLog {
           log {
             _id
             kind
@@ -371,15 +371,15 @@ export class MemberService {
       }
     `;
 
-    this.listenMemberFineLogSub = this.apollo
+    this.listenMemberFineOrRefinementLogSub = this.apollo
       .subscribe({ query: graphqlQuery })
       .subscribe((res) => {
         console.log({
-          emitted: "memberService.listenMemberFineLog.subscribe",
+          emitted: "memberService.listenMemberFineOrRefinementLog.subscribe",
           data: res,
         });
 
-        const rLog = res.data["listenMemberFineLog"];
+        const rLog = res.data["listenMemberFineOrRefinementLog"];
 
         if (rLog.type === "POST") {
           const isExist = this.logs.some((log) => {
@@ -640,12 +640,12 @@ export class MemberService {
       this.listenMemberLogTrackSub.unsubscribe();
     }
   }
-  unSubscribelistenMemberFineLog() {
-    if (this.listenMemberFineLogSub) {
+  unSubscribelistenMemberFineOrRefinementLog() {
+    if (this.listenMemberFineOrRefinementLogSub) {
       console.log({
-        emitted: "societyService.unSubscribelistenMemberFineLog",
+        emitted: "societyService.unSubscribelistenMemberFineOrRefinementLog",
       });
-      this.listenMemberFineLogSub.unsubscribe();
+      this.listenMemberFineOrRefinementLogSub.unsubscribe();
     }
   }
   unSubscribelistenMemberDonationLog() {

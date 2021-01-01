@@ -20,7 +20,7 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
 
     this.memberService.unSubscribeListenCommonMemberLog();
     this.memberService.unSubscribeListenMemberLogTrack();
-    this.memberService.unSubscribelistenMemberFineLog();
+    this.memberService.unSubscribelistenMemberFineOrRefinementLog();
     this.memberService.unSubscribelistenMemberDonationLog();
   }
 
@@ -76,7 +76,7 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
 
     this.memberService.listenCommonMemberLog();
     this.memberService.listenMemberLogTrack();
-    this.memberService.listenMemberFineLog();
+    this.memberService.listenMemberFineOrRefinementLog();
     this.memberService.listenMemberDonationLog();
   }
 

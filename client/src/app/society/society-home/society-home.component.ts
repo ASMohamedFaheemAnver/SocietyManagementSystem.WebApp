@@ -11,6 +11,7 @@ import { EditFeeLogDialogComponent } from "../edit-fee-log-dialog/edit-fee-log-d
 import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
 import { MemberDonationDialogComponent } from "../member-donation-dialog/member-donation-dialog.component";
 import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
+import { AddRefinementFeeDialogComponent } from "../add-refinement-fee-dialog/add-refinement-fee-dialog.component";
 
 @Component({
   selector: "app-society-home",
@@ -276,6 +277,34 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         this.societyService.editFeeForEveryone(
           log._id,
           data.fine,
+          data.description
+        );
+      });
+    } else if (log.kind === "RefinementFee") {
+      const editRefinementFeeDialogRef = this.matDialog.open(
+        AddRefinementFeeDialogComponent,
+        {
+          data: {
+            refinementFee: log.fee.amount,
+            description: log.fee.description,
+          },
+          disableClose: true,
+        }
+      );
+      editRefinementFeeDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.refinementFee === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.refinementFee,
           data.description
         );
       });
