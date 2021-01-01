@@ -82,6 +82,9 @@
           <div>
             <strong>Description</strong>
           </div>
+          <div>
+            <strong>Actions</strong>
+          </div>
         </div>
 
         <div class="warn pdt-1" *ngIf="logs_count < 1">
@@ -102,6 +105,28 @@
 
           <div class="description-wrapper">
             <p>{{ log.fee.description }}</p>
+          </div>
+
+          <div class="action-wrapper">
+            <div>
+              <i
+                *ngIf="!log.fee.tracks[0].is_paid"
+                class="far fa-check-circle green"
+              ></i>
+              <i
+                *ngIf="log.fee.tracks[0].is_paid"
+                class="fas fa-power-off red"
+              ></i>
+              <i
+                *ngIf="log.kind !== 'ExtraFee' && log.kind !== 'MonthFee'"
+                class="far fa-edit"
+              >
+              </i>
+              <i
+                *ngIf="log.kind !== 'ExtraFee' && log.kind !== 'MonthFee'"
+                class="far fa-trash-alt"
+              ></i>
+            </div>
           </div>
         </div>
       </div>
