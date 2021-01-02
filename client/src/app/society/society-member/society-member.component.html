@@ -1,6 +1,6 @@
 <div class="parent">
   <div class="left">
-    <div class="profile" *ngIf="!isLoading && member">
+    <div class="profile" *ngIf="member">
       <div>
         <h1>Profile</h1>
         <div class="center">
@@ -87,7 +87,7 @@
           </div>
         </div>
 
-        <div class="warn pdt-1" *ngIf="logs_count < 1">
+        <div class="warn pdt-1" *ngIf="!isLoading && logs_count < 1">
           <p>No recent activities to view!</p>
         </div>
 
@@ -110,22 +110,15 @@
           <div class="action-wrapper">
             <div>
               <i
-                *ngIf="!log.fee.tracks[0].is_paid"
+                *ngIf="log.kind !== 'Donation' && !log.fee.tracks[0].is_paid"
                 class="far fa-check-circle green"
               ></i>
               <i
-                *ngIf="log.fee.tracks[0].is_paid"
+                *ngIf="log.kind !== 'Donation' && log.fee.tracks[0].is_paid"
                 class="fas fa-power-off red"
               ></i>
-              <i
-                *ngIf="log.kind !== 'ExtraFee' && log.kind !== 'MonthFee'"
-                class="far fa-edit"
-              >
-              </i>
-              <i
-                *ngIf="log.kind !== 'ExtraFee' && log.kind !== 'MonthFee'"
-                class="far fa-trash-alt"
-              ></i>
+              <i class="far fa-edit" (click)="onFeeLogEdit(log)"> </i>
+              <i class="far fa-trash-alt" (click)="onFeeLogDelete(log)"></i>
             </div>
           </div>
         </div>

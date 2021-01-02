@@ -101,7 +101,7 @@ export function createApollo(
         fields: {
           tracks: {
             merge(exsiting = [], incomming: any) {
-              return [...exsiting, ...incomming];
+              return [ ...incomming];
             },
           },
         },

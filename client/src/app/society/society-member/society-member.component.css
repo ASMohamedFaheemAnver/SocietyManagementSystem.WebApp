@@ -46,7 +46,7 @@
 .action-wrapper > div {
   width: 100px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 .fa-trash-alt {
