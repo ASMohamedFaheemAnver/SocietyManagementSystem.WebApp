@@ -407,6 +407,14 @@ export class SocietyService {
 
         this.societyUpdated.next({ ...this.society, isImageLoading: false });
 
+        this.member
+          ? (this.member.arrears += this.member_logs.find((log) => {
+              return log._id === log_id;
+            }).fee.amount)
+          : false;
+
+        this.memberUpdated.next({ ...this.member });
+
         this.logsUpdated.next({
           logs: [...this.logs],
           logs_count: this.logs_count,
@@ -478,6 +486,14 @@ export class SocietyService {
           : false;
 
         this.societyUpdated.next({ ...this.society, isImageLoading: false });
+
+        this.member
+          ? (this.member.arrears -= this.member_logs.find((log) => {
+              return log._id === log_id;
+            }).fee.amount)
+          : false;
+
+        this.memberUpdated.next({ ...this.member });
 
         this.logsUpdated.next({
           logs: [...this.logs],
