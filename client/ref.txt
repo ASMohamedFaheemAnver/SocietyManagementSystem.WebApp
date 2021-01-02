@@ -20,3 +20,6 @@
 
 #Socket not waiting
 #https://github.com/apollographql/subscriptions-transport-ws/pull/675
+
+#Apollo GraphQL merge cached data
+#https://stackoverflow.com/questions/63123558/apollo-graphql-merge-cached-data

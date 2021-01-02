@@ -3,8 +3,11 @@ import { MatDialog } from "@angular/material/dialog";
 import { PageEvent } from "@angular/material/paginator";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { Subscription } from "rxjs";
+import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
 import { Log } from "src/app/log.model";
 import { Member } from "src/app/member.model";
+import { AddExtraFeeDialogComponent } from "../add-extra-fee-dialog/add-extra-fee-dialog.component";
+import { AddMonthlyFeeDialogComponent } from "../add-monthly-fee-dialog/add-monthly-fee-dialog.component";
 import { AddRefinementFeeDialogComponent } from "../add-refinement-fee-dialog/add-refinement-fee-dialog.component";
 import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
 import { MemberDonationDialogComponent } from "../member-donation-dialog/member-donation-dialog.component";
@@ -183,5 +186,172 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
         this.member._id
       );
     });
+  }
+
+  onFeeLogEdit(log: Log) {
+    if (log.kind === "MonthFee") {
+      const editMonthlyFeeDialogRef = this.matDialog.open(
+        AddMonthlyFeeDialogComponent,
+        {
+          data: {
+            monthlyFee: log.fee.amount,
+            description: log.fee.description,
+          },
+          disableClose: true,
+        }
+      );
+
+      editMonthlyFeeDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.monthFee === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.monthFee,
+          data.description
+        );
+      });
+    } else if (log.kind === "ExtraFee") {
+      const editExtraFeeDialogRef = this.matDialog.open(
+        AddExtraFeeDialogComponent,
+        {
+          data: {
+            extraFee: log.fee.amount,
+            description: log.fee.description,
+          },
+          disableClose: true,
+        }
+      );
+      editExtraFeeDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.extraFee === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.extraFee,
+          data.description
+        );
+      });
+    } else if (log.kind === "Donation") {
+      const editDonationDialogRef = this.matDialog.open(
+        MemberDonationDialogComponent,
+        {
+          data: {
+            donation: log.fee.amount,
+            description: log.fee.description,
+          },
+          disableClose: true,
+        }
+      );
+      editDonationDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.donation === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.donation,
+          data.description
+        );
+      });
+    } else if (log.kind === "Fine") {
+      const editFineDialogRef = this.matDialog.open(FineMemberDialogComponent, {
+        data: {
+          fine: log.fee.amount,
+          description: log.fee.description,
+        },
+        disableClose: true,
+      });
+      editFineDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.fine === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.fine,
+          data.description
+        );
+      });
+    } else if (log.kind === "RefinementFee") {
+      const editRefinementFeeDialogRef = this.matDialog.open(
+        AddRefinementFeeDialogComponent,
+        {
+          data: {
+            refinementFee: log.fee.amount,
+            description: log.fee.description,
+          },
+          disableClose: true,
+        }
+      );
+      editRefinementFeeDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.refinementFee === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.refinementFee,
+          data.description
+        );
+      });
+    }
+  }
+
+  onFeeLogDelete(log: Log) {
+    const confirmDialogRef = this.matDialog.open(ConfirmDialogComponent, {
+      data: {
+        msg:
+          "Deleting past activity will undo payments related to the activity, do you want to continue?",
+      },
+      disableClose: true,
+    });
+
+    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+      if (isConfirmed) {
+        this.societyService.deleteFeeLog(log);
+      }
+    });
+  }
+
+  oneMakeFeePaidForOneMember(track_id, log_id) {
+    this.societyService.makeFeePaidForOneMember(track_id, log_id);
+  }
+
+  oneMakeFeeUnPaidForOneMember(track_id, log_id) {
+    this.societyService.makeFeeUnPaidForOneMember(track_id, log_id);
   }
 }

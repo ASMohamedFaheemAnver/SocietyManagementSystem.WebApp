@@ -94,7 +94,20 @@ export function createApollo(
   );
 
   const link = ApolloLink.from([basic, auth, error, http]);
-  const cache = new InMemoryCache();
+  // https://stackoverflow.com/questions/63123558/apollo-graphql-merge-cached-data
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Fee: {
+        fields: {
+          tracks: {
+            merge(exsiting = [], incomming: any) {
+              return [ ...incomming];
+            },
+          },
+        },
+      },
+    },
+  });
 
   return {
     link,

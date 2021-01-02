@@ -37,6 +37,50 @@
   justify-content: center;
 }
 
+.action-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-wrapper > div {
+  width: 100px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.fa-trash-alt {
+  color: red;
+}
+
+.fa-edit {
+  color: green;
+}
+
+.fa-edit:hover {
+  cursor: pointer;
+  transform: scale(2);
+}
+
+.fa-check-circle:hover {
+  cursor: pointer;
+  transform: scale(2);
+}
+
+.fa-power-off:hover {
+  cursor: pointer;
+  transform: scale(2);
+}
+
+.fa-trash-alt:hover {
+  cursor: pointer;
+  transform: scale(2);
+}
+
+.card div i {
+  margin: 10px;
+}
+
 @media (max-width: 500px) {
   .profile img {
     width: 150px;
@@ -68,7 +112,7 @@
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
-.card div {
+.card > div {
   flex: 1;
 }
 
@@ -101,5 +145,13 @@
     padding: 0;
     text-align: center;
     align-items: center;
+  }
+}
+
+@media (max-width: 650px) {
+  .action-wrapper > div {
+    width: auto;
+    display: flex;
+    flex-direction: column;
   }
 }

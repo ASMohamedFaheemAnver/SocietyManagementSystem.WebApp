@@ -384,15 +384,37 @@ export class SocietyService {
           };
         });
 
-        this.society.current_income += this.logs.find((log) => {
-          return log._id === log_id;
-        }).fee.amount;
+        this.member_logs.map((log) => {
+          return {
+            ...log,
+            fee: {
+              ...log.fee,
+              tracks: log.fee.tracks.map((track) => {
+                if (track._id === track_id) {
+                  track.is_paid = true;
+                }
+                return track;
+              }),
+            },
+          };
+        });
+
+        this.society
+          ? (this.society.current_income += this.logs.find((log) => {
+              return log._id === log_id;
+            }).fee.amount)
+          : false;
 
         this.societyUpdated.next({ ...this.society, isImageLoading: false });
 
         this.logsUpdated.next({
           logs: [...this.logs],
           logs_count: this.logs_count,
+        });
+
+        this.memberLogsUpdated.next({
+          logs: [...this.member_logs],
+          logs_count: this.member_logs_count,
         });
       },
       (err) => {
@@ -434,15 +456,37 @@ export class SocietyService {
           };
         });
 
-        this.society.current_income -= this.logs.find((log) => {
-          return log._id === log_id;
-        }).fee.amount;
+        this.member_logs.map((log) => {
+          return {
+            ...log,
+            fee: {
+              ...log.fee,
+              tracks: log.fee.tracks.map((track) => {
+                if (track._id === track_id) {
+                  track.is_paid = false;
+                }
+                return track;
+              }),
+            },
+          };
+        });
+
+        this.society
+          ? (this.society.current_income -= this.logs.find((log) => {
+              return log._id === log_id;
+            }).fee.amount)
+          : false;
 
         this.societyUpdated.next({ ...this.society, isImageLoading: false });
 
         this.logsUpdated.next({
           logs: [...this.logs],
           logs_count: this.logs_count,
+        });
+
+        this.memberLogsUpdated.next({
+          logs: [...this.member_logs],
+          logs_count: this.member_logs_count,
         });
       },
       (err) => {
@@ -452,11 +496,15 @@ export class SocietyService {
     );
   }
 
+  // Since Donation, Fine are following same shema as MonthFee, ExtraFee this will work perfectly fine
   editFeeForEveryone(log_id: string, fee: number, description: string) {
+    // Checking whether log_id provided
     if (!log_id) {
+      this.societyStatusListenner.next(false);
       return;
     }
 
+    // Constructing gql
     const graphqlQuery = gql`
       mutation{
         editFeeForEveryone(log_id: "${log_id}", fee: ${fee}, description: "${description}"){
@@ -481,60 +529,117 @@ export class SocietyService {
       }
     `;
 
+    // Sending the request and listening to the response
     this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
+        // Console logging server response
         console.log({
           emitted: "societyService.editFeeForEveryone",
           data: res,
         });
 
+        // Changing the logs offline
         this.logs = this.logs.map((log) => {
+          // We only changing one log which modified on server
           if (log._id === res["data"]["editFeeForEveryone"]._id) {
             for (let i = 0; i < log.fee.tracks.length; i++) {
               let track = log.fee.tracks[i];
               let modifiedTrack =
                 res["data"]["editFeeForEveryone"].fee.tracks[i];
 
+              // Checking whether track modified on server
               if (track.is_paid && !modifiedTrack.is_paid) {
+                // If modified we need to change expected_income and current_income
                 this.society.expected_income +=
                   res["data"]["editFeeForEveryone"].fee.amount;
                 this.society.expected_income -= log.fee.amount;
                 this.society.current_income -= log.fee.amount;
               } else {
-                this.society.expected_income +=
-                  res["data"]["editFeeForEveryone"].fee.amount;
-                this.society.expected_income -= log.fee.amount;
+                // If not modifed we only change expected_income
+                if (log.kind !== "Donation") {
+                  this.society.expected_income +=
+                    res["data"]["editFeeForEveryone"].fee.amount;
+                  this.society.expected_income -= log.fee.amount;
+                }
               }
             }
 
+            // Returning modified log to override existing offline log
             return res["data"]["editFeeForEveryone"];
           }
+          // Returning non modified offline log as it is
           return log;
         });
 
+        // Changing the member_logs offline
+        this.member_logs = this.member_logs.map((log) => {
+          // We only changing one log which modified on server
+          if (log._id === res["data"]["editFeeForEveryone"]._id) {
+            for (let i = 0; i < log.fee.tracks.length; i++) {
+              let track = log.fee.tracks[i];
+              let modifiedTrack =
+                res["data"]["editFeeForEveryone"].fee.tracks[i];
+
+              // Checking whether track modified on server
+              if (track.is_paid && !modifiedTrack.is_paid) {
+                // If modified we need to change expected_income and current_income
+                this.member.arrears +=
+                  res["data"]["editFeeForEveryone"].fee.amount;
+              } else {
+                if (log.kind !== "Donation") {
+                  this.member.arrears -= log.fee.amount;
+                  this.member.arrears +=
+                    res["data"]["editFeeForEveryone"].fee.amount;
+                }
+              }
+            }
+
+            // Returning modified log to override existing offline log
+            return res["data"]["editFeeForEveryone"];
+          }
+          // Returning non modified offline log as it is
+          return log;
+        });
+
+        // Emitting member_logs updates
+        this.memberLogsUpdated.next({
+          logs: [...this.member_logs],
+          logs_count: this.member_logs_count,
+        });
+
+        // Emitting member updates
+        this.memberUpdated.next({ ...this.member });
+
+        // Emitting society updates
         this.societyUpdated.next({
           ...this.society,
           isImageLoading: false,
         });
 
+        // Emitting logs updates
         this.logsUpdated.next({
           logs: [...this.logs],
           logs_count: this.logs_count,
         });
-        this.societyStatusListenner.next(false);
+
+        // Emitting society execution success message
+        this.societyStatusListenner.next(true);
       },
       (err) => {
         console.log(err);
+        // Emitting society execution failed message
         this.societyStatusListenner.next(false);
       }
     );
   }
 
+  // Will delete all log by using it's id
   deleteFeeLog(log: Log) {
     console.log({
       emitted: "societyService.deleteFeeLog",
     });
 
+    // Constructing gql
     const graphqlQuery = gql`
       mutation {
         deleteFeeLog(log_id: "${log._id}"){
@@ -543,9 +648,10 @@ export class SocietyService {
       }
     `;
 
+    // Sending the request and listening to the response
     this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
-        this.societyStatusListenner.next(false);
+        // Filtering the logs to remove deleted log
         this.logs = this.logs.filter((tLog) => {
           if (tLog._id !== log._id) {
             return true;
@@ -553,25 +659,56 @@ export class SocietyService {
           return false;
         });
 
+        // Filtering the member_logs to remove deleted log
+        this.member_logs = this.member_logs.filter((tLog) => {
+          if (tLog._id !== log._id) {
+            return true;
+          }
+          return false;
+        });
+
+        // Modifying payment according to the category
         log.fee.tracks.forEach((track) => {
           if (log.kind !== "Donation") {
             if (track.is_paid) {
-              this.society.current_income -= log.fee.amount;
+              this.society
+                ? (this.society.current_income -= log.fee.amount)
+                : false;
+            } else {
+              this.member ? (this.member.arrears -= log.fee.amount) : false;
             }
-            this.society.expected_income -= log.fee.amount;
+            this.society
+              ? (this.society.expected_income -= log.fee.amount)
+              : false;
           } else {
-            this.society.donations -= log.fee.amount;
+            this.society ? (this.society.donations -= log.fee.amount) : false;
+            this.member ? (this.member.donations -= log.fee.amount) : false;
           }
         });
 
+        // Emitting updated society
         this.societyUpdated.next({ ...this.society, isImageLoading: false });
 
+        // Emitting updated member
+        this.memberUpdated.next({ ...this.member });
+
+        // Emitting updated logs
         this.logsUpdated.next({
           logs: this.logs,
           logs_count: --this.logs_count,
         });
+
+        // Emitting updated member_logs
+        this.memberLogsUpdated.next({
+          logs: this.member_logs,
+          logs_count: --this.member_logs_count,
+        });
+
+        // Emitting society execution success message
+        this.societyStatusListenner.next(true);
       },
       (err) => {
+        // Emitting society execution failed message
         this.societyStatusListenner.next(false);
         console.log(err);
       }
@@ -632,11 +769,13 @@ export class SocietyService {
           logs_count: ++this.member_logs_count,
         });
 
-        this.member = {
-          ...this.member,
-          isActionLoading: false,
-          arrears: this.member.arrears + fine,
-        };
+        this.member
+          ? (this.member = {
+              ...this.member,
+              isActionLoading: false,
+              arrears: this.member.arrears + fine,
+            })
+          : false;
 
         this.memberUpdated.next({ ...this.member });
 
@@ -927,7 +1066,15 @@ export class SocietyService {
 
           this.member_logs = res["data"]["getMemberLogsById"].logs.map(
             (log) => {
-              return { ...log, fee: { ...log.fee } };
+              return {
+                ...log,
+                fee: {
+                  ...log.fee,
+                  tracks: log.fee.tracks.map((track) => {
+                    return { ...track, member: { _id: member_id } };
+                  }),
+                },
+              };
             }
           );
 

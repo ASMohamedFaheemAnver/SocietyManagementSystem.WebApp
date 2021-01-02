@@ -72,7 +72,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     this.societyStatusSub = this.societyService
       .getSocietyStatusListenner()
       .subscribe((emitedBoolean) => {
-        this.isLoading = emitedBoolean;
+        this.isLoading = false;
       });
 
     this.societyLogsSub = this.societyService
