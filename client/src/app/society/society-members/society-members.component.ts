@@ -45,7 +45,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
     this.societyStatusSub = this.societyServie
       .getSocietyStatusListenner()
       .subscribe((emitedBoolean) => {
-        this.isLoading = emitedBoolean;
+        this.isLoading = false;
       });
     this.societyServie.getAllMembers();
     this.societyServie.listenNewSocietyMembers();

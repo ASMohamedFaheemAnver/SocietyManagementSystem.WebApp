@@ -346,4 +346,12 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  oneMakeFeePaidForOneMember(track_id, log_id) {
+    this.societyService.makeFeePaidForOneMember(track_id, log_id);
+  }
+
+  oneMakeFeeUnPaidForOneMember(track_id, log_id) {
+    this.societyService.makeFeeUnPaidForOneMember(track_id, log_id);
+  }
 }

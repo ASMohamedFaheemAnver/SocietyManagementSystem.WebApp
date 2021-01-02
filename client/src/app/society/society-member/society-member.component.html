@@ -35,7 +35,7 @@
   </div>
 
   <div class="right">
-    <div class="activity">
+    <div class="activity" *ngIf="member">
       <div class="actions-wrapper">
         <h1>Member actions</h1>
         <div class="actions">
@@ -110,10 +110,16 @@
           <div class="action-wrapper">
             <div>
               <i
+                (click)="
+                  oneMakeFeePaidForOneMember(log.fee.tracks[0]._id, log._id)
+                "
                 *ngIf="log.kind !== 'Donation' && !log.fee.tracks[0].is_paid"
                 class="far fa-check-circle green"
               ></i>
               <i
+                (click)="
+                  oneMakeFeeUnPaidForOneMember(log.fee.tracks[0]._id, log._id)
+                "
                 *ngIf="log.kind !== 'Donation' && log.fee.tracks[0].is_paid"
                 class="fas fa-power-off red"
               ></i>
