@@ -1,27 +1,31 @@
 <div mat-dialog-title>
   <p>Edit each member's payment</p>
 </div>
-<div class="card-heading">
-  <p>Profile</p>
-  <p>Name</p>
-  <p *ngIf="offlineLog.kind !== 'Donation'">Action</p>
-</div>
-<div class="card" *ngFor="let track of offlineLog.fee.tracks">
-  <img src="{{ track.member.imageUrl }}" alt="Image" />
-  <p>{{ track.member.name }}</p>
-  <div *ngIf="offlineLog.kind !== 'Donation'">
-    <i
-      (click)="oneMakeFeePaidForOneMember(track._id, offlineLog._id)"
-      *ngIf="!track.is_paid"
-      class="far fa-check-circle fa-2x green done"
-    ></i>
-    <i
-      (click)="oneMakeFeeUnPaidForOneMember(track._id, offlineLog._id)"
-      *ngIf="track.is_paid"
-      class="fas fa-power-off fa-2x red cancel"
-    ></i>
+
+<mat-dialog-content>
+  <div class="card-heading">
+    <p>Profile</p>
+    <p>Name</p>
+    <p *ngIf="offlineLog.kind !== 'Donation'">Action</p>
   </div>
-</div>
+  <div class="card" *ngFor="let track of offlineLog.fee.tracks">
+    <img src="{{ track.member.imageUrl }}" alt="Image" />
+    <p>{{ track.member.name }}</p>
+    <div *ngIf="offlineLog.kind !== 'Donation'">
+      <i
+        (click)="oneMakeFeePaidForOneMember(track._id, offlineLog._id)"
+        *ngIf="!track.is_paid"
+        class="far fa-check-circle fa-2x green done"
+      ></i>
+      <i
+        (click)="oneMakeFeeUnPaidForOneMember(track._id, offlineLog._id)"
+        *ngIf="track.is_paid"
+        class="fas fa-power-off fa-2x red cancel"
+      ></i>
+    </div>
+  </div>
+</mat-dialog-content>
+
 <div mat-dialog-actions class="actions">
   <button mat-button color="primary" [mat-dialog-close]="false">Close</button>
 </div>
