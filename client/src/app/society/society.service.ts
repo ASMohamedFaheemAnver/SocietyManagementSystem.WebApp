@@ -735,7 +735,23 @@ export class SocietyService {
     const graphqlQuery = gql`
       mutation {
         addFineForOneMember(fineInput: {fine: ${fine}, description: "${description}", member_id: "${member_id}"}) {
-          message
+          _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+            tracks{
+                _id
+                member{
+                _id
+                imageUrl
+                name
+                }
+                is_paid
+              }
+          }
         }
       }
     `;
@@ -758,27 +774,9 @@ export class SocietyService {
           return member;
         });
 
-        this.member_logs.unshift({
-          _id: undefined,
-          kind: "Fine",
-          fee: {
-            _id: undefined,
-            tracks: [
-              {
-                _id: undefined,
-                is_paid: true,
-                member: {
-                  _id: member_id,
-                  name: undefined,
-                  imageUrl: undefined,
-                },
-              },
-            ],
-            date: new Date().toString(),
-            amount: fine,
-            description: description,
-          },
-        });
+        this.newLog = res["data"]["addFineForOneMember"];
+
+        this.member_logs.unshift(this.newLog);
 
         this.memberLogsUpdated.next({
           logs: [...this.member_logs],
@@ -823,7 +821,23 @@ export class SocietyService {
     const graphqlQuery = gql`
       mutation {
         addRefinementFeeForOneMember(refinementFee: ${refinementFee}, description: "${description}", member_id: "${member_id}") {
-          message
+          _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+            tracks{
+                _id
+                member{
+                _id
+                imageUrl
+                name
+                }
+                is_paid
+              }
+          }
         }
       }
     `;
@@ -835,27 +849,9 @@ export class SocietyService {
           res: res,
         });
 
-        this.member_logs.unshift({
-          _id: undefined,
-          kind: "RefinementFee",
-          fee: {
-            _id: undefined,
-            amount: refinementFee,
-            date: new Date().toString(),
-            description: description,
-            tracks: [
-              {
-                _id: undefined,
-                is_paid: false,
-                member: {
-                  _id: member_id,
-                  imageUrl: undefined,
-                  name: undefined,
-                },
-              },
-            ],
-          },
-        });
+        this.newLog = res["data"]["addRefinementFeeForOneMember"];
+
+        this.member_logs.unshift(this.newLog);
 
         this.memberLogsUpdated.next({
           logs: this.member_logs,
@@ -895,7 +891,23 @@ export class SocietyService {
     const graphqlQuery = gql`
       mutation {
         addDonationForOneMember(donationInput: {donation: ${donation}, description: "${description}", member_id: "${member_id}"}) {
-          message
+          _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+            tracks{
+                _id
+                member{
+                _id
+                imageUrl
+                name
+                }
+                is_paid
+              }
+          }
         }
       }
     `;
@@ -917,27 +929,9 @@ export class SocietyService {
           return member;
         });
 
-        this.member_logs.unshift({
-          _id: undefined,
-          kind: "Donation",
-          fee: {
-            _id: undefined,
-            tracks: [
-              {
-                _id: undefined,
-                is_paid: true,
-                member: {
-                  _id: member_id,
-                  name: undefined,
-                  imageUrl: undefined,
-                },
-              },
-            ],
-            date: new Date().toString(),
-            amount: donation,
-            description: description,
-          },
-        });
+        this.newLog = res["data"]["addDonationForOneMember"];
+
+        this.member_logs.unshift(this.newLog);
 
         this.memberLogsUpdated.next({
           logs: [...this.member_logs],
