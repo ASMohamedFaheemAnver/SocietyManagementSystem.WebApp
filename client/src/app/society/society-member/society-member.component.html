@@ -1,6 +1,6 @@
-<div class="parent">
+<div class="parent" *ngIf="member">
   <div class="left">
-    <div class="profile" *ngIf="member">
+    <div class="profile">
       <div>
         <h1>Profile</h1>
         <div class="center">
@@ -32,10 +32,16 @@
         <p>{{ member.arrears }}</p>
       </div>
     </div>
+    <div class="actions">
+      <button (click)="onDeleteSocietyMember()" mat-button color="warn">
+        <span>Remove this member</span>
+        <i class="far fa-trash-alt"></i>
+      </button>
+    </div>
   </div>
 
   <div class="right">
-    <div class="activity" *ngIf="member">
+    <div class="activity">
       <div class="actions-wrapper">
         <h1>Member actions</h1>
         <div class="actions">

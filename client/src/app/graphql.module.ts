@@ -101,7 +101,16 @@ export function createApollo(
         fields: {
           tracks: {
             merge(exsiting = [], incomming: any) {
-              return [ ...incomming];
+              return [...incomming];
+            },
+          },
+        },
+      },
+      Query: {
+        fields: {
+          getAllMembers: {
+            merge(exsiting = [], incomming: any) {
+              return [...incomming];
             },
           },
         },

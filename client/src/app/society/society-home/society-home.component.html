@@ -97,15 +97,7 @@
             <strong>Actions</strong>
           </div>
         </div>
-        <div
-          class="warn pdt-1"
-          *ngIf="
-            (logs ? logs.length < 1 : false) ||
-            (this.society
-              ? !this.society.number_of_members && !isLoading
-              : true)
-          "
-        >
+        <div class="warn pdt-1" *ngIf="logs ? logs.length < 1 : false">
           <p>No recent activities to view!</p>
         </div>
         <div class="card" *ngFor="let log of logs">

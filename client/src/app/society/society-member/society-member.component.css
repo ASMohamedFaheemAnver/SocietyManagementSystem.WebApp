@@ -129,6 +129,11 @@
   flex-wrap: wrap;
 }
 
+.left .actions .fa-trash-alt {
+  transform: none;
+  margin: 0 5px;
+}
+
 @media (max-width: 768px) {
   .parent {
     flex-direction: column;
