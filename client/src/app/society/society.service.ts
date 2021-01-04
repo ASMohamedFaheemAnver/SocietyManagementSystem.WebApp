@@ -4,6 +4,7 @@ import { Member } from "../member.model";
 import { Log } from "../log.model";
 import { Society } from "../society.model";
 import { Apollo, gql } from "apollo-angular";
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: "root" })
 export class SocietyService {
@@ -30,7 +31,7 @@ export class SocietyService {
   private member: Member;
   private memberUpdated = new Subject<Member>();
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo, private router: Router) {}
 
   getSociety() {
     const graphqlQuery = gql`
@@ -154,10 +155,19 @@ export class SocietyService {
         });
         this.members = updatedMembers;
         this.membersUpdated.next([...updatedMembers]);
-        this.societyStatusListenner.next(false);
+        this.societyStatusListenner.next(true);
       },
       (err) => {
         console.log(err);
+        let updatedMembers = this.members;
+        updatedMembers = updatedMembers.map((member) => {
+          if (member._id === memberId) {
+            member.isActionLoading = false;
+          }
+          return member;
+        });
+        this.members = updatedMembers;
+        this.membersUpdated.next([...updatedMembers]);
         this.societyStatusListenner.next(false);
       }
     );
@@ -1100,6 +1110,27 @@ export class SocietyService {
           this.societyStatusListenner.next(false);
         }
       );
+  }
+
+  deleteSocietyMemberById(member_id: string) {
+    console.log({ emitted: "societyService.deleteSocietyMemberById" });
+    const graphqlQuery = gql`
+      mutation {
+        deleteSocietyMember(member_id: "${member_id}") {
+          message
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        this.router.navigateByUrl(`/society/members`);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
   }
 
   unSubscribeListenNewSocietyMembers() {

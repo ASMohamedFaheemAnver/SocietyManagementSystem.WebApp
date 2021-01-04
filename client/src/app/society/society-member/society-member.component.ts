@@ -347,6 +347,22 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
     });
   }
 
+  onDeleteSocietyMember() {
+    const confirmDialogRef = this.matDialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: "You can't undo this operation, do you want to condinue?",
+      },
+      disableClose: true,
+    });
+
+    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+      if (isConfirmed) {
+        this.isLoading = true;
+        this.societyService.deleteSocietyMemberById(this.memberId);
+      }
+    });
+  }
+
   oneMakeFeePaidForOneMember(track_id, log_id) {
     this.societyService.makeFeePaidForOneMember(track_id, log_id);
   }
