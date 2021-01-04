@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-di
 import { MemberDonationDialogComponent } from "../member-donation-dialog/member-donation-dialog.component";
 import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
 import { AddRefinementFeeDialogComponent } from "../add-refinement-fee-dialog/add-refinement-fee-dialog.component";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-society-home",
@@ -25,7 +26,8 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private societyService: SocietyService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnDestroy(): void {
@@ -325,5 +327,9 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         this.societyService.deleteFeeLog(log);
       }
     });
+  }
+
+  onEditSocietyProfile() {
+    this.router.navigateByUrl(`/society/edit-profile`);
   }
 }

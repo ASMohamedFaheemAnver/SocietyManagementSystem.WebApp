@@ -11,6 +11,7 @@ import { SocietyMembersComponent } from "./society/society-members/society-membe
 import { MemberMembersComponent } from "./member/member-members/member-members.component";
 import { SocietyMemberComponent } from "./society/society-member/society-member.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
+import { EditSocietyProfileComponent } from "./society/edit-society-profile/edit-society-profile.component";
 
 const routes: Routes = [
   {
@@ -48,6 +49,11 @@ const routes: Routes = [
   {
     path: "society/members",
     component: SocietyMembersComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "society/edit-profile",
+    component: EditSocietyProfileComponent,
     canActivate: [AuthGuard],
   },
   {

@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="actions">
-      <button (click)="onDeleteSocietyMember()" mat-button color="warn">
+      <button (click)="onDeleteSocietyMember()" mat-stroked-button color="warn">
         <span>Remove this member</span>
         <i class="far fa-trash-alt"></i>
       </button>
@@ -48,7 +48,7 @@
           <button
             (click)="onRefinementClick()"
             *ngIf="member?.approved"
-            mat-raised-button
+            mat-stroked-button
             color="primary"
           >
             Add refinement
@@ -56,7 +56,7 @@
           <button
             (click)="onDonationClick()"
             *ngIf="member?.approved"
-            mat-raised-button
+            mat-stroked-button
             color="primary"
           >
             Add donation
@@ -64,7 +64,7 @@
           <button
             (click)="onFineClick()"
             *ngIf="member?.approved"
-            mat-raised-button
+            mat-stroked-button
             class="warn"
           >
             Add fine

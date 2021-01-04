@@ -14,6 +14,7 @@
           style="display: none"
           #inputImage
           type="file"
+          accept="image/*"
           (change)="onImageUpload($event)"
         />
         <button
@@ -31,10 +32,9 @@
           <mat-option
             *ngFor="let society of societies"
             value="{{ society._id }}"
-            >
-              <p>{{ society.name }}</p>
-            </mat-option
           >
+            <p>{{ society.name }}</p>
+          </mat-option>
           <mat-option *ngIf="societies.length == 0">
             <mat-error>No society had been registered!</mat-error>
           </mat-option>

@@ -44,6 +44,15 @@
           <p>{{ society.expected_income }}</p>
         </div>
       </div>
+      <div class="actions">
+        <button
+          (click)="onEditSocietyProfile()"
+          mat-stroked-button
+          color="primary"
+        >
+          <span>Edit profile</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -53,15 +62,17 @@
       <div class="action-buttons">
         <button
           [disabled]="this.society ? !this.society.number_of_members : true"
-          mat-raised-button
+          mat-stroked-button
           (click)="addMonthlyFee()"
+          color="primary"
         >
           Add monthly fees
         </button>
         <button
           [disabled]="this.society ? !this.society.number_of_members : true"
-          mat-raised-button
+          mat-stroked-button
           (click)="addExtraFee()"
+          color="primary"
         >
           Add extra fees
         </button>
