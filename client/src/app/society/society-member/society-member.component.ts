@@ -350,7 +350,7 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
   onDeleteSocietyMember() {
     const confirmDialogRef = this.matDialog.open(ConfirmDialogComponent, {
       data: {
-        msg: "You can't undo this operation, do you want to condinue?",
+        msg: "You can't undo this operation, do you want to continue?",
       },
       disableClose: true,
     });
