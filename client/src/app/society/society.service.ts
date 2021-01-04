@@ -73,6 +73,40 @@ export class SocietyService {
       );
   }
 
+  getSocietyProfile() {
+    const graphqlQuery = gql`
+      query {
+        getSociety {
+          _id
+          name
+          email
+          imageUrl
+          regNo
+          address
+          phoneNumber
+        }
+      }
+    `;
+
+    this.apollo
+      .query({ query: graphqlQuery, fetchPolicy: "network-only" })
+      .subscribe(
+        (res) => {
+          this.society = {
+            ...res["data"]["getSociety"],
+            isImageLoading: true,
+            imageUrl: res["data"]["getSociety"].imageUrl,
+          };
+          this.societyStatusListenner.next(false);
+          this.societyUpdated.next({ ...this.society, isImageLoading: true });
+        },
+        (err) => {
+          console.log(err);
+          this.societyStatusListenner.next(false);
+        }
+      );
+  }
+
   getAllMembers() {
     const graphqlQuery = gql`
       query {

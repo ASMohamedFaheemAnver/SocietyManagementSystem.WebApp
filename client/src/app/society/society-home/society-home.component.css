@@ -2,6 +2,10 @@
   display: flex;
 }
 
+input {
+  padding: 5px;
+}
+
 .left {
   padding: 2rem;
   display: flex;
@@ -18,10 +22,10 @@
   border-radius: 50%;
 }
 
-button {
+/* button {
   background-color: #546e7a;
   color: #fff;
-}
+} */
 
 @media (max-width: 500px) {
   .profile img {
@@ -163,9 +167,9 @@ mat-form-field {
   width: 100px;
 }
 
-button:hover {
+/* button:hover {
   color: #dadada;
-}
+} */
 
 .page-wrapper {
   top: 0;

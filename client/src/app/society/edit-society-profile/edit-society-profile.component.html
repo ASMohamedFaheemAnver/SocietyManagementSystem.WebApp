@@ -7,7 +7,7 @@
       class="form"
       (submit)="onSignUp()"
     >
-      <h1>Society signup</h1>
+      <h1>Edit society profile</h1>
       <div class="profile-pic">
         <img src="{{ imageUrl }}" alt="Profile picture!" />
         <input
@@ -29,53 +29,30 @@
         <br />
       </div>
       <div class="form-control">
-        <p>Enter society's email</p>
+        <p>Edit society's email</p>
         <input type="email" formControlName="email" />
       </div>
 
       <div class="form-control">
-        <p>Enter scoiety's registration number</p>
+        <p>Edit scoiety's registration number</p>
         <input type="text" formControlName="regNo" />
       </div>
 
       <div class="form-control">
-        <p>Enter society's name</p>
+        <p>Edit society's name</p>
         <input type="text" formControlName="name" />
       </div>
 
       <div class="form-control">
-        <p>Enter society's address</p>
+        <p>Edit society's address</p>
         <textarea formControlName="address"></textarea>
       </div>
 
       <div class="form-control">
-        <p>Enter society's phone number</p>
+        <p>Edit society's phone number</p>
         <input type="text" formControlName="phoneNumber" />
       </div>
 
-      <div class="form-control conflic">
-        <p>Enter society's password</p>
-        <div class="password-input">
-          <input
-            formControlName="password"
-            type="password"
-            [type]="hide ? 'password' : 'text'"
-          />
-
-          <div class="eye">
-            <button
-              mat-icon-button
-              matSuffix
-              type="button"
-              (click)="hide = !hide"
-              [attr.aria-label]="'hide'"
-              [attr.aria-pressed]="hide"
-            ></button>
-
-            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-          </div>
-        </div>
-      </div>
       <button
         class="button"
         type="submit"
@@ -83,7 +60,7 @@
         mat-raised-button
         color="primary"
       >
-        Signup
+        Update
       </button>
     </form>
   </div>
