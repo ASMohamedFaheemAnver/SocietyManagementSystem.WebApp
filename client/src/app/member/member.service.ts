@@ -91,23 +91,24 @@ export class MemberService {
       }
     `;
 
-    this.apollo.query({ query: graphqlQuery }).subscribe(
-      (res) => {
-        this.members = res["data"]["getAllSocietyMembers"].map((member) => {
-          return {
-            ...member,
-            isImageLoading: true,
-            imageUrl: member["imageUrl"],
-          };
-        });
-        this.membersUpdated.next([...this.members]);
-        this.memberStatusListenner.next(false);
-      },
-      (err) => {
-        console.log(err);
-        this.memberStatusListenner.next(false);
-      }
-    );
+    this.apollo
+      .query({ query: graphqlQuery, fetchPolicy: "network-only" })
+      .subscribe(
+        (res) => {
+          this.members = res["data"]["getAllSocietyMembers"].map((member) => {
+            return {
+              ...member,
+              isImageLoading: true,
+            };
+          });
+          this.membersUpdated.next([...this.members]);
+          this.memberStatusListenner.next(false);
+        },
+        (err) => {
+          console.log(err);
+          this.memberStatusListenner.next(false);
+        }
+      );
   }
 
   getMemberLogs(page_number, page_size) {
@@ -510,14 +511,35 @@ export class MemberService {
           data: res,
         });
 
-        this.members = this.members.map((member) => {
-          if (member._id === res.data["listenSocietyMembers"].member._id) {
-            return { ...res.data["listenSocietyMembers"].member };
-          }
-          return member;
-        });
+        const rLog = res.data["listenSocietyMembers"];
 
-        this.membersUpdated.next([...this.members]);
+        if (rLog.type === "POST") {
+          const isExist = this.members.some((member) => {
+            return member._id === rLog.member._id;
+          });
+
+          if (isExist) {
+            return;
+          }
+
+          this.members.push({ ...rLog.member, isImageLoading: true });
+          this.membersUpdated.next([...this.members]);
+        } else if (rLog.type === "PUT") {
+          this.members = this.members.map((member) => {
+            if (member._id === rLog.member._id) {
+              return { ...rLog.member };
+            }
+            return member;
+          });
+
+          this.membersUpdated.next([...this.members]);
+        } else if (rLog.type === "DELETE") {
+          this.members = this.members.filter((member) => {
+            return member._id !== rLog.member._id;
+          });
+
+          this.membersUpdated.next([...this.members]);
+        }
       });
   }
 
