@@ -5,6 +5,10 @@ img {
   border-radius: 50%;
 }
 
+.mat-dialog-title {
+  margin-bottom: 5px;
+}
+
 .mat-dialog-title p {
   text-align: center;
 }

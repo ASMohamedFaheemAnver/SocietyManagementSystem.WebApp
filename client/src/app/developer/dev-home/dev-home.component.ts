@@ -12,15 +12,6 @@ import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-di
 })
 export class DevHomeComponent implements OnInit, OnDestroy {
   isLoading = false;
-
-  constructor(
-    private devService: DevService,
-    private confirmDialog: MatDialog
-  ) {}
-  ngOnDestroy(): void {
-    this.societiesSub.unsubscribe();
-    this.devStatusSub.unsubscribe();
-  }
   societies: Society[] = [];
   private societiesSub: Subscription;
   private devStatusSub: Subscription;
@@ -28,6 +19,11 @@ export class DevHomeComponent implements OnInit, OnDestroy {
   loadingCSS = {
     top: "100px",
   };
+
+  constructor(
+    private devService: DevService,
+    private confirmDialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -43,6 +39,14 @@ export class DevHomeComponent implements OnInit, OnDestroy {
         this.societies = societies;
         this.isLoading = false;
       });
+
+    this.devService.listenNewSociety();
+  }
+
+  ngOnDestroy(): void {
+    this.societiesSub.unsubscribe();
+    this.devStatusSub.unsubscribe();
+    this.devService.unSubscribeListenNewSocieties();
   }
 
   onApproveSociety(society: Society) {
