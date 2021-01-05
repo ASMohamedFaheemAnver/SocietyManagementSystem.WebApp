@@ -30,6 +30,7 @@ export class EditSocietyProfileComponent implements OnInit {
   constructor(private societyService: SocietyService) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.societyStatusSub = this.societyService
       .getSocietyStatusListenner()
       .subscribe((emittedBoolean) => {
@@ -66,9 +67,6 @@ export class EditSocietyProfileComponent implements OnInit {
       name: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)],
       }),
-      email: new FormControl(null, {
-        validators: [Validators.required, Validators.email],
-      }),
       address: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(10)],
       }),
@@ -89,8 +87,8 @@ export class EditSocietyProfileComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-
-    console.log(this.form.value);
+    this.isLoading = true;
+    this.societyService.updateSocietyProfile(this.form.value);
   }
 
   onImageUpload(event: Event) {
@@ -109,6 +107,7 @@ export class EditSocietyProfileComponent implements OnInit {
 
       reader.onload = () => {
         this.imageUrl = reader.result;
+        this.form.get("image").markAsDirty();
       };
     });
   }

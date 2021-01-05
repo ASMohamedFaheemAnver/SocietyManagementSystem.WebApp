@@ -97,7 +97,7 @@ export class SocietyService {
             isImageLoading: true,
             imageUrl: res["data"]["getSociety"].imageUrl,
           };
-          this.societyStatusListenner.next(false);
+          this.societyStatusListenner.next(true);
           this.societyUpdated.next({ ...this.society, isImageLoading: true });
         },
         (err) => {
@@ -1174,5 +1174,46 @@ export class SocietyService {
       });
       this.listenNewSocietyMembersSub.unsubscribe();
     }
+  }
+
+  updateSocietyProfile({ name, image, address, regNo, phoneNumber }) {
+    console.log({
+      emitted: "societyService.updateSocietyProfile",
+    });
+
+    const graphqlQuery = gql`
+      mutation updateSocietyProfileMutation($image: Upload!) {
+        updateSocietyProfile(societyProfileInput: {
+          name: "${name}",
+          address: """${address}""",
+          phoneNumber: "${phoneNumber}",
+          image: $image
+          regNo: "${regNo}"}){
+          message
+        }
+      }
+    `;
+
+    this.apollo
+      .mutate({
+        mutation: graphqlQuery,
+        variables: { image: image },
+        context: { useMultipart: true },
+      })
+      .subscribe(
+        (res) => {
+          console.log({
+            emitted: "societyService.updateSocietyProfile.subscribe",
+            res: res,
+          });
+
+          this.router.navigateByUrl(`/society/home`);
+          this.societyStatusListenner.next(true);
+        },
+        (err) => {
+          console.log(err);
+          this.societyStatusListenner.next(false);
+        }
+      );
   }
 }
