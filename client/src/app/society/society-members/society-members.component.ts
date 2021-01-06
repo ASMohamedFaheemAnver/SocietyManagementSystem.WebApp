@@ -28,7 +28,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.membersSub.unsubscribe();
     this.societyStatusSub.unsubscribe();
-    this.societyServie.unSubscribeListenNewSocietyMembers();
+    this.societyServie.unSubscribeListenSocietyMembersBySociety();
   }
 
   ngOnInit(): void {
@@ -48,7 +48,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       });
     this.societyServie.getAllMembers();
-    this.societyServie.listenNewSocietyMembers();
+    this.societyServie.listenSocietyMembersBySociety();
   }
 
   onApproveMember(member: Member) {

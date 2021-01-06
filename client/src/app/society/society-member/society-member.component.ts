@@ -86,6 +86,8 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
           this.currentPage,
           this.page_size
         );
+
+        this.societyService.listenMemberById(this.memberId);
       } else {
         this.router.navigateByUrl(`/society/members`);
       }
@@ -96,6 +98,7 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
     this.memberSub.unsubscribe();
     this.memberLogsSub.unsubscribe();
     this.societyStatusListennerSub.unsubscribe();
+    this.societyService.unSubscribeListenMemberById();
   }
 
   changeDefaultUrl() {

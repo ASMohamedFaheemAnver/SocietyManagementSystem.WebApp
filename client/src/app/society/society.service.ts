@@ -18,8 +18,8 @@ export class SocietyService {
   private society: Society;
   private newLog: Log;
   private societyUpdated = new Subject<Society>();
-  private listenNewSocietyMembersSub: Subscription;
-
+  private listenSocietyMembersBySocietySub: Subscription;
+  private listenMemberByIdSub: Subscription;
   private memberLogsUpdated = new Subject<{
     logs: Log[];
     logs_count: number;
@@ -1002,12 +1002,12 @@ export class SocietyService {
     );
   }
 
-  listenNewSocietyMembers() {
-    console.log({ emitted: "societyService.listenNewSocietyMembers" });
+  listenSocietyMembersBySociety() {
+    console.log({ emitted: "societyService.listenSocietyMembersBySociety" });
 
     const graphqlQuery = gql`
-      subscription listenNewSocietyMembers {
-        listenNewSocietyMembers {
+      subscription listenSocietyMembersBySociety {
+        listenSocietyMembersBySociety {
           member {
             _id
             name
@@ -1022,29 +1022,77 @@ export class SocietyService {
       }
     `;
 
-    this.listenNewSocietyMembersSub = this.apollo
+    this.listenSocietyMembersBySocietySub = this.apollo
       .subscribe({
         query: graphqlQuery,
       })
       .subscribe((res) => {
         console.log({
-          emitted: "societyService.listenNewSocietyMembers",
+          emitted: "societyService.listenSocietyMembersBySociety",
           data: res,
         });
 
-        if (res.data["listenNewSocietyMembers"].type === "POST") {
+        const data = res.data["listenSocietyMembersBySociety"];
+
+        if (data.type === "POST") {
           const isMemberExist = this.members.some((member) => {
-            return (
-              res.data["listenNewSocietyMembers"].member._id === member._id
-            );
+            return data.member._id === member._id;
           });
 
           if (isMemberExist) {
             return;
           }
 
-          this.members.push({ ...res.data["listenNewSocietyMembers"].member });
+          this.members.push({
+            ...data.member,
+          });
           this.membersUpdated.next([...this.members]);
+        } else if (data.type === "PUT") {
+          this.members = this.members.map((member) => {
+            if (member._id === data.member._id) {
+              return { ...data.member };
+            }
+            return member;
+          });
+
+          this.membersUpdated.next([...this.members]);
+        }
+      });
+  }
+
+  listenMemberById(member_id: string) {
+    console.log({ emitted: "societyService.listenMemberById" });
+
+    const graphqlQuery = gql`
+      subscription listenMemberById {
+        listenMemberById(member_id: "${member_id}") {
+          member {
+            _id
+            name
+            email
+            imageUrl
+            address
+            phoneNumber
+          }
+          type
+        }
+      }
+    `;
+
+    this.listenMemberByIdSub = this.apollo
+      .subscribe({
+        query: graphqlQuery,
+      })
+      .subscribe((res) => {
+        console.log({
+          emitted: "societyService.listenMemberByIdSub",
+          data: res,
+        });
+
+        const data = res.data["listenMemberById"];
+        if (data.type === "PUT") {
+          this.member = { ...data.member };
+          this.memberUpdated.next({ ...this.member });
         }
       });
   }
@@ -1167,12 +1215,21 @@ export class SocietyService {
     );
   }
 
-  unSubscribeListenNewSocietyMembers() {
-    if (this.listenNewSocietyMembersSub) {
+  unSubscribeListenSocietyMembersBySociety() {
+    if (this.listenSocietyMembersBySocietySub) {
       console.log({
-        emitted: "societyService.unSubscribeListenNewSocietyMembers",
+        emitted: "societyService.unSubscribeListenSocietyMembersBySociety",
       });
-      this.listenNewSocietyMembersSub.unsubscribe();
+      this.listenSocietyMembersBySocietySub.unsubscribe();
+    }
+  }
+
+  unSubscribeListenMemberById() {
+    if (this.listenMemberByIdSub) {
+      console.log({
+        emitted: "societyService.unSubscribeListenMemberById",
+      });
+      this.listenMemberByIdSub.unsubscribe();
     }
   }
 
