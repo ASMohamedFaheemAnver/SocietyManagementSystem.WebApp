@@ -29,7 +29,7 @@ export class EditMemberProfileComponent implements OnInit {
   constructor(private memberService: MemberService) {}
 
   ngOnInit(): void {
-    // this.isLoading = true;
+    this.isLoading = true;
     this.memberStatusSub = this.memberService
       .getMemberStatusListenner()
       .subscribe((emittedBoolean) => {

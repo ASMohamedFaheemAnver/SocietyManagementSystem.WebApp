@@ -1,6 +1,6 @@
-<div class="parent">
+<div class="parent" *ngIf="!isLoading && member">
   <div class="left">
-    <div class="profile" *ngIf="!isLoading && member">
+    <div class="profile">
       <div>
         <h1>Profile</h1>
         <div class="center">
