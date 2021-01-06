@@ -9,7 +9,7 @@ export class DevService {
   private societiesUpdated = new Subject<Society[]>();
   private societies: Society[];
 
-  private listenNewSocietiesSub: Subscription;
+  private listenSocietiesSub: Subscription;
 
   constructor(private apollo: Apollo) {}
   getAllSociety() {
@@ -107,12 +107,12 @@ export class DevService {
     );
   }
 
-  listenNewSociety() {
-    console.log({ emitted: "devService.listenNewSociety" });
+  listenSociety() {
+    console.log({ emitted: "devService.listenSociety" });
 
     const graphqlQuery = gql`
-      subscription listenNewSociety {
-        listenNewSociety {
+      subscription listenSociety {
+        listenSociety {
           society {
             _id
             name
@@ -128,19 +128,21 @@ export class DevService {
       }
     `;
 
-    this.listenNewSocietiesSub = this.apollo
+    this.listenSocietiesSub = this.apollo
       .subscribe({
         query: graphqlQuery,
       })
       .subscribe((res) => {
         console.log({
-          emitted: "devService.listenNewSociety",
+          emitted: "devService.listenSociety",
           data: res,
         });
 
-        if (res.data["listenNewSociety"].type === "POST") {
+        const data = res.data["listenSociety"];
+
+        if (data.type === "POST") {
           const isSocietyExist = this.societies.some((society) => {
-            return res.data["listenNewSociety"].society._id === society._id;
+            return data.society._id === society._id;
           });
 
           if (isSocietyExist) {
@@ -148,19 +150,29 @@ export class DevService {
           }
 
           this.societies.push({
-            ...res.data["listenNewSociety"].society,
+            ...data.society,
           });
+          this.societiesUpdated.next([...this.societies]);
+        } else if (data.type === "PUT") {
+          this.societies = this.societies.map((society) => {
+            if (society._id === data.society._id) {
+              return { ...data.society };
+            }
+
+            return society;
+          });
+
           this.societiesUpdated.next([...this.societies]);
         }
       });
   }
 
-  unSubscribeListenNewSocieties() {
-    if (this.listenNewSocietiesSub) {
+  unSubscribeListenSocieties() {
+    if (this.listenSocietiesSub) {
       console.log({
-        emitted: "devService.unSubscribeListenNewSocieties",
+        emitted: "devService.unSubscribeListenSocieties",
       });
-      this.listenNewSocietiesSub.unsubscribe();
+      this.listenSocietiesSub.unsubscribe();
     }
   }
 

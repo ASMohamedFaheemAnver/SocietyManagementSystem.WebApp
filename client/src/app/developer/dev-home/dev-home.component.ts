@@ -40,13 +40,13 @@ export class DevHomeComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       });
 
-    this.devService.listenNewSociety();
+    this.devService.listenSociety();
   }
 
   ngOnDestroy(): void {
     this.societiesSub.unsubscribe();
     this.devStatusSub.unsubscribe();
-    this.devService.unSubscribeListenNewSocieties();
+    this.devService.unSubscribeListenSocieties();
   }
 
   onApproveSociety(society: Society) {
