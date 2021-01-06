@@ -4,6 +4,7 @@ import { Log } from "src/app/log.model";
 import { PageEvent } from "@angular/material/paginator";
 import { Subscription } from "rxjs";
 import { Member } from "src/app/member.model";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-member-home",
@@ -11,7 +12,7 @@ import { Member } from "src/app/member.model";
   styleUrls: ["./member-home.component.css"],
 })
 export class MemberHomeComponent implements OnInit, OnDestroy {
-  constructor(private memberService: MemberService) {}
+  constructor(private memberService: MemberService, private router: Router) {}
 
   ngOnDestroy(): void {
     this.memberLogsSub.unsubscribe();
@@ -101,5 +102,9 @@ export class MemberHomeComponent implements OnInit, OnDestroy {
     this.currentPage = event.pageIndex;
     this.page_size = event.pageSize;
     this.memberService.getMemberLogs(event.pageIndex, this.page_size);
+  }
+
+  onEditMemberProfile() {
+    this.router.navigateByUrl(`/member/edit-profile`);
   }
 }

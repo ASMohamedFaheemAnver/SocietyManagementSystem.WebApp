@@ -59,6 +59,38 @@ export class MemberService {
       );
   }
 
+  getMemberProfile() {
+    console.log({ emitted: "memberService.getMemberProfile" });
+    const graphqlQuery = gql`
+      query {
+        getMember {
+          _id
+          name
+          imageUrl
+          address
+          phoneNumber
+        }
+      }
+    `;
+
+    this.apollo
+      .query({ query: graphqlQuery, fetchPolicy: "network-only" })
+      .subscribe(
+        (res) => {
+          this.member = {
+            ...res["data"]["getMember"],
+            isImageLoading: true,
+          };
+          this.memberStatusListenner.next(true);
+          this.memberUpdated.next({ ...this.member });
+        },
+        (err) => {
+          console.log(err);
+          this.memberStatusListenner.next(false);
+        }
+      );
+  }
+
   getMembersUpdateListener() {
     return this.membersUpdated.asObservable();
   }

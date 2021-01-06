@@ -32,6 +32,16 @@
         <p>{{ member.arrears }}</p>
       </div>
     </div>
+
+    <div class="actions">
+      <button
+        (click)="onEditMemberProfile()"
+        mat-stroked-button
+        color="primary"
+      >
+        <span>Edit profile</span>
+      </button>
+    </div>
   </div>
 
   <div class="right" *ngIf="member">

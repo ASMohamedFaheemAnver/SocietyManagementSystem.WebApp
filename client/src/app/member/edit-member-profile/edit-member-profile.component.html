@@ -1,0 +1,62 @@
+<div id="signup">
+  <div class="wrapper">
+    <form
+      class="form"
+      *ngIf="!isLoading"
+      [formGroup]="form"
+      class="form"
+      (submit)="onSignUp()"
+    >
+      <h1>Edit member profile</h1>
+      <div class="profile-pic">
+        <img src="{{ imageUrl }}" alt="Profile picture!" />
+        <input
+          style="display: none"
+          #inputImage
+          type="file"
+          accept="image/*"
+          (change)="onImageUpload($event)"
+        />
+        <br />
+        <button
+          class="upload"
+          type="button"
+          mat-stroked-button
+          (click)="inputImage.click()"
+        >
+          Upload picture
+        </button>
+        <br />
+      </div>
+
+      <div class="form-control">
+        <p>Edit your name</p>
+        <input type="text" formControlName="name" />
+      </div>
+
+      <div class="form-control">
+        <p>Edit your address</p>
+        <textarea formControlName="address"></textarea>
+      </div>
+
+      <div class="form-control">
+        <p>Edit your phone number</p>
+        <input type="text" formControlName="phoneNumber" />
+      </div>
+
+      <button
+        class="button"
+        type="submit"
+        [disabled]="!(this.form.valid && form.dirty)"
+        mat-raised-button
+        color="primary"
+      >
+        Update
+      </button>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="page-wrapper">
+  <mat-spinner class="spinner"></mat-spinner>
+</div>
