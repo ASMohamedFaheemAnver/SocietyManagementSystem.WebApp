@@ -3,10 +3,10 @@ import { Subject, Subscription } from "rxjs";
 import { Member } from "../member.model";
 import { Log } from "../log.model";
 import { Apollo, gql } from "apollo-angular";
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: "root" })
 export class MemberService {
-  constructor(private apollo: Apollo) {}
   private membersUpdated = new Subject<Member[]>();
   private memberUpdated = new Subject<Member>();
   private members: Member[] = [];
@@ -23,6 +23,8 @@ export class MemberService {
   private listenMemberFineOrRefinementLogSub: Subscription;
   private listenMemberDonationLogSub: Subscription;
   private listenSocietyMembersSub: Subscription;
+
+  constructor(private apollo: Apollo, private router: Router) {}
 
   getMember() {
     console.log({ emitted: "memberService.getMember" });
@@ -83,6 +85,46 @@ export class MemberService {
           };
           this.memberStatusListenner.next(true);
           this.memberUpdated.next({ ...this.member });
+        },
+        (err) => {
+          console.log(err);
+          this.memberStatusListenner.next(false);
+        }
+      );
+  }
+
+  updateMemberProfile({ name, image, address, phoneNumber }) {
+    console.log({
+      emitted: "memberService.updateMemberProfile",
+    });
+
+    const graphqlQuery = gql`
+      mutation updateMemberProfileMutation($image: Upload!) {
+        updateMemberProfile(memberProfileInput: {
+          name: "${name}",
+          address: """${address}""",
+          phoneNumber: "${phoneNumber}",
+          image: $image}){
+          message
+        }
+      }
+    `;
+
+    this.apollo
+      .mutate({
+        mutation: graphqlQuery,
+        variables: { image: image },
+        context: { useMultipart: true },
+      })
+      .subscribe(
+        (res) => {
+          console.log({
+            emitted: "memberService.updateMemberProfile.subscribe",
+            res: res,
+          });
+
+          this.router.navigateByUrl(`/member/home`);
+          this.memberStatusListenner.next(true);
         },
         (err) => {
           console.log(err);

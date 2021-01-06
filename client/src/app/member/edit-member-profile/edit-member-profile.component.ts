@@ -82,7 +82,7 @@ export class EditMemberProfileComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    // this.memberService.updateMemberProfile(this.form.value);
+    this.memberService.updateMemberProfile(this.form.value);
   }
 
   onImageUpload(event: Event) {
