@@ -12,6 +12,7 @@ import { MemberMembersComponent } from "./member/member-members/member-members.c
 import { SocietyMemberComponent } from "./society/society-member/society-member.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { EditSocietyProfileComponent } from "./society/edit-society-profile/edit-society-profile.component";
+import { EditMemberProfileComponent } from "./member/edit-member-profile/edit-member-profile.component";
 
 const routes: Routes = [
   {
@@ -64,6 +65,11 @@ const routes: Routes = [
   {
     path: "member/members",
     component: MemberMembersComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "member/edit-profile",
+    component: EditMemberProfileComponent,
     canActivate: [AuthGuard],
   },
   {

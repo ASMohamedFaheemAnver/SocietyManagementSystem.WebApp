@@ -1,68 +1,61 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
-import { Society } from "src/app/society.model";
+import { Member } from "src/app/member.model";
 
 import { mimeType } from "../../util/mime-type.validator";
-import { SocietyService } from "../society.service";
+import { MemberService } from "../member.service";
 
 @Component({
-  selector: "app-signup-society",
-  templateUrl: "./edit-society-profile.component.html",
-  styleUrls: ["./edit-society-profile.component.css"],
+  selector: "app-edit-member-profile",
+  templateUrl: "./edit-member-profile.component.html",
+  styleUrls: ["./edit-member-profile.component.css"],
 })
-export class EditSocietyProfileComponent implements OnInit {
+export class EditMemberProfileComponent implements OnInit {
   form: FormGroup;
 
   isLoading = false;
   hide = true;
 
-  society: Society;
+  member: Member;
 
   imageUrl: any = "./assets/img/add-img.png";
 
-  private societyStatusSub: Subscription;
-  private societySub: Subscription;
+  private memberStatusSub: Subscription;
+  private memberSub: Subscription;
 
   private phoneNumberPattern = "[+]*[0-9]{3,13}";
-  private regIdPattern = "([0-9]|[a-z]|[A-Z]){3,10}";
 
-  constructor(private societyService: SocietyService) {}
+  constructor(private memberService: MemberService) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
-    this.societyStatusSub = this.societyService
-      .getSocietyStatusListenner()
+    // this.isLoading = true;
+    this.memberStatusSub = this.memberService
+      .getMemberStatusListenner()
       .subscribe((emittedBoolean) => {
         this.isLoading = false;
       });
 
-    this.societySub = this.societyService
-      .getSocietyUpdatedListenner()
-      .subscribe((society) => {
+    this.memberSub = this.memberService
+      .getMemberUpdateListener()
+      .subscribe((member) => {
         console.log({
           emitted:
             "editSocietyProfileComponent.ngOnInit.getSocietyUpdatedListenner",
-          society: society,
+          member: member,
         });
-        this.society = society;
+        this.member = member;
 
-        this.form.patchValue({ ...this.society, image: "undefined" });
-        this.imageUrl = this.society.imageUrl;
+        this.form.patchValue({ ...this.member, image: "undefined" });
+        this.imageUrl = this.member.imageUrl;
       });
 
-    this.societyService.getSocietyProfile();
+    this.memberService.getMemberProfile();
 
     this.form = new FormGroup({
       image: new FormControl(null, {
         validators: [Validators.required],
         asyncValidators: [mimeType],
-      }),
-      regNo: new FormControl(null, {
-        validators: [
-          Validators.required,
-          Validators.pattern(this.regIdPattern),
-        ],
       }),
       name: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)],
@@ -80,8 +73,8 @@ export class EditSocietyProfileComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.societyStatusSub.unsubscribe();
-    this.societySub.unsubscribe();
+    this.memberStatusSub.unsubscribe();
+    this.memberSub.unsubscribe();
   }
 
   onSignUp() {
@@ -89,7 +82,7 @@ export class EditSocietyProfileComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.societyService.updateSocietyProfile(this.form.value);
+    // this.memberService.updateMemberProfile(this.form.value);
   }
 
   onImageUpload(event: Event) {
