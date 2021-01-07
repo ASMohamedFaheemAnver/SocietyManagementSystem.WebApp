@@ -13,6 +13,7 @@ import { MemberDonationDialogComponent } from "../member-donation-dialog/member-
 import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
 import { AddRefinementFeeDialogComponent } from "../add-refinement-fee-dialog/add-refinement-fee-dialog.component";
 import { Router } from "@angular/router";
+import { SocietyDonationDialogComponent } from "../society-donation-dialog/society-donation-dialog.component";
 
 @Component({
   selector: "app-society-home",
@@ -93,7 +94,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  addMonthlyFee() {
+  onAddMonthlyFee() {
     const addMonthlyFeeDialogRef = this.matDialog.open(
       AddMonthlyFeeDialogComponent,
       {
@@ -117,7 +118,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  addExtraFee() {
+  onAddExtraFee() {
     const addExtraFeeDialogRef = this.matDialog.open(
       AddExtraFeeDialogComponent,
       {
@@ -131,6 +132,25 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
       this.isLoading = true;
       this.societyService.addExtraFeeToEveryone(
         data.extraFee,
+        data.description
+      );
+    });
+  }
+
+  onAddDonation() {
+    const addDonationDialogRef = this.matDialog.open(
+      SocietyDonationDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+    addDonationDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.addReceivedDonationBySociety(
+        data.donation,
         data.description
       );
     });

@@ -152,11 +152,14 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
   }
 
   onDonationClick() {
-    const fineDialogRef = this.matDialog.open(MemberDonationDialogComponent, {
-      disableClose: true,
-    });
+    const donationDialogRef = this.matDialog.open(
+      MemberDonationDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
 
-    fineDialogRef.afterClosed().subscribe((data) => {
+    donationDialogRef.afterClosed().subscribe((data) => {
       if (!data) {
         return;
       }

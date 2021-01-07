@@ -63,7 +63,7 @@
         <button
           [disabled]="this.society ? !this.society.number_of_members : true"
           mat-stroked-button
-          (click)="addMonthlyFee()"
+          (click)="onAddMonthlyFee()"
           color="primary"
         >
           Add monthly fees
@@ -71,11 +71,16 @@
         <button
           [disabled]="this.society ? !this.society.number_of_members : true"
           mat-stroked-button
-          (click)="addExtraFee()"
+          (click)="onAddExtraFee()"
           color="primary"
         >
           Add extra fees
         </button>
+
+        <button (click)="onAddDonation()" mat-stroked-button color="primary">
+          Add donations
+        </button>
+        <button mat-stroked-button color="primary">Add other expences</button>
       </div>
       <p
         *ngIf="
@@ -129,6 +134,7 @@
           <div class="action-wrapper">
             <div>
               <i
+                *ngIf="log.fee.tracks.length"
                 (click)="onFeeLogMemberEdit(log._id)"
                 class="fas fa-bars green"
               ></i>

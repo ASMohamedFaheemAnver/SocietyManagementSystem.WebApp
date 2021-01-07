@@ -44,12 +44,13 @@ input {
   flex-wrap: wrap;
 }
 
-.right .action-buttons button:not(:first-child) {
-  margin-left: 18px;
+.right .action-buttons button {
+  margin-right: 20px;
+  margin-bottom: 15px;
 }
 
 .right .activity {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .parent2 {
@@ -109,6 +110,7 @@ input {
 .action-wrapper > div {
   width: 100px;
   display: flex;
+  justify-content: flex-end;
 }
 
 .fa-edit {
