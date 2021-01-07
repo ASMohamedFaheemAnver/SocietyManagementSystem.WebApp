@@ -14,6 +14,7 @@ import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dia
 import { AddRefinementFeeDialogComponent } from "../add-refinement-fee-dialog/add-refinement-fee-dialog.component";
 import { Router } from "@angular/router";
 import { SocietyDonationDialogComponent } from "../society-donation-dialog/society-donation-dialog.component";
+import { SocietyExpenseDialogComponent } from "../society-expenses-dialog/society-expense-dialog.component";
 
 @Component({
   selector: "app-society-home",
@@ -153,6 +154,22 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         data.donation,
         data.description
       );
+    });
+  }
+
+  onAddExpense() {
+    const addExpenseDialogRef = this.matDialog.open(
+      SocietyExpenseDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+    addExpenseDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.addSocietyExpense(data.expense, data.description);
     });
   }
 
@@ -327,6 +344,34 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         this.societyService.editFeeForEveryone(
           log._id,
           data.refinementFee,
+          data.description
+        );
+      });
+    } else if (log.kind === "Expense") {
+      const editExpenseDialogRef = this.matDialog.open(
+        SocietyExpenseDialogComponent,
+        {
+          data: {
+            expense: log.fee.amount,
+            description: log.fee.description,
+          },
+          disableClose: true,
+        }
+      );
+      editExpenseDialogRef.afterClosed().subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (
+          data.expense === log.fee.amount &&
+          data.description === log.fee.description
+        ) {
+          return;
+        }
+        this.isLoading = true;
+        this.societyService.editFeeForEveryone(
+          log._id,
+          data.expense,
           data.description
         );
       });

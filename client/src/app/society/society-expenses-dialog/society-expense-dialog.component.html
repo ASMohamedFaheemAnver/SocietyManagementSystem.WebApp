@@ -1,0 +1,63 @@
+<form>
+  <h1>Create or edit expense</h1>
+  <p>Edit expense.</p>
+  <mat-form-field appearance="outline">
+    <input
+      #ngExpense="ngModel"
+      matInput
+      required
+      name="extra_fee"
+      type="number"
+      [(ngModel)]="expense"
+      pattern="[0-9]{1,5}"
+    />
+  </mat-form-field>
+  <div>
+    <p *ngIf="!ngExpense.valid || ngExpense.value < 20" class="warn">
+      Invalid amount!
+    </p>
+  </div>
+  <p>Edit descripton.</p>
+  <mat-form-field appearance="outline">
+    <textarea
+      #ngDescription="ngModel"
+      name="description"
+      matInput
+      required
+      type="text"
+      [(ngModel)]="description"
+    ></textarea>
+  </mat-form-field>
+  <div>
+    <p
+      *ngIf="
+        ngDescription.value
+          ? ngDescription.value.length > 100 || ngDescription.value.length < 5
+          : true
+      "
+      class="warn"
+    >
+      Invalid description!
+    </p>
+  </div>
+
+  <div mat-dialog-actions>
+    <button
+      [disabled]="
+        !ngExpense.valid ||
+        !ngDescription.valid ||
+        ngExpense.value < 20 ||
+        ngDescription.value.length > 100 ||
+        ngDescription.value.length < 5
+      "
+      mat-raised-button
+      color="primary"
+      [mat-dialog-close]="{ expense: expense, description: description }"
+    >
+      Done
+    </button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="false">
+      Cancel
+    </button>
+  </div>
+</form>
