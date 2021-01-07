@@ -29,6 +29,8 @@ import { NotFoundComponent } from "./not-found/not-found.component";
 import { AddRefinementFeeDialogComponent } from "./society/add-refinement-fee-dialog/add-refinement-fee-dialog.component";
 import { EditSocietyProfileComponent } from "./society/edit-society-profile/edit-society-profile.component";
 import { EditMemberProfileComponent } from "./member/edit-member-profile/edit-member-profile.component";
+import { SocietyDonationDialogComponent } from "./society/society-donation-dialog/society-donation-dialog.component";
+import { SocietyExpenseDialogComponent } from "./society/society-expenses-dialog/society-expense-dialog.component";
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { EditMemberProfileComponent } from "./member/edit-member-profile/edit-me
     AddRefinementFeeDialogComponent,
     EditSocietyProfileComponent,
     EditMemberProfileComponent,
+    SocietyDonationDialogComponent,
+    SocietyExpenseDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,6 +85,8 @@ import { EditMemberProfileComponent } from "./member/edit-member-profile/edit-me
     EditFeeLogDialogComponent,
     MemberDonationDialogComponent,
     AddRefinementFeeDialogComponent,
+    SocietyDonationDialogComponent,
+    SocietyExpenseDialogComponent,
   ],
 })
 export class AppModule {}
