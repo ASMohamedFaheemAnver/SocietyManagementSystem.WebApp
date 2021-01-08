@@ -51,6 +51,20 @@
   margin: 0;
 }
 
+#signup .wrapper .form-control > button {
+  flex: 1;
+  height: 47px;
+  margin: 0;
+  border: none;
+  background-color: #e8f2fd;
+  border-radius: 10px;
+  box-shadow: 0px 1px 6px #546e7a inset;
+  color: black;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+}
+
 #signup .wrapper .form-control input,
 #signup .wrapper .form-control mat-select,
 #signup .wrapper .form-control textarea {
@@ -149,6 +163,11 @@ mat-option {
   #signup .wrapper .form-control textarea,
   #signup .wrapper .form-control input {
     width: 280px;
+  }
+
+  #signup .wrapper .form-control > button {
+    width: 280px;
+    flex: none;
   }
 
   #signup .wrapper .form-control p {

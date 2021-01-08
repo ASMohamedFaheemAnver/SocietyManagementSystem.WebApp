@@ -28,7 +28,10 @@ export class AuthService {
         }
       }
     `;
-    return this.apollo.query({ query: graphqlQuery });
+    return this.apollo.query({
+      query: graphqlQuery,
+      fetchPolicy: "network-only",
+    });
   }
 
   createMember(

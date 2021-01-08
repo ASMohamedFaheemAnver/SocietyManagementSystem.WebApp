@@ -5,6 +5,7 @@ import { Subscription } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ErrorComponent } from "src/app/error/error.component";
 import { mimeType } from "../../util/mime-type.validator";
+import { SelectSocietyDialogComponent } from "../select-society-dialog/select-society-dialog.component";
 
 @Component({
   selector: "app-signup-member",
@@ -17,34 +18,23 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
   isLoading = false;
   hide = true;
 
+  selectedSociety;
+
   imageUrl: any = "./assets/img/add-img.png";
 
   private authStatusSub: Subscription;
 
-  societies = [];
-
   private phoneNumberPattern = "[+]*[0-9]{3,13}";
 
-  constructor(private authService: AuthService, private dialog: MatDialog) {}
+  constructor(private authService: AuthService, private matDialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
+    // this.isLoading = true;
     this.authStatusSub = this.authService
       .getAuthStatusListener()
       .subscribe((emittedBoolean) => {
         this.isLoading = emittedBoolean;
       });
-    this.authService.getBasicSocietyDetailes().subscribe(
-      (res) => {
-        this.societies = res["data"]["getBasicSocietyDetailes"];
-        this.form.patchValue({ societyId: this.societies[0]._id });
-        this.isLoading = false;
-      },
-      (err) => {
-        console.log(err);
-        this.isLoading = false;
-      }
-    );
 
     this.form = new FormGroup({
       image: new FormControl(null, {
@@ -123,6 +113,23 @@ export class SignupMemberComponent implements OnInit, OnDestroy {
         console.log("ON_UPLOAD_ON_LOAD");
         this.imageUrl = reader.result;
       };
+    });
+  }
+
+  onSelectSociety() {
+    const selectSocietyDialogRef = this.matDialog.open(
+      SelectSocietyDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+
+    selectSocietyDialogRef.afterClosed().subscribe((selectedSociety) => {
+      if (!selectedSociety) {
+        return;
+      }
+      this.form.patchValue({ societyId: selectedSociety._id });
+      this.selectedSociety = selectedSociety;
     });
   }
 }

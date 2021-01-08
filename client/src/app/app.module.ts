@@ -31,6 +31,7 @@ import { EditSocietyProfileComponent } from "./society/edit-society-profile/edit
 import { EditMemberProfileComponent } from "./member/edit-member-profile/edit-member-profile.component";
 import { SocietyDonationDialogComponent } from "./society/society-donation-dialog/society-donation-dialog.component";
 import { SocietyExpenseDialogComponent } from "./society/society-expenses-dialog/society-expense-dialog.component";
+import { SelectSocietyDialogComponent } from "./auth/select-society-dialog/select-society-dialog.component";
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { SocietyExpenseDialogComponent } from "./society/society-expenses-dialog
     EditMemberProfileComponent,
     SocietyDonationDialogComponent,
     SocietyExpenseDialogComponent,
+    SelectSocietyDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -87,6 +89,7 @@ import { SocietyExpenseDialogComponent } from "./society/society-expenses-dialog
     AddRefinementFeeDialogComponent,
     SocietyDonationDialogComponent,
     SocietyExpenseDialogComponent,
+    SelectSocietyDialogComponent,
   ],
 })
 export class AppModule {}

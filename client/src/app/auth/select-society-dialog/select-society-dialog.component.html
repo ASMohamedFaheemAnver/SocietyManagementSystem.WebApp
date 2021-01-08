@@ -1,0 +1,18 @@
+<div mat-dialog-title>
+  <p>Select your society</p>
+</div>
+
+<mat-dialog-content>
+  <div
+    [mat-dialog-close]="society"
+    class="card"
+    *ngFor="let society of societies"
+  >
+    <p>{{ society.name }}</p>
+  </div>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+</mat-dialog-content>
+
+<div mat-dialog-actions class="actions">
+  <button mat-button color="primary" [mat-dialog-close]="false">Close</button>
+</div>

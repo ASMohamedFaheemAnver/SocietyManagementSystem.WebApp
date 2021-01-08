@@ -28,7 +28,7 @@
       </div>
       <div class="form-control">
         <p>Select society</p>
-        <mat-select formControlName="societyId">
+        <!-- <mat-select formControlName="societyId">
           <mat-option
             *ngFor="let society of societies"
             value="{{ society._id }}"
@@ -38,7 +38,14 @@
           <mat-option *ngIf="societies.length == 0">
             <mat-error>No society had been registered!</mat-error>
           </mat-option>
-        </mat-select>
+        </mat-select> -->
+        <button (click)="onSelectSociety()" mat-stroked-button type="button">
+          {{
+            selectedSociety
+              ? selectedSociety.name
+              : "- click here to select society -"
+          }}
+        </button>
       </div>
 
       <div class="form-control">
