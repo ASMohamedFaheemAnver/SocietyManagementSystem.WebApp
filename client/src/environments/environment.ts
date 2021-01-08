@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  backEndGraphQlUrl2: "http://localhost:3000/",
-  backEndWSUrl: "ws://localhost:3000/",
+  backEndGraphQlUrl2: "http://192.168.8.159:3000/",
+  backEndWSUrl: "ws://192.168.8.159:3000/",
 
   // backEndGraphQlUrl2: "https://freedom-sms.herokuapp.com/",
   // backEndWSUrl: "wss://freedom-sms.herokuapp.com/",

@@ -10,6 +10,7 @@
   /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); */
   width: 40%;
   /* text-align: center; */
+  margin-bottom: 20px;
 }
 
 .profile img {
@@ -44,7 +45,7 @@
 }
 
 .action-wrapper > div {
-  width: 100px;
+  /* width: 100px; */
   display: flex;
   justify-content: flex-end;
 }
@@ -143,6 +144,10 @@
 
   .parent .left img {
     display: inline-block !important;
+  }
+
+  .parent .right {
+    padding: 0;
   }
 
   .parent .left {

@@ -108,7 +108,7 @@ input {
 }
 
 .action-wrapper > div {
-  width: 100px;
+  /* width: 100px; */
   display: flex;
   justify-content: flex-end;
 }

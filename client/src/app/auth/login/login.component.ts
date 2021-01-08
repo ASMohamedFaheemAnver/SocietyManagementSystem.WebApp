@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
   hide = true;
 
+  signUpLink = "/auth/signup-member";
+
   private authStatusSub: Subscription;
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -47,6 +49,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onChangeCategory(category: string) {
+    if (category === "member") {
+      this.signUpLink = "/auth/signup-member";
+    } else if (category === "society") {
+      this.signUpLink = "/auth/signup-society";
+    }
+
     this.form.patchValue({ category: category });
   }
 
