@@ -79,6 +79,11 @@
     padding: 20px;
   }
 
+  .right {
+    width: 100%;
+    padding: 0;
+  }
+
   .parent .left img {
     display: inline-block !important;
   }
