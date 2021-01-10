@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
+import { EnterEmailDialogComponent } from "../enter-email-dialog/enter-email-dialog.component";
 
 @Component({
   selector: "app-login",
@@ -19,7 +21,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private authStatusSub: Subscription;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private matDialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     if (this.authService.isUserAuth()) {
@@ -71,5 +77,20 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.form.value.password,
       this.form.value.category
     );
+  }
+
+  onForgotPassword() {
+    const enterEmailDialogRef = this.matDialog.open(EnterEmailDialogComponent, {
+      disableClose: true,
+      panelClass: "custom-dialog-container",
+      maxWidth: "400px",
+    });
+
+    enterEmailDialogRef.afterClosed().subscribe((emailData) => {
+      if (!emailData) {
+        return;
+      }
+      console.log(emailData);
+    });
   }
 }

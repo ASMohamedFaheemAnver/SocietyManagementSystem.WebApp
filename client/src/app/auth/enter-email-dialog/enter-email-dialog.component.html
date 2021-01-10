@@ -1,0 +1,56 @@
+<mat-dialog-content id="login">
+  <div class="wrapper">
+    <form
+      class="form"
+      *ngIf="!isLoading"
+      [formGroup]="form"
+      class="form"
+      (submit)="onResetPassword()"
+    >
+      <h1>Reset your password</h1>
+      <h2>Who you are?</h2>
+      <div class="icons">
+        <div class="category">
+          <div
+            class="decorator"
+            (click)="onChangeCategory('member')"
+            [class]="form.value.category === 'member' ? 'active' : ''"
+          >
+            <i class="fas fa-user-alt"></i>
+          </div>
+          <p>Member</p>
+        </div>
+        <div class="category">
+          <div
+            class="decorator"
+            (click)="onChangeCategory('society')"
+            [class]="form.value.category === 'society' ? 'active' : ''"
+          >
+            <i class="fas fa-user-cog"></i>
+          </div>
+          <p>Society</p>
+        </div>
+      </div>
+      <input formControlName="email" matInput type="text" placeholder="Email" />
+
+      <div class="actions">
+        <button
+          class="button"
+          mat-raised-button
+          [disabled]="form.invalid"
+          type="submit"
+        >
+          Reset
+        </button>
+        <button
+          [mat-dialog-close]="false"
+          class="button warn"
+          mat-raised-button
+          type="button"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>

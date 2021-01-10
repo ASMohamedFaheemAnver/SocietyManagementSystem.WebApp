@@ -3,6 +3,11 @@
   justify-content: flex-end;
 }
 
+.spinner {
+  display: flex;
+  justify-content: center;
+}
+
 .card {
   width: 100%;
   display: flex;
@@ -27,4 +32,8 @@ mat-dialog-content {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.mat-dialog-title {
+  text-align: center;
 }

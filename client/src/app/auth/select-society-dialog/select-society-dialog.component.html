@@ -10,8 +10,11 @@
   >
     <p>{{ society.name }}</p>
   </div>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
 </mat-dialog-content>
+
+<div class="spinner">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+</div>
 
 <div mat-dialog-actions class="actions">
   <button mat-button color="primary" [mat-dialog-close]="false">Close</button>

@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   color: black;
 }
 
@@ -12,13 +11,13 @@
   align-items: center;
   flex-direction: column;
   background-color: var(--default-form-backgroud);
-  padding: 40px;
-  border-radius: 30px;
+  padding: 20px;
 }
 
 #login .wrapper .form h1 {
   font-size: 2rem;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 #login .wrapper .form h2 {
@@ -53,13 +52,14 @@
 
 .button {
   background-color: var(--primary-color);
+  margin: 0 10px;
 }
 
 #login .wrapper .form .icons {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  width: 100%;
+  width: 200px;
   margin-bottom: 20px;
 }
 
@@ -99,38 +99,6 @@
   font-size: 2.5rem;
 }
 
-.password-input {
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.password-input > input {
-  margin: 0 !important;
-  padding-right: 20px;
-}
-
-.password-input .eye {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 20px;
-}
-
-.password-input .eye > button,
-.password-input .eye > mat-icon {
-  position: absolute;
-}
-
-.password-input .eye > button {
-  z-index: 2;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
 .page-wrapper {
   top: 0;
   left: 0;
@@ -145,20 +113,8 @@
   justify-content: center;
 }
 
-.extra {
-  display: flex;
-  flex-direction: column;
-}
-
-.extra a {
-  text-decoration: none;
-  margin-bottom: 4px;
-  color: rgb(85, 26, 139);
-}
-
-.extra a:hover {
-  cursor: pointer;
-  color: rgb(148, 43, 246);
+.warn {
+  background-color: red;
 }
 
 @media (max-width: 350px) {
