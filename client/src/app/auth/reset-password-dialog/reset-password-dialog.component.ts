@@ -1,17 +1,18 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { PasswordResetSnackComponent } from "src/app/common/snackbars/password-reset.component";
 import { AuthService } from "../auth.service";
+import { Location } from "@angular/common";
 
 @Component({
-  templateUrl: "enter-email-dialog.component.html",
-  styleUrls: ["enter-email-dialog.component.css"],
+  templateUrl: "reset-password-dialog.component.html",
+  styleUrls: ["reset-password-dialog.component.css"],
 })
-export class EnterEmailDialogComponent implements OnInit {
+export class ResetPasswordDialogComponent implements OnInit {
   form: FormGroup;
 
   isLoading = false;
@@ -23,10 +24,12 @@ export class EnterEmailDialogComponent implements OnInit {
   private authPasswordResetStatusSub: Subscription;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { category: string; token: string },
     private authService: AuthService,
     private router: Router,
-    private matDialog: MatDialogRef<EnterEmailDialogComponent>,
-    private snackBar: MatSnackBar
+    private matDialog: MatDialogRef<ResetPasswordDialogComponent>,
+    private snackBar: MatSnackBar,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -42,35 +45,34 @@ export class EnterEmailDialogComponent implements OnInit {
     this.authPasswordResetStatusSub = this.authService
       .getresetPasswordStatusListenner()
       .subscribe((emittedBoolean) => {
+        if (!emittedBoolean) {
+          return;
+        }
+
         this.matDialog.close();
-        this.snackBar.openFromComponent(PasswordResetSnackComponent, {
-          duration: 10000,
-        });
+        this.location.replaceState(this.location.path().split("?")[0], "");
+        this.snackBar.open(
+          "Your password has been reset successfully!",
+          "Close",
+          {
+            duration: 5000,
+          }
+        );
       });
 
     this.form = new FormGroup({
-      email: new FormControl(null, {
-        validators: [Validators.required, Validators.email],
+      password: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(8)],
       }),
       category: new FormControl(null, { validators: [Validators.required] }),
     });
 
-    this.form.patchValue({ category: "member" });
+    this.form.patchValue({ category: this.data.category });
   }
 
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();
     this.authPasswordResetStatusSub.unsubscribe();
-  }
-
-  onChangeCategory(category: string) {
-    if (category === "member") {
-      this.signUpLink = "/auth/signup-member";
-    } else if (category === "society") {
-      this.signUpLink = "/auth/signup-society";
-    }
-
-    this.form.patchValue({ category: category });
   }
 
   onResetPassword() {
@@ -86,7 +88,10 @@ export class EnterEmailDialogComponent implements OnInit {
     });
 
     if (this.form.value.category === "member") {
-      this.authService.requestMemberPasswordReset(this.form.value.email);
+      this.authService.memberPasswordReset(
+        this.form.value.password,
+        this.data.token
+      );
     }
   }
 }

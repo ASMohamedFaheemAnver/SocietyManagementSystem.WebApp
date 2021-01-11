@@ -10,6 +10,10 @@
   >
     <p>{{ society.name }}</p>
   </div>
+
+  <p class="warn" *ngIf="!isLoading && !societies.length">
+    Currently there is no society registered!
+  </p>
 </mat-dialog-content>
 
 <div class="spinner">

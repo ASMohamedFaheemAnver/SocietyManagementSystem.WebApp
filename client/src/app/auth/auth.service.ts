@@ -8,6 +8,7 @@ export class AuthService {
   constructor(private router: Router, private apollo: Apollo) {}
 
   private authStatusListenner = new Subject<boolean>();
+  private resetPasswordStatusListenner = new Subject<boolean>();
   private userId: string;
   private token: string;
   private isUserLoggedIn: boolean;
@@ -17,6 +18,10 @@ export class AuthService {
 
   getAuthStatusListener() {
     return this.authStatusListenner;
+  }
+
+  getresetPasswordStatusListenner() {
+    return this.resetPasswordStatusListenner;
   }
 
   getBasicSocietyDetailes() {
@@ -73,6 +78,58 @@ export class AuthService {
         },
         (err) => {
           console.log(err);
+          this.authStatusListenner.next(false);
+        }
+      );
+  }
+
+  requestMemberPasswordReset(email: string) {
+    const graphqlQuery = gql`
+      mutation {
+          requestMemberPasswordReset(email: "${email}"){
+          message
+        }
+      }
+    `;
+
+    this.apollo
+      .mutate({
+        mutation: graphqlQuery,
+      })
+      .subscribe(
+        (res) => {
+          this.resetPasswordStatusListenner.next(true);
+          this.authStatusListenner.next(true);
+        },
+        (err) => {
+          console.log(err);
+          this.resetPasswordStatusListenner.next(false);
+          this.authStatusListenner.next(false);
+        }
+      );
+  }
+
+  memberPasswordReset(password: string, token: string) {
+    const graphqlQuery = gql`
+      mutation {
+          memberPasswordReset(token: "${token}", password: "${password}"){
+          message
+        }
+      }
+    `;
+
+    this.apollo
+      .mutate({
+        mutation: graphqlQuery,
+      })
+      .subscribe(
+        (res) => {
+          this.resetPasswordStatusListenner.next(true);
+          this.authStatusListenner.next(true);
+        },
+        (err) => {
+          console.log(err);
+          this.resetPasswordStatusListenner.next(false);
           this.authStatusListenner.next(false);
         }
       );

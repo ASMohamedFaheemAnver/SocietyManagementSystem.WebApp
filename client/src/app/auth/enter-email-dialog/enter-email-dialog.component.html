@@ -2,7 +2,6 @@
   <div class="wrapper">
     <form
       class="form"
-      *ngIf="!isLoading"
       [formGroup]="form"
       class="form"
       (submit)="onResetPassword()"
@@ -52,5 +51,9 @@
         </button>
       </div>
     </form>
+
+    <div *ngIf="isLoading" class="spinner-wrapper">
+      <mat-spinner></mat-spinner>
+    </div>
   </div>
 </mat-dialog-content>

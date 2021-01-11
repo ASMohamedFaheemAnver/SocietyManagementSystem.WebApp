@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
+import { ResetPasswordDialogComponent } from "../reset-password-dialog/reset-password-dialog.component";
 import { EnterEmailDialogComponent } from "../enter-email-dialog/enter-email-dialog.component";
 
 @Component({
@@ -17,6 +18,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
   hide = true;
 
+  resetUserCategory: string;
+  resetUserToken: string;
+
   signUpLink = "/auth/signup-member";
 
   private authStatusSub: Subscription;
@@ -24,13 +28,35 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     if (this.authService.isUserAuth()) {
       this.router.navigateByUrl(`/${this.authService.getUserCategory()}/home`);
     }
+
+    this.route.queryParams.subscribe((params) => {
+      this.resetUserCategory = params["user_category"];
+      this.resetUserToken = params["reset_token"];
+
+      if (this.resetUserCategory && this.resetUserToken) {
+        const enterPasswordDialogRef = this.matDialog.open(
+          ResetPasswordDialogComponent,
+          {
+            disableClose: true,
+            panelClass: "custom-dialog-container",
+            maxWidth: "400px",
+            data: {
+              category: this.resetUserCategory,
+              token: this.resetUserToken,
+            },
+          }
+        );
+      }
+    });
+
     this.authStatusSub = this.authService
       .getAuthStatusListener()
       .subscribe((emittedBoolean) => {
@@ -80,17 +106,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onForgotPassword() {
-    const enterEmailDialogRef = this.matDialog.open(EnterEmailDialogComponent, {
-      disableClose: true,
-      panelClass: "custom-dialog-container",
-      maxWidth: "400px",
-    });
-
-    enterEmailDialogRef.afterClosed().subscribe((emailData) => {
-      if (!emailData) {
-        return;
+    const enterEmaildDialogRef = this.matDialog.open(
+      EnterEmailDialogComponent,
+      {
+        disableClose: true,
+        panelClass: "custom-dialog-container",
+        maxWidth: "400px",
       }
-      console.log(emailData);
-    });
+    );
   }
 }

@@ -11,6 +11,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatIconModule } from "@angular/material/icon";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
   exports: [
@@ -26,6 +27,7 @@ import { MatIconModule } from "@angular/material/icon";
     MatDatepickerModule,
     MatPaginatorModule,
     MatIconModule,
+    MatSnackBarModule,
   ],
 })
 export class AngularMaterialModule {}
