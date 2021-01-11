@@ -92,6 +92,11 @@ export class ResetPasswordDialogComponent implements OnInit {
         this.form.value.password,
         this.data.token
       );
+    } else if (this.form.value.category === "society") {
+      this.authService.societyPasswordReset(
+        this.form.value.password,
+        this.data.token
+      );
     }
   }
 }

@@ -109,10 +109,62 @@ export class AuthService {
       );
   }
 
+  requestSocietyPasswordReset(email: string) {
+    const graphqlQuery = gql`
+      mutation {
+          requestSocietyPasswordReset(email: "${email}"){
+          message
+        }
+      }
+    `;
+
+    this.apollo
+      .mutate({
+        mutation: graphqlQuery,
+      })
+      .subscribe(
+        (res) => {
+          this.resetPasswordStatusListenner.next(true);
+          this.authStatusListenner.next(true);
+        },
+        (err) => {
+          console.log(err);
+          this.resetPasswordStatusListenner.next(false);
+          this.authStatusListenner.next(false);
+        }
+      );
+  }
+
   memberPasswordReset(password: string, token: string) {
     const graphqlQuery = gql`
       mutation {
           memberPasswordReset(token: "${token}", password: "${password}"){
+          message
+        }
+      }
+    `;
+
+    this.apollo
+      .mutate({
+        mutation: graphqlQuery,
+      })
+      .subscribe(
+        (res) => {
+          this.resetPasswordStatusListenner.next(true);
+          this.authStatusListenner.next(true);
+        },
+        (err) => {
+          console.log(err);
+          this.resetPasswordStatusListenner.next(false);
+          this.authStatusListenner.next(false);
+        }
+      );
+  }
+
+  societyPasswordReset(password: string, token: string) {
+    const graphqlQuery = gql`
+      mutation {
+          societyPasswordReset(token: "${token}", password: "${password}"){
           message
         }
       }

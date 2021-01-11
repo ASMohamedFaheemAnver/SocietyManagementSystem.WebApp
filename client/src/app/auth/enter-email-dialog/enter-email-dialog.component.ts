@@ -87,6 +87,8 @@ export class EnterEmailDialogComponent implements OnInit {
 
     if (this.form.value.category === "member") {
       this.authService.requestMemberPasswordReset(this.form.value.email);
+    } else if (this.form.value.category === "society") {
+      this.authService.requestSocietyPasswordReset(this.form.value.email);
     }
   }
 }
