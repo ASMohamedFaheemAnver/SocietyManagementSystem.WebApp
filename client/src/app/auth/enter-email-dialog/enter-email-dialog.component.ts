@@ -42,6 +42,10 @@ export class EnterEmailDialogComponent implements OnInit {
     this.authPasswordResetStatusSub = this.authService
       .getresetPasswordStatusListenner()
       .subscribe((emittedBoolean) => {
+        if (!emittedBoolean) {
+          return;
+        }
+
         this.matDialog.close();
         this.snackBar.openFromComponent(PasswordResetSnackComponent, {
           duration: 10000,
