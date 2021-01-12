@@ -35,6 +35,8 @@
 }
 
 .card img {
+  display: block;
+  margin: auto;
   width: 150px;
   height: 150px;
   border-radius: 50%;
