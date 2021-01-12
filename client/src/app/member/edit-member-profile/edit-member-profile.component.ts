@@ -24,7 +24,7 @@ export class EditMemberProfileComponent implements OnInit {
   private memberStatusSub: Subscription;
   private memberSub: Subscription;
 
-  private phoneNumberPattern = "[+]*[0-9]{3,13}";
+  private phoneNumberPattern = "[+]*[0-9]{3,13}[\\s]*";
 
   constructor(private memberService: MemberService) {}
 

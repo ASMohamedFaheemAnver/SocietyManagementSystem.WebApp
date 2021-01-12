@@ -20,7 +20,7 @@ export class SignupSocietyComponent implements OnInit {
 
   private authStatusSub: Subscription;
 
-  private phoneNumberPattern = "[+]*[0-9]{3,13}";
+  private phoneNumberPattern = "[+]*[0-9]{3,13}[\\s]*";
   private regIdPattern = "([0-9]|[a-z]|[A-Z]){3,10}";
 
   constructor(private authService: AuthService) {}
@@ -91,22 +91,22 @@ export class SignupSocietyComponent implements OnInit {
 
     this.form.get("image").statusChanges.subscribe((_) => {
       // console.log(this.form.get("image").errors);
-      console.log(!this.form.get("image").valid);
-      console.log("ON_UPLOAD");
+      // console.log(!this.form.get("image").valid);
+      // console.log("ON_UPLOAD");
       if (!this.form.get("image").valid) {
-        console.log("ON_UPLOAD_EXIT");
+        // console.log("ON_UPLOAD_EXIT");
         this.imageUrl = "./assets/img/invalid-img.jpg";
         // console.log(this.imageUrl);
         return;
       }
 
-      console.log("ON_UPLOAD_PASS");
+      // console.log("ON_UPLOAD_PASS");
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
 
       reader.onload = () => {
-        console.log("ON_UPLOAD_ON_LOAD");
+        // console.log("ON_UPLOAD_ON_LOAD");
         this.imageUrl = reader.result;
       };
     });
