@@ -6,3 +6,8 @@ form > div {
   display: flex;
   justify-content: flex-end;
 }
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}

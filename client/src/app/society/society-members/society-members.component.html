@@ -66,7 +66,7 @@
     <div class="actions" *ngIf="!member.isActionLoading">
       <button
         *ngIf="member.approved"
-        mat-button
+        mat-stroked-button
         color="primary"
         (click)="onDonationClick(member)"
       >
@@ -74,7 +74,7 @@
       </button>
       <button
         *ngIf="member.approved"
-        mat-button
+        mat-stroked-button
         class="warn"
         (click)="onFineClick(member)"
       >
@@ -82,7 +82,7 @@
       </button>
       <button
         *ngIf="!member.approved"
-        mat-button
+        mat-stroked-button
         class="btn-green"
         (click)="onApproveMember(member)"
       >
@@ -90,7 +90,7 @@
       </button>
       <!-- <button
         *ngIf="member.approved"
-        mat-button
+        mat-stroked-button
         color="warn"
         (click)="onDisApproveMember(member)"
       >
@@ -98,7 +98,7 @@
       </button> -->
       <button
         *ngIf="member.approved"
-        mat-button
+        mat-stroked-button
         color="primary"
         (click)="onAdvanceClick(member._id)"
       >

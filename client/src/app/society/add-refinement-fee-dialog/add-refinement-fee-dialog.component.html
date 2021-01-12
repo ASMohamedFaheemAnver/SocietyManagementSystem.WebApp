@@ -53,7 +53,7 @@
         ngDescription.value.length > 100 ||
         ngDescription.value.length < 5
       "
-      mat-raised-button
+      mat-stroked-button
       color="primary"
       [mat-dialog-close]="{
         refinementFee: refinementFee,
@@ -62,7 +62,7 @@
     >
       Done
     </button>
-    <button mat-raised-button color="warn" [mat-dialog-close]="false">
+    <button mat-stroked-button color="warn" [mat-dialog-close]="false">
       Cancel
     </button>
   </div>
