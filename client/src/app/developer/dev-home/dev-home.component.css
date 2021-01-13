@@ -10,7 +10,6 @@
 .card {
   width: 90%;
   display: flex;
-  align-items: center;
   justify-content: center;
   text-align: center;
   padding: 0.25rem;
@@ -32,7 +31,19 @@
 }
 
 .card div {
-  flex: 1;
+  flex: 2;
+}
+
+.card > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.card > div:last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .card img {
@@ -64,10 +75,20 @@ mat-spinner {
   justify-content: center;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1500px) {
+  .card > div {
+    flex-direction: column;
+    border-left: none;
+  }
+
+  .card > div:last-child {
+    border-right: none;
+  }
+
   .card {
     flex-direction: column;
     width: 40%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
   }
   .big-heading {
     display: none;
@@ -80,7 +101,7 @@ mat-spinner {
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1500px) {
   .small-heading {
     display: none;
   }
