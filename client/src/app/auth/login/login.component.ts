@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { ResetPasswordDialogComponent } from "../reset-password-dialog/reset-password-dialog.component";
 import { EnterEmailDialogComponent } from "../enter-email-dialog/enter-email-dialog.component";
+import { Location } from "@angular/common";
 
 @Component({
   selector: "app-login",
@@ -29,7 +30,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private matDialog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +56,10 @@ export class LoginComponent implements OnInit, OnDestroy {
             },
           }
         );
+
+        enterPasswordDialogRef.afterClosed().subscribe((password) => {
+          this.location.replaceState(this.location.path().split("?")[0], "");
+        });
       }
     });
 

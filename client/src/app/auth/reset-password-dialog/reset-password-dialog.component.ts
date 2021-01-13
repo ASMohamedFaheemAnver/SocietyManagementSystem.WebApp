@@ -4,9 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
-import { PasswordResetSnackComponent } from "src/app/common/snackbars/password-reset.component";
 import { AuthService } from "../auth.service";
-import { Location } from "@angular/common";
 
 @Component({
   templateUrl: "reset-password-dialog.component.html",
@@ -28,8 +26,7 @@ export class ResetPasswordDialogComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private matDialog: MatDialogRef<ResetPasswordDialogComponent>,
-    private snackBar: MatSnackBar,
-    private location: Location
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +47,6 @@ export class ResetPasswordDialogComponent implements OnInit {
         }
 
         this.matDialog.close();
-        this.location.replaceState(this.location.path().split("?")[0], "");
         this.snackBar.open(
           "Your password has been reset successfully!",
           "Close",
