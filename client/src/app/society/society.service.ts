@@ -263,7 +263,13 @@ export class SocietyService {
     this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
         this.newLog = res["data"]["addMonthlyFeeToEveryone"];
-        this.logs.unshift(this.newLog);
+        this.logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
         this.logsUpdated.next({
           logs: this.logs,
           logs_count: ++this.logs_count,
@@ -308,7 +314,13 @@ export class SocietyService {
     this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
         this.newLog = res["data"]["addExtraFeeToEveryone"];
-        this.logs.unshift(this.newLog);
+        this.logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
         this.logsUpdated.next({
           logs: this.logs,
           logs_count: ++this.logs_count,
@@ -362,6 +374,7 @@ export class SocietyService {
               ...log,
               fee: {
                 ...log.fee,
+                date: new Date(log.fee.date).toString(),
                 tracks: [
                   ...log.fee.tracks.map((track) => {
                     return { ...track, member: { ...track.member } };
@@ -625,7 +638,15 @@ export class SocietyService {
             }
 
             // Returning modified log to override existing offline log
-            return res["data"]["editFeeForEveryone"];
+            return {
+              ...res["data"]["editFeeForEveryone"],
+              fee: {
+                ...res["data"]["editFeeForEveryone"].fee,
+                date: new Date(
+                  res["data"]["editFeeForEveryone"].fee.date
+                ).toString(),
+              },
+            };
           }
           // Returning non modified offline log as it is
           return log;
@@ -655,7 +676,15 @@ export class SocietyService {
             }
 
             // Returning modified log to override existing offline log
-            return res["data"]["editFeeForEveryone"];
+            return {
+              ...res["data"]["editFeeForEveryone"],
+              fee: {
+                ...res["data"]["editFeeForEveryone"].fee,
+                date: new Date(
+                  res["data"]["editFeeForEveryone"].fee.date
+                ).toString(),
+              },
+            };
           }
           // Returning non modified offline log as it is
           return log;
@@ -820,7 +849,13 @@ export class SocietyService {
 
         this.newLog = res["data"]["addFineForOneMember"];
 
-        this.member_logs.unshift(this.newLog);
+        this.member_logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
 
         this.memberLogsUpdated.next({
           logs: [...this.member_logs],
@@ -895,7 +930,13 @@ export class SocietyService {
 
         this.newLog = res["data"]["addRefinementFeeForOneMember"];
 
-        this.member_logs.unshift(this.newLog);
+        this.member_logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
 
         this.memberLogsUpdated.next({
           logs: this.member_logs,
@@ -975,7 +1016,13 @@ export class SocietyService {
 
         this.newLog = res["data"]["addDonationForOneMember"];
 
-        this.member_logs.unshift(this.newLog);
+        this.member_logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
 
         this.memberLogsUpdated.next({
           logs: [...this.member_logs],
@@ -1035,7 +1082,13 @@ export class SocietyService {
         });
         this.newLog = res["data"]["addReceivedDonationBySociety"];
 
-        this.logs.unshift(this.newLog);
+        this.logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
         this.logsUpdated.next({
           logs: this.logs,
           logs_count: ++this.logs_count,
@@ -1085,7 +1138,13 @@ export class SocietyService {
         });
         this.newLog = res["data"]["addSocietyExpense"];
 
-        this.logs.unshift(this.newLog);
+        this.logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
         this.logsUpdated.next({
           logs: this.logs,
           logs_count: ++this.logs_count,
@@ -1145,6 +1204,7 @@ export class SocietyService {
 
           this.members.push({
             ...data.member,
+            isImageLoading: true,
           });
           this.membersUpdated.next([...this.members]);
         } else if (data.type === "PUT") {
@@ -1272,6 +1332,7 @@ export class SocietyService {
                 ...log,
                 fee: {
                   ...log.fee,
+                  date: new Date(log.fee.date).toString(),
                   tracks: log.fee.tracks.map((track) => {
                     return { ...track, member: { _id: member_id } };
                   }),

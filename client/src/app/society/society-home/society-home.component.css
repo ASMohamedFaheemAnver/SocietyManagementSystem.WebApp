@@ -85,8 +85,17 @@ input {
   justify-content: center;
   align-items: center;
   padding: 0.25rem;
+  flex: 2;
+  height: 100%;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.card .small {
   flex: 1;
-  min-height: 50px;
+}
+
+.card > div:last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .big-heading {
@@ -112,7 +121,7 @@ input {
 }
 
 .action-wrapper > div {
-  /* width: 100px; */
+  width: 100px;
   display: flex;
   justify-content: flex-end;
 }
@@ -191,6 +200,16 @@ mat-form-field {
   justify-content: center;
 }
 
+@media (max-width: 992px) {
+  .action-wrapper > div {
+    width: 80px;
+  }
+
+  .card div i {
+    margin: 7px;
+  }
+}
+
 @media (max-width: 792px) {
   .parent {
     flex-direction: column;
@@ -264,6 +283,10 @@ mat-form-field {
 
   .profile {
     width: 100%;
+  }
+
+  .action-wrapper > div {
+    width: auto;
   }
 
   .action-wrapper > div {

@@ -219,7 +219,10 @@ export class MemberService {
           });
 
           this.logs = res["data"]["getMemberLogs"].logs.map((log) => {
-            return { ...log, fee: { ...log.fee } };
+            return {
+              ...log,
+              fee: { ...log.fee, date: new Date(log.fee.date).toString() },
+            };
           });
 
           this.logs_count = res["data"]["getMemberLogs"].logs_count;
@@ -281,6 +284,7 @@ export class MemberService {
             ...rLog.log,
             fee: {
               ...rLog.log.fee,
+              date: new Date(rLog.log.fee.date).toString(),
               tracks: [{ is_paid: false, _id: "undefined" }],
             },
           });
@@ -326,6 +330,7 @@ export class MemberService {
                   ...rLog.log,
                   fee: {
                     ...rLog.log.fee,
+                    date: new Date(rLog.log.fee.date).toString(),
                     tracks: [{ ...log.fee.tracks[0] }],
                   },
                 };
@@ -340,6 +345,7 @@ export class MemberService {
                     ...rLog.log,
                     fee: {
                       ...rLog.log.fee,
+                      date: new Date(rLog.log.fee.date).toString(),
                       tracks: [{ ...log.fee.tracks[0], is_paid: false }],
                     },
                   };
@@ -349,6 +355,7 @@ export class MemberService {
                   ...rLog.log,
                   fee: {
                     ...rLog.log.fee,
+                    date: new Date(rLog.log.fee.date).toString(),
                     tracks: [{ ...log.fee.tracks[0] }],
                   },
                 };
@@ -469,6 +476,7 @@ export class MemberService {
             ...rLog.log,
             fee: {
               ...rLog.log.fee,
+              date: new Date(rLog.log.fee.date).toString(),
               tracks: [{ is_paid: false, _id: "undefined" }],
             },
           });
@@ -514,6 +522,7 @@ export class MemberService {
                   ...rLog.log,
                   fee: {
                     ...rLog.log.fee,
+                    date: new Date(rLog.log.fee.date).toString(),
                     tracks: [{ ...log.fee.tracks[0] }],
                   },
                 };
@@ -528,6 +537,7 @@ export class MemberService {
                     ...rLog.log,
                     fee: {
                       ...rLog.log.fee,
+                      date: new Date(rLog.log.fee.date).toString(),
                       tracks: [{ ...log.fee.tracks[0], is_paid: false }],
                     },
                   };
@@ -537,6 +547,7 @@ export class MemberService {
                   ...rLog.log,
                   fee: {
                     ...rLog.log.fee,
+                    date: new Date(rLog.log.fee.date).toString(),
                     tracks: [{ ...log.fee.tracks[0] }],
                   },
                 };
@@ -662,6 +673,7 @@ export class MemberService {
             ...rLog.log,
             fee: {
               ...rLog.log.fee,
+              date: new Date(rLog.log.fee.date).toString(),
             },
           });
           this.logsUpdatedListener.next({
@@ -705,7 +717,13 @@ export class MemberService {
                 };
               }
 
-              return { ...rLog.log };
+              return {
+                ...rLog.log,
+                fee: {
+                  ...rLog.log.fee,
+                  date: new Date(rLog.log.fee.date).toString(),
+                },
+              };
             }
             return log;
           });

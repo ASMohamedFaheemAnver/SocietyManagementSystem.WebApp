@@ -42,12 +42,37 @@
   flex: 1;
 }
 
+.card > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem;
+  flex: 2;
+  height: 100%;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.card > div:last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.small {
+  flex: 1 !important;
+}
+
 .card img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
   display: block;
   margin: auto;
+}
+
+mat-spinner {
+  display: block;
+  margin: auto;
+  width: 150px;
+  height: 150px;
 }
 
 .page-wrapper {
@@ -69,6 +94,16 @@
     flex-direction: column;
     width: 40%;
   }
+
+  .card > div {
+    border: none;
+    flex-direction: column;
+  }
+
+  .card > div:last-child {
+    border-right: none;
+  }
+
   .big-heading {
     display: none;
   }

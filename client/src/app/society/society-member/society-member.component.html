@@ -79,16 +79,16 @@
             <strong>Type</strong>
           </div> -->
 
-          <div>
+          <div class="small">
             <strong>Date</strong>
           </div>
-          <div>
+          <div class="small">
             <strong>Amount</strong>
           </div>
           <div>
             <strong>Description</strong>
           </div>
-          <div>
+          <div class="small">
             <strong>Actions</strong>
           </div>
         </div>
@@ -101,11 +101,11 @@
           <!-- <div>
             <p>{{ log.kind }}</p>
           </div> -->
-          <div>
+          <div class="small">
             <p>{{ log.fee.date.slice(4, 15) }}</p>
           </div>
 
-          <div>
+          <div class="small">
             <p>{{ log.fee.amount }}</p>
           </div>
 
@@ -113,7 +113,7 @@
             <p>{{ log.fee.description }}</p>
           </div>
 
-          <div class="action-wrapper">
+          <div class="action-wrapper small">
             <div>
               <i
                 (click)="

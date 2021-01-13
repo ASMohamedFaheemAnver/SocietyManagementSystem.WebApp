@@ -49,7 +49,7 @@
 }
 
 .action-wrapper > div {
-  /* width: 100px; */
+  width: 100px;
   display: flex;
   justify-content: flex-end;
 }
@@ -101,7 +101,6 @@
 .card {
   width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
   text-align: center;
   padding: 0.25rem;
@@ -126,6 +125,31 @@
   flex: 1;
 }
 
+.card > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem;
+  flex: 2;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.card > div:first-child {
+  height: auto;
+}
+
+.card .small {
+  flex: 1;
+}
+
+.card > div:last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.card:first-child > div {
+  min-height: auto;
+}
+
 .right .actions-wrapper .actions button {
   margin-right: 20px;
   margin-bottom: 20px;
@@ -142,6 +166,16 @@
 .left .actions .fa-trash-alt {
   transform: none;
   margin: 0 5px;
+}
+
+@media (max-width: 992px) {
+  .action-wrapper > div {
+    width: 80px;
+  }
+
+  .card div i {
+    margin: 6px;
+  }
 }
 
 @media (max-width: 768px) {

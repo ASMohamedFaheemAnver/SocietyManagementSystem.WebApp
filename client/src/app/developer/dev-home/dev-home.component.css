@@ -43,6 +43,13 @@
   border-radius: 50%;
 }
 
+mat-spinner {
+  display: block;
+  margin: auto;
+  width: 150px;
+  height: 150px;
+}
+
 .page-wrapper {
   top: 0;
   left: 0;

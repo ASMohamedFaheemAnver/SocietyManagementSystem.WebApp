@@ -31,7 +31,27 @@
 }
 
 .card div {
-  flex: 1;
+  flex: 3;
+}
+
+.card .small {
+  flex: 2;
+}
+
+.card div p {
+  padding: 0.5rem;
+}
+
+.card > div {
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card > div:last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .card img {
@@ -40,6 +60,13 @@
   width: 150px;
   height: 150px;
   border-radius: 50%;
+}
+
+mat-spinner {
+  display: block;
+  margin: auto;
+  width: 150px;
+  height: 150px;
 }
 
 .actions {
@@ -67,20 +94,30 @@
   justify-content: center;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1268px) {
   .card {
     flex-direction: column;
     width: 40%;
   }
+
+  .card > div {
+    border: none;
+    flex-direction: column;
+  }
+
+  .card > div:last-child {
+    border-right: none;
+  }
+
   .big-heading {
     display: none;
   }
   .actions {
-    flex-direction: row;
+    flex-direction: row !important;
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1268px) {
   .small-heading {
     display: none;
   }
