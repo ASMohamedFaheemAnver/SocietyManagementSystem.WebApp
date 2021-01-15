@@ -20,6 +20,7 @@ input {
   width: 200px;
   height: 200px;
   border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 /* button {
