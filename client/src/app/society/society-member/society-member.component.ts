@@ -364,7 +364,7 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
     confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
       if (isConfirmed) {
         this.isLoading = true;
-        this.societyService.deleteSocietyMemberById(this.memberId);
+        this.societyService.removeSocietyMemberById(this.memberId);
       }
     });
   }

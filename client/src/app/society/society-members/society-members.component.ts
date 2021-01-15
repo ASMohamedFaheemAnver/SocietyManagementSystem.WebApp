@@ -21,8 +21,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
 
   constructor(
     private societyServie: SocietyService,
-    private editMemberDialog: MatDialog,
-    private confirmDialog: MatDialog,
+    private matDialog: MatDialog,
     private router: Router
   ) {}
   ngOnDestroy(): void {
@@ -52,7 +51,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   }
 
   onApproveMember(member: Member) {
-    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+    const matDialogRef = this.matDialog.open(ConfirmDialogComponent, {
       data: {
         msg:
           "Approved member can be able to login and view society informations, Do you want to continue?",
@@ -60,7 +59,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
       disableClose: true,
     });
 
-    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+    matDialogRef.afterClosed().subscribe((isConfirmed) => {
       if (isConfirmed) {
         member.isActionLoading = true;
         this.societyServie.approveMember(member._id);
@@ -69,7 +68,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   }
 
   onDisApproveMember(member: Member) {
-    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+    const matDialogRef = this.matDialog.open(ConfirmDialogComponent, {
       data: {
         msg:
           "Disappoved member can't be able to login or view society information, Do you want to continue?",
@@ -77,7 +76,7 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
       disableClose: true,
     });
 
-    confirmDialogRef.afterClosed().subscribe((isConfirmed) => {
+    matDialogRef.afterClosed().subscribe((isConfirmed) => {
       if (isConfirmed) {
         member.isActionLoading = true;
         this.societyServie.disApproveMember(member._id);
@@ -86,12 +85,9 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   }
 
   onFineClick(member: Member) {
-    const fineDialogRef = this.editMemberDialog.open(
-      FineMemberDialogComponent,
-      {
-        disableClose: true,
-      }
-    );
+    const fineDialogRef = this.matDialog.open(FineMemberDialogComponent, {
+      disableClose: true,
+    });
 
     fineDialogRef.afterClosed().subscribe((data) => {
       if (!data) {
@@ -109,12 +105,9 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
   }
 
   onDonationClick(member: Member) {
-    const fineDialogRef = this.editMemberDialog.open(
-      MemberDonationDialogComponent,
-      {
-        disableClose: true,
-      }
-    );
+    const fineDialogRef = this.matDialog.open(MemberDonationDialogComponent, {
+      disableClose: true,
+    });
 
     fineDialogRef.afterClosed().subscribe((data) => {
       if (!data) {
@@ -128,6 +121,22 @@ export class SocietyMembersComponent implements OnInit, OnDestroy {
         data.description,
         member._id
       );
+    });
+  }
+
+  onDeleteSocietyMember(member: Member) {
+    const matDialogRef = this.matDialog.open(ConfirmDialogComponent, {
+      data: {
+        msg: "You can't undo this operation, do you want to continue?",
+      },
+      disableClose: true,
+    });
+
+    matDialogRef.afterClosed().subscribe((isConfirmed) => {
+      if (isConfirmed) {
+        member.isActionLoading = true;
+        this.societyServie.deleteSocietyMemberById(member._id);
+      }
     });
   }
 

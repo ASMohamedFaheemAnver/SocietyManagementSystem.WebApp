@@ -88,6 +88,14 @@
       >
         Approve
       </button>
+      <button
+        (click)="onDeleteSocietyMember(member)"
+        *ngIf="!member.approved"
+        mat-stroked-button
+        class="warn"
+      >
+        Remove
+      </button>
       <!-- <button
         *ngIf="member.approved"
         mat-stroked-button

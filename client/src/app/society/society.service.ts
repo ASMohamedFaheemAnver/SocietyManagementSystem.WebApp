@@ -1355,6 +1355,27 @@ export class SocietyService {
       );
   }
 
+  removeSocietyMemberById(member_id: string) {
+    console.log({ emitted: "societyService.removeSocietyMemberById" });
+    const graphqlQuery = gql`
+      mutation {
+        removeSocietyMember(member_id: "${member_id}") {
+          message
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        this.router.navigateByUrl(`/society/members`);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
+  }
+
   deleteSocietyMemberById(member_id: string) {
     console.log({ emitted: "societyService.deleteSocietyMemberById" });
     const graphqlQuery = gql`
@@ -1367,7 +1388,11 @@ export class SocietyService {
 
     this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
-        this.router.navigateByUrl(`/society/members`);
+        this.members = this.members.filter((member) => {
+          return member._id !== member_id;
+        });
+        this.societyStatusListenner.next(true);
+        this.membersUpdated.next([...this.members]);
       },
       (err) => {
         console.log(err);
