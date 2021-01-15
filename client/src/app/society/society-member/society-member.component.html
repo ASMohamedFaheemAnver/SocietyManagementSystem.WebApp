@@ -43,7 +43,19 @@
   <div class="right">
     <div class="activity">
       <div class="actions-wrapper">
-        <h1>Member actions</h1>
+        <div class="heading">
+          <h1>Member actions</h1>
+
+          <i
+            mat-raised-button
+            #tooltip="matTooltip"
+            matTooltip="These actions will only effect selected member."
+            [matTooltipPosition]="'below'"
+            class="far fa-question-circle"
+            (click)="tooltip.show()"
+          ></i>
+        </div>
+
         <div class="actions">
           <button
             (click)="onRefinementClick()"

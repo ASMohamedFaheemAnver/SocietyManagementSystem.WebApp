@@ -29,12 +29,12 @@ p {
 
 .done:hover {
   cursor: pointer;
-  box-shadow: 0 0 2px green;
+  /* box-shadow: 0 0 2px green; */
 }
 
 .cancel:hover {
   cursor: pointer;
-  box-shadow: 0 0 2px red;
+  /* box-shadow: 0 0 2px red; */
 }
 
 .card {
@@ -74,7 +74,7 @@ p {
 }
 
 .card i:hover {
-  transform: scale(1.2);
+  transform: scale(2);
 }
 
 .card-heading {

@@ -22,12 +22,12 @@
       <i
         (click)="oneMakeFeePaidForOneMember(track._id, offlineLog._id)"
         *ngIf="!track.is_paid"
-        class="far fa-check-circle fa-2x green done"
+        class="far fa-check-circle green done"
       ></i>
       <i
         (click)="oneMakeFeeUnPaidForOneMember(track._id, offlineLog._id)"
         *ngIf="track.is_paid"
-        class="fas fa-power-off fa-2x red cancel"
+        class="fas fa-power-off red cancel"
       ></i>
     </div>
   </div>

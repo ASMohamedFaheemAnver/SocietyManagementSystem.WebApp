@@ -59,8 +59,17 @@
   <div class="right">
     <div class="actions">
       <div class="society-actions">
-        <h1>Society actions</h1>
-
+        <div class="heading">
+          <h1>Society actions</h1>
+          <i
+            mat-raised-button
+            #tooltip="matTooltip"
+            matTooltip="These actions will only effect society assets."
+            [matTooltipPosition]="'below'"
+            class="far fa-question-circle"
+            (click)="tooltip.show()"
+          ></i>
+        </div>
         <div class="action-buttons">
           <button (click)="onAddDonation()" mat-stroked-button color="primary">
             Add donations
@@ -71,8 +80,18 @@
         </div>
       </div>
 
-      <div class="society-actions">
-        <h1>Member actions</h1>
+      <div class="member-actions">
+        <div class="heading">
+          <h1>Member actions</h1>
+          <i
+            mat-raised-button
+            #tooltip2="matTooltip"
+            matTooltip="These actions will effect all society members."
+            [matTooltipPosition]="'below'"
+            class="far fa-question-circle"
+            (click)="tooltip2.show()"
+          ></i>
+        </div>
 
         <div class="action-buttons">
           <button

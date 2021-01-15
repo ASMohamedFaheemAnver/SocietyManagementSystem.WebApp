@@ -16,6 +16,21 @@ input {
   /* text-align: center; */
 }
 
+.heading {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.heading i {
+  margin: 5px;
+  opacity: 0.6;
+}
+
+.heading h1 {
+  margin: 0;
+}
+
 .profile img {
   width: 200px;
   height: 200px;
