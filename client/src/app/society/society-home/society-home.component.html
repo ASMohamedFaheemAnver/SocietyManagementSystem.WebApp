@@ -58,32 +58,42 @@
 
   <div class="right">
     <div class="actions">
-      <h1>Society actions</h1>
-      <div class="action-buttons">
-        <button
-          [disabled]="this.society ? !this.society.number_of_members : true"
-          mat-stroked-button
-          (click)="onAddMonthlyFee()"
-          color="primary"
-        >
-          Add monthly fees
-        </button>
-        <button
-          [disabled]="this.society ? !this.society.number_of_members : true"
-          mat-stroked-button
-          (click)="onAddExtraFee()"
-          color="primary"
-        >
-          Add extra fees
-        </button>
+      <div class="society-actions">
+        <h1>Society actions</h1>
 
-        <button (click)="onAddDonation()" mat-stroked-button color="primary">
-          Add donations
-        </button>
-        <button (click)="onAddExpense()" mat-stroked-button color="primary">
-          Add other expense
-        </button>
+        <div class="action-buttons">
+          <button (click)="onAddDonation()" mat-stroked-button color="primary">
+            Add donations
+          </button>
+          <button (click)="onAddExpense()" mat-stroked-button color="primary">
+            Add other expense
+          </button>
+        </div>
       </div>
+
+      <div class="society-actions">
+        <h1>Member actions</h1>
+
+        <div class="action-buttons">
+          <button
+            [disabled]="this.society ? !this.society.number_of_members : true"
+            mat-stroked-button
+            (click)="onAddMonthlyFee()"
+            color="primary"
+          >
+            Add monthly fees
+          </button>
+          <button
+            [disabled]="this.society ? !this.society.number_of_members : true"
+            mat-stroked-button
+            (click)="onAddExtraFee()"
+            color="primary"
+          >
+            Add extra fees
+          </button>
+        </div>
+      </div>
+
       <!-- <p
         *ngIf="
           this.society ? !this.society.number_of_members && !isLoading : true
