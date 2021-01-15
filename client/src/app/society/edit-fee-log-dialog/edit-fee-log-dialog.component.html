@@ -1,11 +1,12 @@
 <div mat-dialog-title>
-  <p>Edit each member's payment</p>
+  <p *ngIf="offlineLog.kind !== 'Donation'">Edit each member's payment</p>
+  <p *ngIf="offlineLog.kind === 'Donation'">Donated member info</p>
 
   <div class="card card-heading">
     <div class="small"><p>Profile</p></div>
     <div><p>Name</p></div>
-    <div class="small">
-      <p *ngIf="offlineLog.kind !== 'Donation'">Action</p>
+    <div class="small" *ngIf="offlineLog.kind !== 'Donation'">
+      <p>Action</p>
     </div>
   </div>
 </div>
