@@ -157,6 +157,25 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  onRefinementClick() {
+    const addRefinementFeeDialogRef = this.matDialog.open(
+      AddRefinementFeeDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+    addRefinementFeeDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.addRefinementFeeForSociety(
+        data.refinementFee,
+        data.description
+      );
+    });
+  }
+
   onAddExpense() {
     const addExpenseDialogRef = this.matDialog.open(
       SocietyExpenseDialogComponent,

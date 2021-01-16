@@ -968,6 +968,59 @@ export class SocietyService {
     );
   }
 
+  addRefinementFeeForSociety(refinementFee: number, description: string) {
+    const graphqlQuery = gql`
+      mutation {
+        addRefinementFeeForSociety(refinementFee: ${refinementFee}, description: "${description}") {
+          _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+            tracks{
+                _id
+                member{
+                _id
+                imageUrl
+                name
+                }
+                is_paid
+              }
+          }
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        console.log({
+          emitted: "societyService.addRefinementFeeForSociety",
+          res: res,
+        });
+
+        this.newLog = res["data"]["addRefinementFeeForSociety"];
+
+        this.logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
+        this.societyStatusListenner.next(true);
+        this.logsUpdated.next({
+          logs: this.logs,
+          logs_count: ++this.logs_count,
+        });
+      },
+      (err) => {
+        this.societyStatusListenner.next(false);
+      }
+    );
+  }
+
   addDonationForOneMember(
     donation: number,
     description: string,

@@ -71,8 +71,15 @@
           ></i>
         </div>
         <div class="action-buttons">
+          <button
+            (click)="onRefinementClick()"
+            mat-stroked-button
+            color="primary"
+          >
+            Add refinement
+          </button>
           <button (click)="onAddDonation()" mat-stroked-button color="primary">
-            Add donations
+            Add donation
           </button>
           <button (click)="onAddExpense()" mat-stroked-button color="primary">
             Add other expense
