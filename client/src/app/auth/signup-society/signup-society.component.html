@@ -44,6 +44,15 @@
         <textarea formControlName="address"></textarea>
       </div>
 
+      <span
+        *ngIf="
+          this.form.value.address?.length < 10 &&
+          this.form.controls['address'].dirty
+        "
+        class="warn"
+        >*Address should be atleased 10 characters!</span
+      >
+
       <div class="form-control">
         <p>Enter society's phone number</p>
         <input type="text" formControlName="phoneNumber" />
@@ -77,6 +86,16 @@
           </div>
         </div>
       </div>
+
+      <span
+        *ngIf="
+          this.form.value.password?.length < 8 &&
+          this.form.controls['password'].dirty
+        "
+        class="warn"
+        >*Password should be atleased 8 characters!</span
+      >
+
       <button
         class="button"
         type="submit"

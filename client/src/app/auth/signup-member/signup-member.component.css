@@ -146,6 +146,11 @@ mat-option {
   padding: 0 !important;
 }
 
+.warn {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
 @media (max-width: 600px) {
   #signup .wrapper .form {
     padding-top: 20px;
