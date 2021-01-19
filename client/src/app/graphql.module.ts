@@ -65,7 +65,7 @@ export function createApollo(
 
   const client = new SubscriptionClient(wsUri, {
     reconnect: true,
-    minTimeout: 30000,
+    minTimeout: 55000,
   });
 
   client.use([
