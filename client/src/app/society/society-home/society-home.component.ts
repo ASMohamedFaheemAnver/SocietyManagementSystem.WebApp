@@ -15,6 +15,7 @@ import { Router } from "@angular/router";
 import { SocietyDonationDialogComponent } from "../society-donation-dialog/society-donation-dialog.component";
 import { SocietyExpenseDialogComponent } from "../society-expenses-dialog/society-expense-dialog.component";
 import { AddBankDepositDialogComponent } from "../add-bank-deposit-dialog/add-bank-deposit-dialog.component";
+import { AddReceivedCaseDialogComponent } from "../add-received-case-dialog/add-received-case-dialog.component";
 
 @Component({
   selector: "app-society-home",
@@ -171,6 +172,25 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
       this.isLoading = true;
       this.societyService.addBankDepositForSociety(
         data.deposit_amount,
+        data.description
+      );
+    });
+  }
+
+  onAddReceivedCase() {
+    const addReceivedCaseDialogRef = this.matDialog.open(
+      AddReceivedCaseDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+    addReceivedCaseDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.addReceivedCaseForSociety(
+        data.received_amount,
         data.description
       );
     });

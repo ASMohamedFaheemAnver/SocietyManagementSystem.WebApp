@@ -1021,6 +1021,59 @@ export class SocietyService {
     );
   }
 
+  addReceivedCaseForSociety(received_amount: number, description: string) {
+    const graphqlQuery = gql`
+      mutation {
+        addReceivedCaseForSociety(received_amount: ${received_amount}, description: "${description}") {
+          _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+            tracks{
+                _id
+                member{
+                _id
+                imageUrl
+                name
+                }
+                is_paid
+              }
+          }
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        console.log({
+          emitted: "societyService.addReceivedCaseForSociety",
+          res: res,
+        });
+
+        this.newLog = res["data"]["addReceivedCaseForSociety"];
+
+        this.logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
+        this.societyStatusListenner.next(true);
+        this.logsUpdated.next({
+          logs: this.logs,
+          logs_count: ++this.logs_count,
+        });
+      },
+      (err) => {
+        this.societyStatusListenner.next(false);
+      }
+    );
+  }
+
   addDonationForOneMember(
     donation: number,
     description: string,

@@ -1,0 +1,69 @@
+<form>
+  <h1>Create or edit received case</h1>
+  <p>Edit fees.</p>
+  <mat-form-field appearance="outline">
+    <input
+      #ngRefinementFee="ngModel"
+      matInput
+      required
+      name="extra_fee"
+      type="number"
+      [(ngModel)]="received_amount"
+      pattern="[0-9]{1,5}"
+    />
+  </mat-form-field>
+  <div>
+    <p
+      *ngIf="!ngRefinementFee.valid || ngRefinementFee.value < 20"
+      class="warn"
+    >
+      Invalid amount!
+    </p>
+  </div>
+  <p>Edit descripton.</p>
+  <mat-form-field appearance="outline">
+    <textarea
+      #ngDescription="ngModel"
+      name="description"
+      matInput
+      required
+      type="text"
+      [(ngModel)]="description"
+    ></textarea>
+  </mat-form-field>
+  <div>
+    <p
+      *ngIf="
+        ngDescription.value
+          ? ngDescription.value.length > 100 || ngDescription.value.length < 5
+          : true
+      "
+      class="warn"
+    >
+      Invalid description!
+    </p>
+  </div>
+
+  <div mat-dialog-actions>
+    <button
+      [disabled]="
+        !ngRefinementFee.valid ||
+        !ngDescription.valid ||
+        ngRefinementFee.value < 20 ||
+        ngDescription.value.length > 100 ||
+        ngDescription.value.length < 5
+      "
+      mat-stroked-button
+      color="primary"
+      [mat-dialog-close]="{
+        received_amount: received_amount,
+        description: description
+      }"
+    >
+      Done
+    </button>
+    <button mat-stroked-button color="warn" [mat-dialog-close]="false">
+      Cancel
+    </button>
+  </div>
+</form>
