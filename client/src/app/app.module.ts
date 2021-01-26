@@ -35,6 +35,7 @@ import { EnterEmailDialogComponent } from "./auth/enter-email-dialog/enter-email
 import { ResetPasswordDialogComponent } from "./auth/reset-password-dialog/reset-password-dialog.component";
 import { AddBankDepositDialogComponent } from "./society/add-bank-deposit-dialog/add-bank-deposit-dialog.component";
 import { AddReceivedCaseDialogComponent } from "./society/add-received-case-dialog/add-received-case-dialog.component";
+import { AddOtherIncomeDialogComponent } from "./society/add-other-income-dialog/add-other-income-dialog.component";
 
 @NgModule({
   declarations: [
@@ -63,6 +64,8 @@ import { AddReceivedCaseDialogComponent } from "./society/add-received-case-dial
     EnterEmailDialogComponent,
     ResetPasswordDialogComponent,
     AddReceivedCaseDialogComponent,
+    AddMonthlyFeeDialogComponent,
+    AddOtherIncomeDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -99,6 +102,7 @@ import { AddReceivedCaseDialogComponent } from "./society/add-received-case-dial
     EnterEmailDialogComponent,
     ResetPasswordDialogComponent,
     AddReceivedCaseDialogComponent,
+    AddOtherIncomeDialogComponent,
   ],
 })
 export class AppModule {}

@@ -1,12 +1,12 @@
 <form>
   <h1>Create or edit received case</h1>
-  <p>Edit fees.</p>
+  <p>Edit case.</p>
   <mat-form-field appearance="outline">
     <input
       #ngRefinementFee="ngModel"
       matInput
       required
-      name="extra_fee"
+      name="received_amount"
       type="number"
       [(ngModel)]="received_amount"
       pattern="[0-9]{1,5}"

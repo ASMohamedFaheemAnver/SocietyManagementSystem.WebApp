@@ -1,22 +1,19 @@
 <form>
-  <h1>Create or edit bank deposit</h1>
-  <p>Edit deposit.</p>
+  <h1>Create or edit other income</h1>
+  <p>Edit income.</p>
   <mat-form-field appearance="outline">
     <input
-      #ngRefinementFee="ngModel"
+      #ngExtraFee="ngModel"
       matInput
       required
-      name="deposit_amount"
+      name="other_income"
       type="number"
-      [(ngModel)]="deposit_amount"
+      [(ngModel)]="other_income"
       pattern="[0-9]{1,5}"
     />
   </mat-form-field>
   <div>
-    <p
-      *ngIf="!ngRefinementFee.valid || ngRefinementFee.value < 20"
-      class="warn"
-    >
+    <p *ngIf="!ngExtraFee.valid || ngExtraFee.value < 20" class="warn">
       Invalid amount!
     </p>
   </div>
@@ -47,16 +44,16 @@
   <div mat-dialog-actions>
     <button
       [disabled]="
-        !ngRefinementFee.valid ||
+        !ngExtraFee.valid ||
         !ngDescription.valid ||
-        ngRefinementFee.value < 20 ||
+        ngExtraFee.value < 20 ||
         ngDescription.value.length > 100 ||
         ngDescription.value.length < 5
       "
       mat-stroked-button
       color="primary"
       [mat-dialog-close]="{
-        deposit_amount: deposit_amount,
+        other_income: other_income,
         description: description
       }"
     >

@@ -16,6 +16,7 @@ import { SocietyDonationDialogComponent } from "../society-donation-dialog/socie
 import { SocietyExpenseDialogComponent } from "../society-expenses-dialog/society-expense-dialog.component";
 import { AddBankDepositDialogComponent } from "../add-bank-deposit-dialog/add-bank-deposit-dialog.component";
 import { AddReceivedCaseDialogComponent } from "../add-received-case-dialog/add-received-case-dialog.component";
+import { AddOtherIncomeDialogComponent } from "../add-other-income-dialog/add-other-income-dialog.component";
 
 @Component({
   selector: "app-society-home",
@@ -153,6 +154,25 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
       this.isLoading = true;
       this.societyService.addReceivedDonationBySociety(
         data.donation,
+        data.description
+      );
+    });
+  }
+
+  onOtherIncome() {
+    const addOtherIncomeDialogRef = this.matDialog.open(
+      AddOtherIncomeDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+    addOtherIncomeDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.addOtherIncomeForSociety(
+        data.other_income,
         data.description
       );
     });
