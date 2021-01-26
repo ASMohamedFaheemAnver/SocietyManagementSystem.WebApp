@@ -8,7 +8,7 @@ import { Log } from "src/app/log.model";
 import { Member } from "src/app/member.model";
 import { AddExtraFeeDialogComponent } from "../add-extra-fee-dialog/add-extra-fee-dialog.component";
 import { AddMonthlyFeeDialogComponent } from "../add-monthly-fee-dialog/add-monthly-fee-dialog.component";
-import { AddRefinementFeeDialogComponent } from "../add-refinement-fee-dialog/add-refinement-fee-dialog.component";
+import { AddBankDepositDialogComponent } from "../add-bank-deposit-dialog/add-bank-deposit-dialog.component";
 import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
 import { MemberDonationDialogComponent } from "../member-donation-dialog/member-donation-dialog.component";
 import { SocietyService } from "../society.service";
@@ -130,7 +130,7 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
 
   onRefinementClick() {
     const refinementDialogRef = this.matDialog.open(
-      AddRefinementFeeDialogComponent,
+      AddBankDepositDialogComponent,
       {
         disableClose: true,
       }
@@ -308,7 +308,7 @@ export class SocietyMemberComponent implements OnInit, OnDestroy {
       });
     } else if (log.kind === "RefinementFee") {
       const editRefinementFeeDialogRef = this.matDialog.open(
-        AddRefinementFeeDialogComponent,
+        AddBankDepositDialogComponent,
         {
           data: {
             refinementFee: log.fee.amount,

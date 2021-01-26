@@ -70,20 +70,44 @@
             (click)="tooltip.show()"
           ></i>
         </div>
-        <div class="action-buttons">
-          <button
-            (click)="onRefinementClick()"
-            mat-stroked-button
-            color="primary"
-          >
-            Add refinement
-          </button>
-          <button (click)="onAddDonation()" mat-stroked-button color="primary">
-            Add donation
-          </button>
-          <button (click)="onAddExpense()" mat-stroked-button color="primary">
-            Add other expense
-          </button>
+
+        <div class="sub-actions">
+          <h2>Income actions</h2>
+          <div class="action-buttons">
+            <button
+              (click)="onAddBankDeposite()"
+              mat-stroked-button
+              color="primary"
+            >
+              Add bank deposit
+            </button>
+            <button mat-stroked-button color="primary">
+              Add received case
+            </button>
+            <button
+              (click)="onAddDonation()"
+              mat-stroked-button
+              color="primary"
+            >
+              Add received donation
+            </button>
+            <button mat-stroked-button color="primary">Add other income</button>
+          </div>
+        </div>
+
+        <div class="sub-actions">
+          <h2>Expense actions</h2>
+          <div class="action-buttons">
+            <button mat-stroked-button color="primary">
+              Add administrative expense
+            </button>
+            <button mat-stroked-button color="primary">
+              Add event expense
+            </button>
+            <button (click)="onAddExpense()" mat-stroked-button color="primary">
+              Add other expense
+            </button>
+          </div>
         </div>
       </div>
 
@@ -100,23 +124,46 @@
           ></i>
         </div>
 
-        <div class="action-buttons">
-          <button
-            [disabled]="this.society ? !this.society.number_of_members : true"
-            mat-stroked-button
-            (click)="onAddMonthlyFee()"
-            color="primary"
-          >
-            Add monthly fees
-          </button>
-          <button
-            [disabled]="this.society ? !this.society.number_of_members : true"
-            mat-stroked-button
-            (click)="onAddExtraFee()"
-            color="primary"
-          >
-            Add extra fees
-          </button>
+        <div class="sub-actions">
+          <h2>Income actions</h2>
+          <div class="action-buttons">
+            <button
+              [disabled]="this.society ? !this.society.number_of_members : true"
+              mat-stroked-button
+              (click)="onAddMonthlyFee()"
+              color="primary"
+            >
+              Add monthly subscription
+            </button>
+            <button
+              [disabled]="this.society ? !this.society.number_of_members : true"
+              mat-stroked-button
+              (click)="onAddExtraFee()"
+              color="primary"
+            >
+              Add extra fees
+            </button>
+          </div>
+        </div>
+
+        <div class="sub-actions">
+          <h2>Expense actions</h2>
+          <div class="action-buttons">
+            <button
+              [disabled]="this.society ? !this.society.number_of_members : true"
+              mat-stroked-button
+              color="primary"
+            >
+              Add entertainment expense
+            </button>
+            <button
+              [disabled]="this.society ? !this.society.number_of_members : true"
+              mat-stroked-button
+              color="primary"
+            >
+              Add other expense
+            </button>
+          </div>
         </div>
       </div>
 

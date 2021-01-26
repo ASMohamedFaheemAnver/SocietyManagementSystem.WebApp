@@ -26,7 +26,6 @@ import { GraphQLModule } from "./graphql.module";
 import { MemberDonationDialogComponent } from "./society/member-donation-dialog/member-donation-dialog.component";
 import { SocietyMemberComponent } from "./society/society-member/society-member.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
-import { AddRefinementFeeDialogComponent } from "./society/add-refinement-fee-dialog/add-refinement-fee-dialog.component";
 import { EditSocietyProfileComponent } from "./society/edit-society-profile/edit-society-profile.component";
 import { EditMemberProfileComponent } from "./member/edit-member-profile/edit-member-profile.component";
 import { SocietyDonationDialogComponent } from "./society/society-donation-dialog/society-donation-dialog.component";
@@ -34,6 +33,7 @@ import { SocietyExpenseDialogComponent } from "./society/society-expenses-dialog
 import { SelectSocietyDialogComponent } from "./auth/select-society-dialog/select-society-dialog.component";
 import { EnterEmailDialogComponent } from "./auth/enter-email-dialog/enter-email-dialog.component";
 import { ResetPasswordDialogComponent } from "./auth/reset-password-dialog/reset-password-dialog.component";
+import { AddBankDepositDialogComponent } from "./society/add-bank-deposit-dialog/add-bank-deposit-dialog.component";
 
 @NgModule({
   declarations: [
@@ -53,7 +53,7 @@ import { ResetPasswordDialogComponent } from "./auth/reset-password-dialog/reset
     MemberDonationDialogComponent,
     SocietyMemberComponent,
     NotFoundComponent,
-    AddRefinementFeeDialogComponent,
+    AddBankDepositDialogComponent,
     EditSocietyProfileComponent,
     EditMemberProfileComponent,
     SocietyDonationDialogComponent,
@@ -90,7 +90,7 @@ import { ResetPasswordDialogComponent } from "./auth/reset-password-dialog/reset
     ConfirmDialogComponent,
     EditFeeLogDialogComponent,
     MemberDonationDialogComponent,
-    AddRefinementFeeDialogComponent,
+    AddBankDepositDialogComponent,
     SocietyDonationDialogComponent,
     SocietyExpenseDialogComponent,
     SelectSocietyDialogComponent,

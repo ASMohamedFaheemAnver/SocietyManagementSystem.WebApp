@@ -198,6 +198,14 @@ mat-form-field {
   width: 100px;
 }
 
+.sub-actions {
+  margin-left: 20px;
+}
+
+.sub-actions h2 {
+  font-weight: 400;
+}
+
 /* button:hover {
   color: #dadada;
 } */

@@ -893,13 +893,13 @@ export class SocietyService {
   }
 
   addRefinementFeeForOneMember(
-    refinementFee: number,
+    deposit_amount: number,
     description: string,
     member_id: string
   ) {
     const graphqlQuery = gql`
       mutation {
-        addRefinementFeeForOneMember(refinementFee: ${refinementFee}, description: "${description}", member_id: "${member_id}") {
+        addRefinementFeeForOneMember(deposit_amount: ${deposit_amount}, description: "${description}", member_id: "${member_id}") {
           _id
           kind
           fee{
@@ -946,7 +946,7 @@ export class SocietyService {
         this.member = {
           ...this.member,
           isActionLoading: false,
-          arrears: this.member.arrears + refinementFee,
+          arrears: this.member.arrears + deposit_amount,
         };
 
         this.societyStatusListenner.next(true);
@@ -968,10 +968,10 @@ export class SocietyService {
     );
   }
 
-  addRefinementFeeForSociety(refinementFee: number, description: string) {
+  addBankDepositForSociety(deposit_amount: number, description: string) {
     const graphqlQuery = gql`
       mutation {
-        addRefinementFeeForSociety(refinementFee: ${refinementFee}, description: "${description}") {
+        addBankDepositForSociety(deposit_amount: ${deposit_amount}, description: "${description}") {
           _id
           kind
           fee{
@@ -996,11 +996,11 @@ export class SocietyService {
     this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
       (res) => {
         console.log({
-          emitted: "societyService.addRefinementFeeForSociety",
+          emitted: "societyService.addBankDepositForSociety",
           res: res,
         });
 
-        this.newLog = res["data"]["addRefinementFeeForSociety"];
+        this.newLog = res["data"]["addBankDepositForSociety"];
 
         this.logs.unshift({
           ...this.newLog,

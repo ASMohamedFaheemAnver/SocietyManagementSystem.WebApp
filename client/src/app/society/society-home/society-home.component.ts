@@ -11,10 +11,10 @@ import { EditFeeLogDialogComponent } from "../edit-fee-log-dialog/edit-fee-log-d
 import { ConfirmDialogComponent } from "src/app/common/confirm-dialog/confirm-dialog.component";
 import { MemberDonationDialogComponent } from "../member-donation-dialog/member-donation-dialog.component";
 import { FineMemberDialogComponent } from "../fine-member-dialog/fine-member-dialog.component";
-import { AddRefinementFeeDialogComponent } from "../add-refinement-fee-dialog/add-refinement-fee-dialog.component";
 import { Router } from "@angular/router";
 import { SocietyDonationDialogComponent } from "../society-donation-dialog/society-donation-dialog.component";
 import { SocietyExpenseDialogComponent } from "../society-expenses-dialog/society-expense-dialog.component";
+import { AddBankDepositDialogComponent } from "../add-bank-deposit-dialog/add-bank-deposit-dialog.component";
 
 @Component({
   selector: "app-society-home",
@@ -157,20 +157,20 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  onRefinementClick() {
-    const addRefinementFeeDialogRef = this.matDialog.open(
-      AddRefinementFeeDialogComponent,
+  onAddBankDeposite() {
+    const addBankDepositDialogRef = this.matDialog.open(
+      AddBankDepositDialogComponent,
       {
         disableClose: true,
       }
     );
-    addRefinementFeeDialogRef.afterClosed().subscribe((data) => {
+    addBankDepositDialogRef.afterClosed().subscribe((data) => {
       if (!data) {
         return;
       }
       this.isLoading = true;
-      this.societyService.addRefinementFeeForSociety(
-        data.refinementFee,
+      this.societyService.addBankDepositForSociety(
+        data.deposit_amount,
         data.description
       );
     });
@@ -340,7 +340,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
       });
     } else if (log.kind === "RefinementFee") {
       const editRefinementFeeDialogRef = this.matDialog.open(
-        AddRefinementFeeDialogComponent,
+        AddBankDepositDialogComponent,
         {
           data: {
             refinementFee: log.fee.amount,
