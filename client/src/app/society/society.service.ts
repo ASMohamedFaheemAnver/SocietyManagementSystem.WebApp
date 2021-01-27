@@ -1376,6 +1376,62 @@ export class SocietyService {
     );
   }
 
+  onAddEventExpense(expense: number, description: string) {
+    const graphqlQuery = gql`
+      mutation {
+        onAddEventExpense(expenseInput: {expense: ${expense}, description: "${description}"}) {
+          _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+            tracks{
+                _id
+                member{
+                _id
+                imageUrl
+                name
+                }
+                is_paid
+              }
+          }
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        console.log({
+          emitted: "societyService.onAddEventExpense",
+          res: res,
+        });
+        this.newLog = res["data"]["onAddEventExpense"];
+
+        this.logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
+        this.logsUpdated.next({
+          logs: this.logs,
+          logs_count: ++this.logs_count,
+        });
+
+        this.society.expenses += expense;
+        this.societyUpdated.next({ ...this.society, isImageLoading: false });
+
+        this.societyStatusListenner.next(true);
+      },
+      (err) => {
+        this.societyStatusListenner.next(false);
+      }
+    );
+  }
+
   listenSocietyMembersBySociety() {
     console.log({ emitted: "societyService.listenSocietyMembersBySociety" });
 

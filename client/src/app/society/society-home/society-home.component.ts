@@ -254,6 +254,22 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  onAddEventExpense() {
+    const addExpenseDialogRef = this.matDialog.open(
+      SocietyExpenseDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+    addExpenseDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.onAddEventExpense(data.expense, data.description);
+    });
+  }
+
   changeDefaultUrl() {
     this.society.imageUrl = "./assets/img/invalid-img.jpg";
   }
