@@ -337,6 +337,102 @@ export class SocietyService {
     );
   }
 
+  addEntertainmentExpenseToEveryone(expense, description) {
+    const graphqlQuery = gql`
+      mutation{
+        addEntertainmentExpenseToEveryone(expense: ${expense}, description: "${description}"){
+          _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+            tracks{
+                _id
+                member{
+                _id
+                imageUrl
+                name
+                }
+                is_paid
+              }
+          }
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        this.newLog = res["data"]["addEntertainmentExpenseToEveryone"];
+        this.logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
+        this.logsUpdated.next({
+          logs: this.logs,
+          logs_count: ++this.logs_count,
+        });
+        this.societyStatusListenner.next(false);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
+  }
+
+  addOtherExpenseToEveryone(expense, description) {
+    const graphqlQuery = gql`
+      mutation{
+        addOtherExpenseToEveryone(expense: ${expense}, description: "${description}"){
+          _id
+          kind
+          fee{
+            _id
+            amount
+            date
+            description
+            tracks{
+                _id
+                member{
+                _id
+                imageUrl
+                name
+                }
+                is_paid
+              }
+          }
+        }
+      }
+    `;
+
+    this.apollo.mutate({ mutation: graphqlQuery }).subscribe(
+      (res) => {
+        this.newLog = res["data"]["addOtherExpenseToEveryone"];
+        this.logs.unshift({
+          ...this.newLog,
+          fee: {
+            ...this.newLog.fee,
+            date: new Date(this.newLog.fee.date).toString(),
+          },
+        });
+        this.logsUpdated.next({
+          logs: this.logs,
+          logs_count: ++this.logs_count,
+        });
+        this.societyStatusListenner.next(false);
+      },
+      (err) => {
+        console.log(err);
+        this.societyStatusListenner.next(false);
+      }
+    );
+  }
+
   getSocietyLogs(page_number, page_size) {
     const graphqlQuery = gql`
       query{

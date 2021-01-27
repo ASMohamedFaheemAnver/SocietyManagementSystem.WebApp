@@ -172,6 +172,7 @@
           <h2>Expense actions</h2>
           <div class="action-buttons">
             <button
+              (click)="onAddEntertainmentExpense()"
               [disabled]="this.society ? !this.society.number_of_members : true"
               mat-stroked-button
               color="primary"
@@ -179,6 +180,7 @@
               Add entertainment expense
             </button>
             <button
+              (click)="onAddOtherExpenseForAllMember()"
               [disabled]="this.society ? !this.society.number_of_members : true"
               mat-stroked-button
               color="primary"

@@ -235,6 +235,44 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  onAddEntertainmentExpense() {
+    const addExpenseDialogRef = this.matDialog.open(
+      SocietyExpenseDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+    addExpenseDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.addEntertainmentExpenseToEveryone(
+        data.expense,
+        data.description
+      );
+    });
+  }
+
+  onAddOtherExpenseForAllMember() {
+    const addExpenseDialogRef = this.matDialog.open(
+      SocietyExpenseDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+    addExpenseDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.addOtherExpenseToEveryone(
+        data.expense,
+        data.description
+      );
+    });
+  }
+
   onAddAdministrativeExpense() {
     const addExpenseDialogRef = this.matDialog.open(
       SocietyExpenseDialogComponent,
