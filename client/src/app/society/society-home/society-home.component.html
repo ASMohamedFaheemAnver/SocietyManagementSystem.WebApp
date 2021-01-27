@@ -108,13 +108,25 @@
         <div class="sub-actions">
           <h2>Expense actions</h2>
           <div class="action-buttons">
-            <button mat-stroked-button color="primary">
+            <button
+              (click)="onAddAdministrativeExpense()"
+              mat-stroked-button
+              color="primary"
+            >
               Add administrative expense
             </button>
-            <button mat-stroked-button color="primary">
+            <button
+              (click)="onAddOtherExpense()"
+              mat-stroked-button
+              color="primary"
+            >
               Add event expense
             </button>
-            <button (click)="onAddExpense()" mat-stroked-button color="primary">
+            <button
+              (click)="onAddOtherExpense()"
+              mat-stroked-button
+              color="primary"
+            >
               Add other expense
             </button>
           </div>

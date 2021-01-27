@@ -216,7 +216,7 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAddExpense() {
+  onAddOtherExpense() {
     const addExpenseDialogRef = this.matDialog.open(
       SocietyExpenseDialogComponent,
       {
@@ -228,7 +228,29 @@ export class SocietyHomeComponent implements OnInit, OnDestroy {
         return;
       }
       this.isLoading = true;
-      this.societyService.addSocietyExpense(data.expense, data.description);
+      this.societyService.addOtherSocietyExpense(
+        data.expense,
+        data.description
+      );
+    });
+  }
+
+  onAddAdministrativeExpense() {
+    const addExpenseDialogRef = this.matDialog.open(
+      SocietyExpenseDialogComponent,
+      {
+        disableClose: true,
+      }
+    );
+    addExpenseDialogRef.afterClosed().subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      this.isLoading = true;
+      this.societyService.onAddAdministrativeExpense(
+        data.expense,
+        data.description
+      );
     });
   }
 
