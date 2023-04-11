@@ -4,13 +4,13 @@
 
 export const environment = {
   production: false,
-  backEndGraphQlUrl2: "http://192.168.8.159:3000/",
-  backEndWSUrl: "ws://192.168.8.159:3000/",
+  backEndGraphQlUrl2: "http://192.168.1.100:3000/",
+  backEndWSUrl: "ws://192.168.1.100:3000/",
 
   // backEndGraphQlUrl2: "https://freedom-sms.herokuapp.com/",
   // backEndWSUrl: "wss://freedom-sms.herokuapp.com/",
 };
-// 192.168.8.159
+// 192.168.1.100
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
